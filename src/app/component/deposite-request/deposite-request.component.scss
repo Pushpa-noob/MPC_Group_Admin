@@ -1,0 +1,16 @@
+.pedngBtn{
+    background-color: var(--primaryColor);
+    padding: 1px 6px;
+    font-size: 13px;
+    color: var(--blackTextColorSec);
+}
+
+.screenShot {
+    height: 100%;
+    img{
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+        max-height: 300px;
+    }
+}

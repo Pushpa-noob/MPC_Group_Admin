@@ -1,0 +1,95 @@
+<div class="page-title-box mb-3 mb-ms-4">
+   <h4 class="page-title">Over All P&L</h4>
+</div>
+<div class="card">
+   <div class="row">
+      <div class="col-lg-4 col-md-8 col-sm-12 col-xs-12 mb-2">
+         <div class="input-group marginb5 div-datepicker">
+            <input type="datetime-local" class="form-control" name="startTime" [(ngModel)]="startTime"
+               (ngModelChange)="onStartTimeChange($event)" />
+            <span class="col-form-label">to</span>
+            <input type="datetime-local" class="form-control" name="endTime" [(ngModel)]="endTime"
+               (ngModelChange)="onEndTimeChange($event)" />
+         </div>
+
+      </div>
+      <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 mb-2">
+         <div class="d-flex align-items-center">
+            <button class="btn btn-primary mb-1 ms-1" (click)="getOverAllPL(0,0)">Submit</button>
+            <button class="btn btn-danger mb-1 ms-1" (click)="resetAll()">Reset</button>
+            <div class="form-group d-flex align-items-center mb-0 ms-4">
+               <label class="col-form-label">Sharing</label>
+               <div class="form-check form-switch ms-1">
+                  <input type="checkbox" class="form-check-input" [(ngModel)]="sharing" (change)="getOverAllPL(0,0)">
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<div class=" custoModal overallPlModal d-block">
+   <div class=" w-100">
+      <div class="table-content">
+         <div class="table-body">
+            <div class="breadcrumb" *ngIf="isHomeClicked">
+               <span *ngFor="let breadcrumb of breadcrumbs; let i = index; let last = last">
+                  <a class="me-2" href="javascript:void(0)" (click)="navigateToUser(breadcrumb.userId)" *ngIf="i === 0">
+                     <i class="fa-solid fa-house-chimney"></i>
+                  </a>
+
+                  <a href="javascript:void(0)" (click)="navigateToUser(breadcrumb.userId)" *ngIf="i > 0 && !last">
+                     {{ breadcrumb.userName }}
+                  </a>
+                  <!-- / -->
+                  <span *ngIf="last">{{ breadcrumb.userName }}</span>
+                  <span class="mx-1" *ngIf="!last && i !== 0"> / </span>
+               </span>
+            </div>
+            <div class="table-responsive">
+               <table class="datatable table nowrapTable mb-0">
+                  <thead>
+                     <tr>
+                        <th>User Name</th>
+                        <th>Total Sports P/L</th>
+                        <th>Total Casino P/L</th>
+                        <th>Total</th>
+                        
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <tr *ngFor="let data of returnList">
+                        <td [class.pointer]="data.role != 'Client'"
+                           (click)="data.role != 'Client' && getOverAllPL(sportsId,data.userId)">
+                           <span>{{data.role=='Client'?'C':'A'}} | </span>{{data.userName}}
+                        </td>
+                        <td [ngClass]="{'text-danger':data.sports<0,'text-success':data.sports>=0}">
+                           {{data.sports | number:'1.2-2'}}</td>
+                        <td [ngClass]="{'text-danger':data.casino<0,'text-success':data.casino>=0}">
+                           {{data.casino | number:'1.2-2'}}</td>
+                        <td [ngClass]="{'text-danger':data.rowTotal<0,'text-success':data.rowTotal>=0}">
+                           {{data.rowTotal | number:'1.2-2'}}</td>
+                        
+
+
+                     </tr>
+                  </tbody>
+                  <tfoot>
+                     <tr>
+                        <td>Total</td>
+                        <td [ngClass]="{'text-danger':total.sportsTotal<0,'text-success':total.sportsTotal>=0}">
+                           {{total.sportsTotal | number : '1.2-2'}}</td>
+                        <td [ngClass]="{'text-danger':total.casinoTotal<0,'text-success':total.casinoTotal>=0}">
+                           {{total.casinoTotal | number : '1.2-2'}}</td>
+                        <td [ngClass]="{'text-danger':total.overAllTotal<0,'text-success':total.overAllTotal>=0}">
+                           {{total.overAllTotal | number : '1.2-2'}}</td>
+                        
+
+                     </tr>
+                  </tfoot>
+
+               </table>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>

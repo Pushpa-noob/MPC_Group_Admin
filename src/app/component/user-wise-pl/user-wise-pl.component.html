@@ -1,0 +1,235 @@
+<div class="page-title-box mb-3 mb-ms-4">
+    <div class="row align-items-center">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <h4 class="page-title mb-0">User Profit Loss Report</h4>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 pull-right mt-3 mt-md-0">
+            <span><b>Note :</b> <span class="text-danger"> minus value indicates your loss.</span></span>
+            <span class="text-success ms-4 d-block"> (+ve) plus value indicates your profit.</span>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="row">
+                <div class="col-lg-5 col-md-8 col-sm-12 col-xs-12 mb-2">
+                    <div class="input-group marginb5 div-datepicker">
+                        <input type="datetime-local" class="form-control" name="startTime" [(ngModel)]="startTime">
+                        <span class="col-form-label">to</span>
+                        <input type="datetime-local" class="form-control" name="endTime" [(ngModel)]="endTime">
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12 mb-2">
+                    <div class="position-relative searchUserList">
+                        <input type="text" class="form-control" placeholder="Enter username" name="keyWord"
+                            [(ngModel)]="keyWord" (keyup)="getIds()">
+                        <ul class="searchList">
+                            <li *ngFor="let list of userList"><a
+                                    (click)="selectUser(list.id)">{{list.loginId}}[{{list.fullName}}]</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 mb-2">
+                    <!-- <label class=" d-none d-md-block d-lg-block mb-1">&nbsp;</label> -->
+                    <button type="button" class="btn btn-success" (click)="getUserWisePL()">
+                        <i class="fa fa-search"></i> Search
+                    </button>
+                    <button (click)="reset()" type="button" class="btn btn-danger ms-2">
+                        <i class="fa fa-reset"></i> Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="row mt-2 mb-2 d-flex align-items-center flex-row-reverse tableTopRow ">
+                <div class="dt-buttons flex-wrap mt-2 mt-md-0 col-lg-7 col-md-6 col-sm-12 col-xs-12 text-end">
+                    <button class="btn downloadTableBtn me-2" type="button"  (click)="reset()"><i class="fas fa-sync-alt"></i></button>
+                    <button class="btn downloadTableBtn me-2" type="button" (click)="downloadCSV()"><i class="fas fa-file-csv"></i> CSV</button>
+                    <button class="btn downloadTableBtn me-2" type="button" (click)="downloadExcel()"><i class="far fa-file-excel"></i> Excel</button>
+                    <button class="btn downloadTableBtn" type="button" (click)="downloadPDF()"><i class="far fa-file-pdf"></i> Pdf</button>
+                </div>
+
+            </div>
+            <div class="row my-2">
+                <div *ngIf="marketPL?.length>0" class="col-md-4 col-sm-12 mt-2 mt-md-0">
+                    <p class="tableP mb-0">Showing {{marketPL?.length}} of {{count}} entries
+                </div>
+            </div>
+            <div class="row mt-2 mb-2 p-0 m-0">
+                <div class="col-md-6 col-sm-12 mt-2 mt-md-0">
+                   <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';" *ngIf="breadcrumbs.length > 0">
+                      <ol class="breadcrumb mb-0">
+                         <li class="breadcrumb-item">
+                            <a (click)="reset()"> <i class="fa-solid fa-house-chimney"></i> </a>
+                         </li>
+                         <li *ngFor="let crumb of breadcrumbs; let i = index" class="breadcrumb-item">
+                            <a (click)="navToList(crumb)">{{ crumb.username }}</a>
+                         </li>
+                      </ol>
+                   </nav>
+ 
+                </div>
+             </div>
+            <div class="table-responsive border">
+                <table class="datatable table nowrapTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Upline</th>
+                            <th>Own</th>
+                            <th>Downline</th>
+                            <th>Total</th>
+                            <th>MatchCommission</th>
+                            <th>SessionCommission</th>
+                            <th>Bet Count</th>
+                            <th>Bet Volume</th>
+                            <th>Profit Loss</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            *ngFor="let data of marketPL | paginate: { itemsPerPage:takeRecords, currentPage:pageNum,totalItems: count };">
+                            <td *ngIf="data.role!='Client'" (click)="getInnerParent(data)">
+                                <div class="d-flex align-items-center">
+                                    <span class="frstLet btn btn-danger" data-bs-toggle="tooltip"
+                                        data-bs-placement="top" title="{{data.role}}">A</span>
+                                    {{data.name}}[{{data.loginId}}]
+                                </div>
+                            </td>
+                            <td *ngIf="data.role=='Client'">
+                                <span (click)="getEventWiseBetHistory(data.userId)"
+                                    class="cursor-pointer d-flex align-items-center" data-bs-toggle="modal"
+                                    data-bs-target="#betHisModal"><span class="frstLet btn btn-warning"
+                                        data-bs-toggle="tooltip" data-bs-placement="top" title="{{data.role}}">C</span>
+                                    {{data.name}}[{{data.loginId}}]
+                                </span>
+                            </td>
+                            <td [ngClass]="{'text-success':data.upline>=0,'text-danger':data.upline<0}">{{ data.upline  % 1 !== 0 ? (data.upline  |
+                                number:'1.2-2') : data.upline  }}</td>
+                            <td [ngClass]="{'text-success':data.own>=0,'text-danger':data.own<0}">{{ data.own  % 1 !== 0 ? (data.own  |
+                                number:'1.2-2') : data.own  }}</td>
+                            <td [ngClass]="{'text-success':data.downLine>=0,'text-danger':data.downLine<0}">{{ data.downLine  % 1 !== 0 ? (data.downLine  |
+                                number:'1.2-2') : data.downLine  }}</td>
+                            <td [ngClass]="{'text-success':data.own>=0,'text-danger':data.own<0}">{{ data.own  % 1 !== 0 ? (data.own  |
+                                number:'1.2-2') : data.own  }}</td>
+                            <td [ngClass]="{'text-success':data.matchCommission>=0,'text-danger':data.matchCommission<0}">{{ data.matchCommission  % 1 !== 0 ? (data.matchCommission  |
+                                number:'1.2-2') : data.matchCommission  }}</td>
+                            <td [ngClass]="{'text-success':data.sessionCommission>=0,'text-danger':data.sessionCommission<0}">{{ data.sessionCommission  % 1 !== 0 ? (data.sessionCommission  |
+                                number:'1.2-2') : data.sessionCommission  }}</td>
+                            <td>
+                                <span (click)="getEventWiseBetHistory(data.userId)" class="cursor-pointer"
+                                    data-bs-toggle="modal" data-bs-target="#betHisModal">
+                                    {{data.betCount}}
+                                </span>
+                            </td>
+                            <td>{{data.totalStake}}</td>
+                            <td [ngClass]="{'text-success':data.own>=0,'text-danger':data.own<0}">{{ data.own  % 1 !== 0 ? (data.own  |
+                                number:'1.2-2') : data.own  }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div *ngIf="marketPL?.length>0" class="pagination_filter justify-content-between pt-3 d-flex  row">
+                <div class="col-sm-6 mb- mb-sm-0">
+                        <select class="form-control w-auto mr-2 " id="" (change)="updateRecValue($event)">
+                            <option value="takeRecords" selected>{{takeRecords}}</option>
+                            <option value="10" *ngIf="takeRecords!=10">10</option>
+                            <option value="20" *ngIf="takeRecords!=20">20</option>
+                            <option value="30" *ngIf="takeRecords!=30">30</option>
+                            <option value="40" *ngIf="takeRecords!=40">40</option>
+                            <option value="50" *ngIf="takeRecords!=50">50</option>
+                        </select>
+                </div>
+                <div class="col-sm-6 d-flex justify-content-end">
+                    <pagination-controls class="pagination" [maxSize]="5" *ngIf="marketPL?.length>0"
+                        (pageChange)="pageChanged($event)">
+                    </pagination-controls>
+                </div>
+            </div>
+            <div *ngIf="marketPL?.length==0" class="load-more"><span>No Data Available.</span></div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade custoModal " id="betHisModal" tabindex="-1" aria-labelledby="betHisModalLabel" aria-hidden="true"
+    data-bs-backdrop="static">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title" id="betHisModalLabel" style="font-size: 16px !important;">Bet History</h1>
+                <button type="button" (click)="resetModel()" id="clsWallet" class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive border">
+                    <table class="datatable table nowrapTable">
+                        <thead>
+                            <tr>
+                                <th>Client</th>
+                                <th>Market Details</th>
+                                <th>Rate</th>
+                                <th>Stake</th>
+                                <th>Bet Type</th>
+                                <th>PL</th>
+                                <th>Result</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="betHis?.length>0">
+                            <tr
+                                *ngFor="let data of betHis | paginate: { itemsPerPage:takeRecordsBets, currentPage:pageNumBets,totalItems: countBets };">
+                                <td>{{data.userName}}</td>
+                                <td>{{data.eventName}}/{{data.marketName}}/{{data.runnerName}}</td>
+                                <td>{{data.odds |number:'1.2-2'}}</td>
+                                <td>{{data.stake}}</td>
+                                <td><span
+                                        [ngClass]="{'back': data.selection === 'Back' || data.selection === 'Yes', 'lay': data.selection === 'Lay' || data.selection === 'No'}">{{data.selection}}</span>
+                                </td>
+                                <td [ngClass]="{'text-success':data.profit>=0,'text-danger':data.profit<0}">{{ data.profit  % 1 !== 0 ? (data.profit  |
+                                    number:'1.2-2') : data.profit  }}</td>
+                                <td>{{data.result}}</td>
+                                <th *ngIf="data.betStatus == 1">
+                                    <span [ngClass]="{'btn btn-success': data.betStatus == 1}"> WIN</span>
+                                </th>
+                                <th *ngIf="data.betStatus == 2">
+                                    <span [ngClass]="{'btn btn-danger': data.betStatus == 2}">Loss</span>
+                                </th>
+                                <th *ngIf="data.betStatus == 0" >
+                                    <span [ngClass]="{'btn btn-warning': data.betStatus == 0}">Pending</span>
+                                </th>
+
+                                <td>{{data.betTime | date:'dd/MM/yyyy h:mm:ss a'}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div *ngIf="betHis?.length>0" class="pagination_filter justify-content-between pt-3 d-flex  row">
+                    <div class="col-sm-6 mb- mb-sm-0">
+                        <select class="form-control w-auto mr-2 " id="" (change)="updateRecValueBets($event)">
+                            <option value="takeRecords" selected>{{takeRecords}}</option>
+                            <option value="10" *ngIf="takeRecords!=10">10</option>
+                            <option value="20" *ngIf="takeRecords!=20">20</option>
+                            <option value="30" *ngIf="takeRecords!=30">30</option>
+                            <option value="40" *ngIf="takeRecords!=40">40</option>
+                            <option value="50" *ngIf="takeRecords!=50">50</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6 d-flex justify-content-end">
+                        <pagination-controls class="pagination" [maxSize]="5" *ngIf="betHis?.length>0"
+                            (pageChange)="pageChangedBets($event)">
+                        </pagination-controls>
+                    </div>
+                </div>
+                <div *ngIf="betHis?.length==0" class="load-more"><span>No Data Available.</span></div>
+            </div>
+        </div>
+    </div>
+</div>

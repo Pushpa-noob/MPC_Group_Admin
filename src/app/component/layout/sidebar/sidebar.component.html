@@ -1,0 +1,212 @@
+<div class="left-side-menu">
+  <div class="sidebar-menu">
+    <ul class="list-unstyled">
+      <li>
+        <a routerLink="/dashboard" routerLinkActive="active" class="link-tag">
+
+          <i class="fa-solid fa-table-columns"></i>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/user_list" routerLinkActive="active" class="link-tag">
+
+          <i class="fa-solid fa-users"></i>
+          <span>User List</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/risk_analysis" routerLinkActive="active" class="link-tag">
+
+          <i class="fa-solid fa-chart-bar"></i>
+          <span>Risk Analysis</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/balance_sheet" routerLinkActive="active" class="link-tag">
+
+          <i class="fa-solid fa-sheet-plastic"></i>
+          <span>Balance Sheet</span>
+        </a>
+      </li>
+      <li>
+        <div class="dropdown" routerLinkActive="showDrop" [ngClass]="{'showDrop': isDropdownOpen('report')}">
+          <a class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
+            (click)="toggleDropdownul('report')">
+
+            <i class="fa-solid fa-file-contract"></i> <span>Reports</span>
+          </a>
+          <ul class="dropdown-menu position-static transform-none" [ngClass]="{'show': isDropdownOpen('report')}">
+            <li><a class="dropdown-item link-tag" routerLink="/open_bets" routerLinkActive="active">Open Bets</a></li>
+
+            <li><a class="dropdown-item  link-tag" routerLink="/profit_loss_report" routerLinkActive="active"> Over All
+                PL</a></li>
+            <li *ngIf="getRoleId==1"><a class="dropdown-item link-tag" routerLink="/cheatbet_report"
+                routerLinkActive="active"> Open CheatBet
+                Report</a></li>
+            <li><a class="dropdown-item link-tag" routerLink="/client_bet_history" routerLinkActive="active">Client Bet
+                History</a></li>
+            <li><a class="dropdown-item link-tag" routerLink="/account_statement" routerLinkActive="active">Account
+                Statement</a></li>
+
+            <!-- <li><a class="dropdown-item link-tag" routerLink="/market_pl_report" routerLinkActive="active">Market Wise
+                PL</a></li> -->
+
+            <li><a class="dropdown-item link-tag" routerLink="/cash_statement" routerLinkActive="active">Cash
+                Statement</a>
+            </li>
+
+          </ul>
+        </div>
+      </li>
+      <li *ngIf="getRoleId==1 || getRoleId==2">
+        <a routerLink="/open_market" routerLinkActive="active" class="link-tag">
+
+          <i class="fa-solid fa-box-open"></i>
+          <span>Open Market</span>
+        </a>
+      </li>
+      <li *ngIf="getRoleId==1 || getRoleId==2">
+        <a routerLink="/casino" routerLinkActive="active" class="link-tag">
+          <i class="fa-solid fa-coins"></i>
+          <span>Casino Settings</span>
+        </a>
+      </li>
+      <li *ngIf="getRoleId==1">
+        <a routerLink="/odd_even" routerLinkActive="active" class="link-tag">
+          <i class="fa-solid fa-coins"></i>
+          <span>Odd/Even</span>
+        </a>
+      </li>
+
+
+      <li *ngIf="getRoleId==2">
+        <a class="link-tag" routerLink="/deposit_request" routerLinkActive="active">
+          <i class="fa-solid fa-money-bill"></i>
+          <span> Pending Deposit Req </span> <span class="countCol">{{pendingRequestsCount.depositCount}}</span></a></li>
+      <li *ngIf="getRoleId==2">
+        <a class="link-tag" routerLink="/pending_withdraw" routerLinkActive="active">
+          <i class="fa-solid fa-money-bill-transfer"></i>
+          <span>Pending Withdraw</span>
+          <span class="countCol">{{pendingRequestsCount.withdrawalCount}}</span></a></li>
+
+      <li *ngIf="getRoleId==2" (click)="getCountForPendingRequests()">
+        <div class="dropdown" routerLinkActive="showDrop" [ngClass]="{'showDrop': isDropdownOpen('manageBanking')}">
+          <a class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
+            (click)="toggleDropdownul('manageBanking')">
+            <!-- <i class="fas fa-university"></i> -->
+            <i class="fa-solid fa-landmark"></i>
+            <span>Manage Banking</span>
+          </a>
+          <ul class="dropdown-menu position-static transform-none"
+            [ngClass]="{'show': isDropdownOpen('manageBanking')}">
+            <!-- <li><a class="dropdown-item link-tag" routerLink="/deposit_request" routerLinkActive="active">Pending Deposit
+                Req <span class="countCol">{{pendingRequestsCount.depositCount}}</span></a></li> -->
+            <li><a class="dropdown-item link-tag" routerLink="/accept_deposit_request"
+                routerLinkActive="active">Accepted
+                Deposit Req</a></li>
+            <!-- <li><a class="dropdown-item link-tag" routerLink="/pending_withdraw" routerLinkActive="active">Pending Withdraw
+                <span class="countCol">{{pendingRequestsCount.withdrawalCount}}</span></a></li> -->
+            <li><a class="dropdown-item link-tag" routerLink="/accept_withdraw_request"
+                routerLinkActive="active">Accepted
+                Withdraw Req </a></li>
+            <li><a class="dropdown-item link-tag" routerLink="/banking_method" routerLinkActive="active">Banking Method
+              </a></li>
+            <li><a class="dropdown-item link-tag" routerLink="/manage_banking" routerLinkActive="active">Manage Banking
+                Details </a></li>
+          </ul>
+        </div>
+      </li>
+      <li *ngIf="getRoleId==1 || getRoleId==2">
+        <a routerLink="/tournament_list" routerLinkActive="active" class="link-tag">
+          <!-- <i class="fa-solid fa-gamepad"></i> -->
+          <i class="fa-solid fa-cash-register"></i>
+          <span>Tournament Settings</span>
+        </a>
+      </li>
+      <li *ngIf="getRoleId===1">
+        <div class="dropdown" routerLinkActive="showDrop" [ngClass]="{'showDrop': isDropdownOpen('event')}">
+          <a class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
+            (click)="toggleDropdownul('event')">
+            <i class="fa-solid fa-calendar"></i>
+            <span>Event</span>
+          </a>
+          <ul class="dropdown-menu position-static transform-none" [ngClass]="{'show': isDropdownOpen('event')}">
+            <li><a class="dropdown-item link-tag" routerLink="/add_event" routerLinkActive="active"> Add Event</a></li>
+            <li><a class="dropdown-item link-tag" routerLink="/create_matches" routerLinkActive="active"> Create
+                Matches</a></li>
+          </ul>
+        </div>
+      </li>
+      <li *ngIf="getRoleId===1">
+        <div class="dropdown" routerLinkActive="showDrop" [ngClass]="{'showDrop': isDropdownOpen('matchSetting')}">
+          <a class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
+            (click)="toggleDropdownul('matchSetting')">
+            <i class="fa-solid fa-gear"></i>
+            <span>Match Settings</span>
+          </a>
+          <ul class="dropdown-menu position-static transform-none" [ngClass]="{'show': isDropdownOpen('matchSetting')}">
+            <li><a class="dropdown-item link-tag" routerLink="/result_fancy" routerLinkActive="active"> Session</a></li>
+            <li><a class="dropdown-item link-tag" routerLink="/result_market" routerLinkActive="active"> Match</a></li>
+            <li><a class="dropdown-item link-tag" routerLink="/rollback_fancy" routerLinkActive="active"> Session
+                History</a></li>
+            <li><a class="dropdown-item link-tag" routerLink="/rollback_match" routerLinkActive="active"> Match
+                History</a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      <li *ngIf="getRoleId===1 || getRoleId==2">
+        <a routerLink="/sports" routerLinkActive="active" class="link-tag">
+          <i class="fa-regular fa-futbol"></i>
+          <span>Sports</span>
+        </a>
+      </li>
+
+      <li *ngIf="getRoleId===2">
+        <div class="dropdown" routerLinkActive="showDrop" [ngClass]="{'showDrop': isDropdownOpen('generalSetting')}">
+          <a class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
+            (click)="toggleDropdownul('generalSetting')">
+            <!-- <i class="fa-solid fa-gear"></i> -->
+            <i class="fa-solid fa-gears"></i>
+            <span>General Setting</span>
+          </a>
+          <ul class="dropdown-menu position-static transform-none"
+            [ngClass]="{'show': isDropdownOpen('generalSetting')}">
+            <li><a class="dropdown-item link-tag" routerLink="/basic_settings" routerLinkActive="active">Basic
+                Settings</a>
+            </li>
+            <li><a class="dropdown-item link-tag" routerLink="/notifications"
+                routerLinkActive="active">Add-Notification</a></li>
+            <li><a class="dropdown-item link-tag" routerLink="/keyboard_settings" routerLinkActive="active">KeyBoard
+                Settings</a></li>
+            <li><a class="dropdown-item link-tag" routerLink="/banner_upload" routerLinkActive="active">Banner
+                Upload</a>
+            </li>
+            <!-- <li><a class="dropdown-item" routerLink="/contact_details" routerLinkActive="active">Contact
+                Details</a></li> -->
+            <!-- <li><a class="dropdown-item" routerLink="/api_settings"
+                routerLinkActive="active">BetFair API
+                Setting</a></li> -->
+          </ul>
+        </div>
+      </li>
+      <li *ngIf="getRoleId===1 || getRoleId===2">
+        <div class="dropdown" routerLinkActive="showDrop" [ngClass]="{'showDrop': isDropdownOpen('blockUnblock')}">
+          <a class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
+            (click)="toggleDropdownul('blockUnblock')">
+            <i class="fa-solid fa-lock"></i>
+            <span>Block/Unblock</span>
+          </a>
+          <ul class="dropdown-menu position-static transform-none" [ngClass]="{'show': isDropdownOpen('blockUnblock')}">
+            <li><a class="dropdown-item link-tag" routerLink="/block_market" routerLinkActive="active">Block Market</a>
+            </li>
+            <li><a class="dropdown-item link-tag" routerLink="/unblock_market" routerLinkActive="active">Unblock
+                Market</a>
+            </li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

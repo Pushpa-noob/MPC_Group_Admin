@@ -1,0 +1,253 @@
+<div class="page-title-box mb-3 mb-ms-4">
+    <h4 class="page-title">Risk Analysis</h4>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="row mob_ColRev">
+                <div class="col-sm-12 col-md-3 col-lg-4 col-xl-3">
+                    <div class="gamesTabs">
+                        <ul class="nav nav-pills mb-0" id="pills-tab" role="tablist">
+                            <li class="nav-item" role="presentation" (click)="getEventList(0)">
+                                <button class="nav-link active" id="pills-SportGame-tab" data-bs-toggle="pill"
+                                    data-bs-target="#pills-SportGame" type="button" role="tab"
+                                    aria-controls="pills-SportGame" aria-selected="true">In-Play</button>
+                            </li>
+                            <li class="nav-item" role="presentation" (click)="getEventList(1)">
+                                <button class="nav-link" id="pills-SportGame-tab" data-bs-toggle="pill"
+                                    data-bs-target="#pills-SportGame" type="button" role="tab"
+                                    aria-controls="pills-SportGame" aria-selected="true">All Match</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- <div class="col-sm-12 col-md-9 col-lg-8 col-xl-7 my-2 my-md-0">
+                    <div class="d-flex align-items-center justify-content-md-end flex-wrap">
+                        <label class="lblDetailView me-1">Risk Analysis</label>
+                        <div class="ms-1 switchCommon pb-1">
+                            <label class="switchBtnCommon">
+                                <input type="checkbox" checked id="togBtn" name="riskToggle" [(ngModel)]="riskToggle">
+                                <div class="slider round" (click)="riskAnalysis(riskToggle)">
+                                    <span class="on">True</span>
+                                    <span class="off">False</span>
+                                </div>
+                            </label>
+                        </div>
+                    
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-3 col-lg-12 col-xl-2">
+                    <input type="text" class="form-control " placeholder="Search">
+                </div> -->
+            </div>
+            <div class="tab-content mt-1" id="pills-tabContent">
+                <!-- InPlay Matches -->
+                <div class="tab-pane fade show active" id="pills-SportGame" role="tabpanel"
+                    aria-labelledby="pills-SportGame-tab" tabindex="0">
+                    <div class="row sportrow m-0" *ngFor="let data of eventList">
+                        <div class="col-12" *ngIf="data.list.length>0">
+                            <h6>{{data.name}}</h6>
+                        </div>
+                        <div class="col-12 matchrow">
+                            <div class="row" *ngFor="let event of data.list;let i=index">
+                                <div class="col-md-7 col-xs-12 tr-matchdetail">
+                                    <div class="row">
+                                        <div class="col-sm-7 col-xs-12 mb-1 mb-md-0 px-0 px-md-1">
+                                            <div class="d-inline-block cursor-pointer icon">
+                                                <button type="button" class="bg-transparent border-0 p-0 accorBtn"
+                                                    *ngIf="riskToggle" data-bs-toggle="collapse"
+                                                    [attr.href]="'#matchDet' + i" role="button"
+                                                    aria-controls="matchDet">
+                                                    <i class="fa-solid fa-chevron-down"></i>
+                                                </button>
+                                                <a style="cursor: pointer;" data-bs-toggle="modal"
+                                                    data-bs-target="#actdeact">
+                                                    <i *ngIf="!event.eventStatus"
+                                                        (click)="setUpModal(event.betfairEventId)"
+                                                        class="fa fa-check-circle text-green p-1"
+                                                        data-bs-toggle="tooltip" data-bs-placement="top"
+                                                        data-bs-original-title="Active / Deactive Match"></i>
+                                                    <i *ngIf="event.eventStatus"
+                                                        (click)="setUpModal(event.betfairEventId)"
+                                                        class="fa-solid fa-ban text-danger p-1" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top"
+                                                        data-bs-original-title="Active / Deactive Match"></i>
+
+                                                </a>
+                                            </div>
+                                            <div class="d-inline-block">
+                                                <a routerLink="/running_market/{{event.betfairSportId}}/{{event.betfairEventId}}"
+                                                    class="text-decoration-none"><span
+                                                        class="matchName">{{event.eventName}} <span
+                                                            class="badge badge-soft-success" *ngIf="event.inPlay">In
+                                                            Play</span></span></a>
+                                                <br>
+                                                <span class="matchname-span d-flex">
+                                                    <span class="tournament-title">{{event.tournamnetName}}</span>
+                                                    <span class="matchdate-span ms-1 d-none d-md-flex">|
+                                                        {{event.eventTime | date:'yyyy-MM-dd
+                                                        hh:mm:ss':'Asia/Kolkata'}}</span></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-5 col-xs-12 text-end desktop-button-div">
+                                            <span class="matchdate-span d-inline-block d-md-none">{{event.eventTime |
+                                                date:'yyyy-MM-dd hh:mm:ss':'Asia/Kolkata'}}</span>
+                                            <div class="button-list">
+                                                <button class="btn badge-color btn-match-count active" type="button"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    data-bs-original-title="Fancy">
+                                                    <span class="btn-match-count-span">F</span>
+                                                    <span
+                                                        class="badge badge-warning rounded-circle match-count-badge">{{event.fancy}}</span>
+                                                </button>
+                                                <button class="btn badge-color btn-match-count" type="button"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    data-bs-original-title="Bookmarkers">
+                                                    <span class="btn-match-count-span">BM</span>
+                                                    <span
+                                                        class="badge badge-warning rounded-circle match-count-badge">1</span>
+                                                </button>
+                                                <button class="btn badge-color btn-match-count active" type="button"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    data-bs-original-title="Market">
+                                                    <span class="btn-match-count-span">MO</span>
+                                                    <span
+                                                        class="badge badge-warning rounded-circle match-count-badge">1</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-5 col-xs-12 td-marketrate px-0 px-md-2">
+                                    <div class="row">
+                                        <div class="col-4 ratebox">
+                                            <div class="col-6 text-center BackColor ratediv blink">
+                                                <a>
+                                                    <div class="price">{{event.runner1BackRate}}</div>
+                                                </a>
+                                            </div>
+                                            <div class="col-6 text-center Laycolor ratediv">
+                                                <a>
+                                                    <div class="price">{{event.runner1LayRate}}</div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-4 ratebox">
+                                            <div class="col-6 text-center BackColor ratediv blink">
+                                                <a>
+                                                    <div class="price">{{event.runner2BackRate}}</div>
+                                                </a>
+                                            </div>
+                                            <div class="col-6 text-center Laycolor ratediv">
+                                                <a>
+                                                    <div class="price">{{event.runner2LayRate}}</div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-4 ratebox">
+                                            <div class="col-6 text-center BackColor ratediv blink">
+                                                <a>
+                                                    <div class="price">{{event.runner3BackRate}}</div>
+                                                </a>
+                                            </div>
+                                            <div class="col-6 text-center Laycolor ratediv">
+                                                <a>
+                                                    <div class="price">{{event.runner3LayRate}}</div>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-12 collapse" [id]="'matchDet' + i" *ngFor="let  market of event.markets"
+                                    [class.show]="checkIfAnyRunnerBookNotZero(market.runners)">
+                                    <div class="mainDetailCol">
+                                        <div class="row market-row noShadowHover">
+                                            <div class="col-md-7 col-xs-12 tr-matchdetail d-flex align-items-center">
+                                                <small class="ms-lg-5">{{market.marketName}}
+                                                    ({{getBetsCount(event.betfairEventId,market.marketName)}})</small>
+                                            </div>
+                                            <div class="col-md-5 col-xs-12 px-1">
+                                                <div class="table-responsive table-wrap">
+                                                    <table class="table">
+                                                        <tbody>
+                                                            <tr class="">
+                                                                <td class="text-center"
+                                                                    *ngFor="let runner of market.runners">
+                                                                    {{runner.runnerName}}
+                                                                    <h6 class="text-center"
+                                                                        [ngClass]="{'green':runner.book>=0,'red':runner.book<0}">
+                                                                        {{runner.book% 1 !== 0?(runner.book |
+                                                                        number:'1.2-2'):runner.book}}</h6>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="row" *ngIf="event.betfairSportId==4">
+                                    <div class="col-md-6" *ngFor="let data of getFancyBookObject(event.betfairEventId)">
+
+                                        <div class="ballRuningCell py-1">
+                                            <small class="ms-lg-5">{{data.runnerName}}
+                                                ({{getFancyBetsCount(event.betfairEventId,data.runnerName)}})</small>
+                                            <div class="ballByBall">
+                                                <ul class="list-unstyled d-flex">
+                                                    <li *ngFor="let pl of data.book">
+                                                        <p>{{pl.RunValue}}</p>
+                                                        <p [ngClass]="{'green':pl.Pl>=0,'red':pl.Pl<0}">
+                                                            {{pl.Pl% 1 !== 0?(pl.Pl |
+                                                            number:'1.2-2'):pl.Pl}}</p>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="load-more" *ngIf="eventList?.length==0"><span>No More Data Available.</span></div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!--active deactive Modal -->
+<div class="modal fade custoModal actdeactiveModal" id="actdeact" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="actdeactLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content">
+            <div class="card-body p-4">
+                <div class="swalIcon">
+                    <span class="swa-icon-text">!</span>
+                </div>
+                <div class="text-center px-md-4">
+                    <h4>Are you sure?</h4>
+                    <p>You won't be able to revert this.!</p>
+                    <input type="password" class="form-control" placeholder="Enter password" [(ngModel)]="password">
+                    <div *ngIf="password.length==0" class="text-danger text-start">
+                        *Password is required.
+                    </div>
+                </div>
+                <div class="modal-footer border-0 justify-content-center order-0 p-0 mt-3">
+                    <button type="button" class="btn btn-success" (click)="blockUnblockEvent()">Yes, Update
+                        it.!</button>
+                    <button type="button" id="clsCnfrmPass" class="btn btn-danger" data-bs-dismiss="modal">No,
+                        cancel.!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

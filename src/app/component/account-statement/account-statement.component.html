@@ -1,0 +1,177 @@
+<div class="page-title-box mb-3 mb-ms-4">
+   <div class="row align-items-center">
+      <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+         <h4 class="page-title mb-0">Account Statement</h4>
+      </div>
+   </div>
+</div>
+
+
+<div class="row">
+   <div class="col-md-12">
+      <div class="card">
+         <div class="row">
+            <div class="content text-left ms-2 mt-2" style="color: red;">*Showing data of last one 7 days by default</div>
+            <div class=" col-md-6 col-lg-6 col-xs-12 px-1"></div>
+            <div class="col-md-6 col-lg-6 col-xs-12 accordion custom-accordion text-sm-end">
+               <a class="link m-1" data-bs-toggle="collapse" href="#advanceearch" role="button" aria-expanded="false"
+                  aria-controls="advanceearch">
+                  Advance Search <i class="ms-1 fa-solid fa-chevron-right"></i>
+               </a>
+            </div>
+         </div>
+         <div class="collapse" id="advanceearch">
+            <hr>
+            <div class="row">
+               <div class="col-lg-5 col-md-6 col-sm-12 col-xs-12">
+                  <div class="input-group marginb5 div-datepicker">
+                     <input type="datetime-local" class="form-control" name="startTime" [(ngModel)]="startTime"
+                        (ngModelChange)="onStartTimeChange($event)" />
+                     <span class="col-form-label">to</span>
+                     <input type="datetime-local" class="form-control" name="endTime" [(ngModel)]="endTime"
+                        (ngModelChange)="onEndTimeChange($event)" />
+                  </div>
+               </div>
+
+               <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                  <button type="button" class="btn btn-success" (click)="getTransationHistory()">
+                     <i class="fa fa-search"></i> Search
+                  </button>
+               </div>
+            </div>
+            <hr>
+         </div>
+         <div class="row">
+            <div class="col-lg-12 col-md-8 col-sm-12 col-xs-12">
+               <div class="d-flex align-items-center flex-wrap account-radio">
+                  <label class="radio radio-info">
+                     <input type="radio" (click)="getHistoryData('AllCredit')" [(ngModel)]="filterType" id="AllCredit"
+                        name="AllCredit" value="AllCredit">
+                     <label class="bold" for="chkShowAll1">Show All Credit</label>
+                     &nbsp;
+                  </label>
+                  <label class="radio radio-info">
+                     <input type="radio" (click)="getHistoryData('ChipsOnly')" [(ngModel)]="filterType"
+                        id="ShowOnlyChips" name="ChipsOnly" value="ChipsOnly">
+                     <label class="bold" for="ShowOnlyChips">Show Only Chips</label>
+                     &nbsp;
+                  </label>
+                  <label class="radio radio-info">
+                     <input type="radio" (click)="getHistoryData('CreditTaken')" [(ngModel)]="filterType"
+                        id="CreditGiven" name="CreditGiven" value="CreditTaken">
+                     <label class="bold" for="chkShowCash">Show Parent Credit</label>
+                     &nbsp;
+                  </label>
+                  <label class="radio radio-info">
+                     <input type="radio" (click)="getHistoryData('CreditGiven')" [(ngModel)]="filterType"
+                        id="CreditGiven" name="CreditGiven" value="CreditGiven">
+                     <label class="bold" for="chkShowPnl">Show Child Credit</label>
+                     &nbsp;
+                  </label>
+                  <label class="radio radio-info">
+                     <input type="radio" (click)="getHistoryData('ProfitLoss')" [(ngModel)]="filterType" id="ProfitLoss"
+                        name="ProfitLoss" value="ProfitLoss">
+                     <label class="bold" for="chkShowPnl">Show Market Profit & Loss </label>
+                     &nbsp;
+                  </label>
+               </div>
+            </div>
+         </div>
+         <div class="row mt-2 mb-2 d-flex align-items-center flex-row-reverse tableTopRow ">
+            <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12 ps-md-0">
+               <input type="text" placeholder="Search Min. 2 characters" class="form-control">
+            </div>
+            <div class="dt-buttons flex-wrap mt-2 mt-md-0 col-lg-7 col-md-6 col-sm-12 col-xs-12 text-end">
+               <button class="btn downloadTableBtn me-2" type="button" data-bs-toggle="modal"
+                  data-bs-target="#filter"><i class="fa fa-filter"></i></button>
+               <button class="btn downloadTableBtn me-2" type="button"><i class="fas fa-sync-alt"></i></button>
+               <button class="btn downloadTableBtn me-2" type="button"><i class="fas fa-file-csv"></i></button>
+               <button class="btn downloadTableBtn me-2" type="button"><i class="far fa-file-excel"></i></button>
+               <button class="btn downloadTableBtn" type="button"><i class="far fa-file-pdf"></i></button>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-12 mt-2 mt-md-0">
+               <p class="tableP mb-0">Showing {{returnObj.length}} of {{Count}} entries
+            </div>
+         </div>
+         <div *ngIf="returnObj?.length>0" class="table-responsive border">
+            <table class="table dataNowrap mb-0">
+               <thead>
+                  <tr>
+                     <th>Date</th>
+                     <th>Type</th>
+                     <th>Description</th>
+                     <th>Cr (Deposit)</th>
+                     <th>Dr (Withdraw)</th>
+                     <th>Com.</th>
+                     <th>Balance</th>
+
+                  </tr>
+               </thead>
+               <tbody>
+                  <tr
+                     *ngFor="let data of returnObj  | paginate: { itemsPerPage:takeRecords, currentPage:pageNum,totalItems: Count };">
+                     <td>
+                        {{data?.createdOn | date:'short'}}
+                     </td>
+                     <td>
+                        <label class="btn grid-button"
+                           [ngClass]="{'btn-warning': data?.sportsName === 'Banking', 'btn-primary': data?.sportsName !== 'Banking'}"
+                           style="cursor:text;">
+                           {{ data?.sportsName === 'Banking' ? 'D|W Cash' : 'P|L Market' }}
+                        </label>
+                     </td>
+                     <td *ngIf="data.sportsId != 0">
+                        <div class="d-flex flex-column">
+                           <a (click)="openInNewTab(data)">
+                              <p class="mb-0">
+                                 {{data.sportsName}}/{{data.eventName}}/{{data.marketName}}
+                                 <span
+                                    *ngIf="data.marketName === 'Fancy' || data.marketName==='Session Commision'">/{{data.runnerId}}</span>
+                              </p>
+                           </a>
+                           <p *ngIf="data.sportsId != 5" class="mb-0">Result: <b
+                                 class="text-success">{{data?.tournamentName}}</b></p>
+                        </div>
+                     </td>
+                     <td *ngIf="data.sportsId == 0">
+                        <div class="d-flex flex-column">
+                           <p class="mb-0">
+                              {{data.eventName}}
+                           </p>
+                        </div>
+                     </td>
+                     <td><span [ngClass]="{'btn btn-success grid-button':data.amount>0}">{{ data.type === 'Credit'
+                           ? (data.amount | number:'1.2-2') : '0' }}</span></td>
+                     <td><span [ngClass]="{'btn btn-danger grid-button':data.amount<0}">{{ data.type === 'Debit' ?
+                           (data.amount | number:'1.2-2') : '0' }}</span></td>
+                     <td><span
+                           [ngClass]="{'btn btn-danger grid-button':data.commission<0,'btn btn-success grid-button':data.commission>=0}">{{data.commission
+                           |
+                           number:'1.2-2'}}</span></td>
+                     <td>{{data.balance | number:'1.2-2'}}</td>
+
+                  </tr>
+               </tbody>
+            </table>
+         </div>
+         <div *ngIf="returnObj?.length>0" class="pagination_filter justify-content-between pt-3 d-flex  row">
+            <div class="col-sm-6 mb- mb-sm-0">
+               <select class="form-control w-auto mr-2 " id="" (change)="updateRecValue($event)">
+                  <option value="takeRecords" selected>{{takeRecords}}</option>
+                  <option value="10" *ngIf="takeRecords!=10">10</option>
+                  <option value="20" *ngIf="takeRecords!=20">20</option>
+                  <option value="30" *ngIf="takeRecords!=30">30</option>
+                  <option value="40" *ngIf="takeRecords!=40">40</option>
+                  <option value="50" *ngIf="takeRecords!=50">50</option>
+               </select>
+            </div>
+            <div class="col-sm-6 d-flex justify-content-end">
+               <pagination-controls class="pagination" *ngIf="returnObj?.length>0" [maxSize]="5"
+                  (pageChange)="pageChanged($event)">
+               </pagination-controls>
+            </div>
+         </div>
+         <div *ngIf="returnObj?.length==0" class="load-more"><span>No Data Available.</span></div>
+      </div>
+   </div>
+</div>

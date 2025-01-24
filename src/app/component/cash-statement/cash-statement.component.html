@@ -1,0 +1,129 @@
+<div class="page-title-box mb-3 mb-ms-4">
+    <div class="row align-items-center">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <h4 class="page-title mb-0">Cash Statement</h4>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 mb-2">
+                    <div class="input-group marginb5 div-datepicker">
+                        <input type="datetime-local" class="form-control" [(ngModel)]="startTime">
+                        <span class="col-form-label">to</span>
+                        <input type="datetime-local" class="form-control" [(ngModel)]="endTime">
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-12 col-xs-12 mb-2 d-flex nowrap">
+                    <button (click)="getStatement()" type="button" class="btn btn-success">
+                        <i class="fa fa-search"></i> Search
+                    </button>
+                    <button (click)="resetAll()" type="button" class="btn btn-danger ms-2">
+                        Reset
+                    </button>
+                </div>
+                <div class="col-lg-5 col-md-4 col-sm-12 col-xs-12 mb-2 ">
+                    <span class="label label-primary">Please Add Filter Values To See Data</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2 col-md-8 col-sm-12 col-xs-12" *ngIf="getRoleId>1">
+                    <label class="radio radio-info" >
+                        <input (click)="setFilter('Own')" [(ngModel)]="filterType" value="Own" type="radio" id="rbtnOwn" name="rbtnselect" value="own" checked="checked">
+                        <label class="bold" for="rbtnOwn">Own</label>
+                        &nbsp;
+                    </label>
+
+                    <label class="radio radio-info">
+                        <input type="radio" (click)="setFilter('All')" [(ngModel)]="filterType" value="User" id="rbtnUser" name="rbtnselect" value="user">
+                        <label class="bold" for="rbtnUser">User</label>
+                        &nbsp;
+                    </label>
+                </div>
+            </div>
+            <div class="row mt-2 mb-2 d-flex align-items-center flex-row-reverse tableTopRow ">
+                <!-- <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12 ps-md-0">
+                    <input type="text" placeholder="Search Min. 2 characters" class="form-control">
+                </div> -->
+                <div class="dt-buttons flex-wrap mt-2 mt-md-0 col-lg-7 col-md-6 col-sm-12 col-xs-12 text-end">
+                    <!-- <button class="btn downloadTableBtn me-2" type="button" data-bs-toggle="modal"
+                          data-bs-target="#filter"><i class="fa fa-filter"></i></button> -->
+                          <!-- <button class="btn downloadTableBtn me-2" type="button"><i class="fas fa-sync-alt"></i></button> -->
+                    <button class="btn downloadTableBtn me-2" type="button"><i class="fas fa-file-csv"></i></button>
+                    <button class="btn downloadTableBtn me-2" type="button"><i class="far fa-file-excel"></i></button>
+                    <button class="btn downloadTableBtn" type="button"><i class="far fa-file-pdf"></i></button>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-12 mt-2 mt-md-0">
+                    <p class="tableP mb-0">Showing {{transObj?.length}} of {{Count}} entries
+                </div>
+            </div>
+            <div class="table-responsive border">
+                <table class="datatable table nowrapTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>UserName</th>
+                            <th>type</th>
+                            <th>Description</th>
+                            <th>Cr (Deposit)</th>
+                            <th>Dr (Withdraw)</th>
+                            <th>Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of transObj  | paginate: { itemsPerPage:takeRecords, currentPage:pageNum,totalItems: Count };">
+                            <td>
+                                {{data.createdOn | date:'short'}}
+                            </td>
+                            <td>
+                                {{data.loginId}}
+                            </td>
+                            <td>
+                                <label class="btn grid-button btn-warning"
+                                 style="cursor:text;">
+                                 D|W Cash
+                              </label>
+                            </td>
+                            
+                            <td >
+                                <div class="d-flex flex-column">
+                                    <p class="mb-0 px-1 rounded-1">{{data.sportsName
+                                        }}/{{data.eventName}}/{{data.marketName}}
+                                    </p>
+                                   
+                                </div>
+                            </td>
+                            <td><span [ngClass]="{'btn btn-success grid-button':data.amount>0}">{{ data.type === 'Credit'
+                                ? (data.amount | number:'1.2-2') : '0' }}</span></td>
+                          <td><span [ngClass]="{'btn btn-danger grid-button':data.amount<0}">{{ data.type === 'Debit' ?
+                                (data.amount | number:'1.2-2') : '0' }}</span></td>
+                          <td>{{data.balance | number:'1.2-2'}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div *ngIf="transObj?.length>0" class="pagination_filter justify-content-between pt-3 d-flex  row">
+                <div class="col-sm-6 mb- mb-sm-0">
+                   <select class="form-control w-auto mr-2 " id="" (change)="updateRecValue($event)">
+                      <option value="takeRecords" selected>{{takeRecords}}</option>
+                      <option value="10" *ngIf="takeRecords!=10">10</option>
+                      <option value="20" *ngIf="takeRecords!=20">20</option>
+                      <option value="30" *ngIf="takeRecords!=30">30</option>
+                      <option value="40" *ngIf="takeRecords!=40">40</option>
+                      <option value="50" *ngIf="takeRecords!=50">50</option>
+                   </select>
+                </div>
+                <div class="col-sm-6 d-flex justify-content-end">
+                   <pagination-controls class="pagination" [maxSize]="5" *ngIf="transObj?.length>0"
+                      (pageChange)="pageChanged($event)">
+                   </pagination-controls>
+                </div>
+             </div>
+             <div *ngIf="transObj?.length==0" class="load-more"><span>No Data Available.</span></div>
+        </div>
+    </div>
+</div>

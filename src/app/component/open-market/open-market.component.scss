@@ -1,0 +1,34 @@
+.link {
+    text-decoration: none;
+    color: var(--blackTextColor);
+    font-size: 13px;
+}
+.notification-list{
+    .checkbox {
+        input{
+            width: 18px;
+            height: 18px;
+        }
+    }
+}
+span.col-form-label {
+    padding: 8px;
+}
+p.tableP{
+    color: var(--blackTextColor);
+}
+.nowrapTable{
+    td{
+        white-space: nowrap;
+    }
+}
+
+
+.cstmradioBtns{
+    .radio-info {
+        input {
+            width: 16px;
+            height: 16px;
+        }
+    }
+}

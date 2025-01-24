@@ -1,0 +1,17 @@
+input.run_field {
+    min-width: 70px;
+    max-width: 200px;
+}
+
+h6{
+    font-weight: normal;
+}
+.customSelect{
+    min-width: 115px;
+    width: 115px;
+    height: 32px;
+    padding: 2px;
+}
+.text-danger {
+    color: red; /* Ensure this isn't overridden or hidden by parent styles */
+}

@@ -1,0 +1,156 @@
+<div class="page-title-box mb-3 mb-ms-4">
+    <h4 class="page-title">General Settings <button type="button" data-bs-toggle="modal"
+            data-bs-target="#addKeyboardSetting" class="btn btn-primary m-0 ms-3">Add New</button></h4>
+</div>
+<div class="row subPages">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="table-responsive mb-3">
+                <table class="table  mb-0">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Chip Name</th>
+                            <th>Chip Value</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let chip of chips;let i=index">
+                            <td>{{i+1}}</td>
+                            <td>{{chip.keyName}}</td>
+                            <td>{{chip.keyValue}}</td>
+                            <td>
+                                <div class="act_btn">
+                                    <button type="button" class="btn btn-info me-1 px-2 py-1" data-bs-toggle="modal"
+                                        data-bs-target="#editKeyboardSetting" (click)="getModelValues(chip)">
+                                        <i class="far fa-edit"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-danger px-2 py-1" data-bs-toggle="modal"
+                                        data-bs-target="#chipsDelete" (click)="getModelValues(chip)">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="text-align: center;" *ngIf="chips?.length==0">No record found</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- add Chips setting modal -->
+<div class="modal fade custoModal" id="addKeyboardSetting" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="addKeyboardSettingLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="addKeyboardSettingLabel">Add Keyboard Setting</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="clsaddmdl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+                    <div class="bankingForm">
+                        <div class="row">
+                            <form [formGroup]="chipsForm" (ngSubmit)="addChips()">
+                                <div class="col-md-12 mb-3 mb-md-4">
+                                    <label class="mb-1">ChipName</label>
+                                    <input type="text" class="form-control" formControlName="KeyName">
+                                    <div *ngIf="chipsForm.get('KeyName')?.errors?.['required'] && (chipsForm.get('KeyName')?.dirty || chipsForm.get('KeyName')?.touched)"
+                                        class="text-danger">
+                                        Chip name field is required.
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-3 mb-md-4">
+                                    <label class="mb-1">ChipValue</label>
+                                    <input type="number" class="form-control" formControlName="KeyValue">
+                                    <div *ngIf="chipsForm.get('KeyValue')?.errors?.['required'] && (chipsForm.get('KeyValue')?.dirty || chipsForm.get('KeyValue')?.touched)"
+                                        class="text-danger">
+                                        Chip value field is required.
+                                    </div>
+                                </div>
+                                <div class="col-md-12 text-end">
+                                    <button type="submit" class="btn btn-primary">Add</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Chips setting modal -->
+<div class="modal fade custoModal" id="editKeyboardSetting" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="editKeyboardSettingLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="editKeyboardSettingLabel">Edit Keyboard Setting</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="clsmdl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+                    <div class="bankingForm">
+                        <div class="row">
+                            <form [formGroup]="chipsForm" (ngSubmit)="updateChips()">
+                                <div class="col-md-12 mb-3 mb-md-4">
+                                    <label class="mb-1">ChipName</label>
+                                    <input type="text" class="form-control" formControlName="KeyName">
+                                    <div *ngIf="chipsForm.get('KeyName')?.errors?.['required'] && (chipsForm.get('KeyName')?.dirty || chipsForm.get('KeyName')?.touched)"
+                                        class="text-danger">
+                                        Chip name field is required.
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-3 mb-md-4">
+                                    <label class="mb-1">ChipValue</label>
+                                    <input type="number" class="form-control" formControlName="KeyValue">
+                                    <div *ngIf="chipsForm.get('KeyValue')?.errors?.['required'] && (chipsForm.get('KeyValue')?.dirty || chipsForm.get('KeyValue')?.touched)"
+                                        class="text-danger">
+                                        Chip value field is required.
+                                    </div>
+                                </div>
+                                <div class="col-md-12 text-end">
+                                    <button type="submit" class="btn btn-primary">Update</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--delete Chips Modal -->
+<div class="modal fade custoModal actdeactiveModal" id="chipsDelete" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="chipsDeleteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content">
+            <div class="card-body p-4">
+                <div class="swalIcon">
+                    <span class="swa-icon-text">!</span>
+                </div>
+                <div class="text-center px-md-4">
+                    <h4>Are you sure?</h4>
+                    <p>You wan't to delete this chips</p>
+                </div>
+                <div class="modal-footer border-0 justify-content-center order-0 p-0 mt-3">
+                    <button type="button" class="btn btn-success" (click)="deleteChips()">Yes, Delete it.!</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="clsdltmdl">No, cancel.!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

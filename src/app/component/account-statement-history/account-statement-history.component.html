@@ -1,0 +1,131 @@
+<div class="page-title-box mb-3 mb-ms-4">
+    <div class="row align-items-center">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <h4 class="page-title mb-0">Account Statement</h4>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="row">
+                <div class=" col-md-6 col-lg-6 col-xs-12 px-1"></div>
+                <div class="col-md-6 col-lg-6 col-xs-12 accordion custom-accordion text-sm-end">
+                    <a class="link m-1" data-bs-toggle="collapse" href="#advanceearch" role="button"
+                        aria-expanded="false" aria-controls="advanceearch">
+                        Advance Search <i class="ms-1 fa-solid fa-chevron-right"></i>
+                    </a>
+
+                </div>
+
+            </div>
+            <div class="collapse" id="advanceearch">
+                <hr>
+                <div class="row">
+                    <div class="col-lg-5 col-md-6 col-sm-12 col-xs-12">
+                        <div class="notification-list mb-2 d-flex align-items-center">
+                            <label class="checkbox checkbox-info mr-1">
+                                <input type="checkbox" id="chkIsDate" value="true">
+                                <label for="chkIsDate" class="ms-1">Date Wise</label>
+                            </label>
+                        </div>
+                        <div class="input-group div-datepicker">
+                            <input type="datetime-local" class="form-control">
+                            <span class="col-form-label">to</span>
+                            <input type="datetime-local" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                        <label class=" d-none d-md-block d-lg-block mb-2">&nbsp;</label>
+                        <button type="button" class="btn btn-success">
+                            <i class="fa fa-search"></i> Search
+                        </button>
+                    </div>
+                </div>
+                <hr>
+            </div>
+            <div class="row align-items-end">
+                <div class="col-lg-2 col-md-4 mb-2 mb-md-0">
+                    <label>Backup Data</label>
+                    <select class="form-control">
+                        <option value="10">29/08/2023 - 18/02/2024</option>
+                    </select>
+                </div>
+                <div class="col-lg-10 col-md-8 col-sm-12 col-xs-12">
+                    <label class="radio radio-info me-2">
+                        <input type="radio" id="chkShowAllChips" name="chkSAAcoount" value="false" checked="checked">
+                        <label class="bold" for="chkShowAllChips">Show All Credit</label>
+                        &nbsp;
+                    </label>
+                    <label class="radio radio-info me-2">
+                        <input type="radio" id="chkShowChips" name="chkSAAcoount" value="false">
+                        <label class="bold" for="chkShowChips">Show Parent Credit</label>
+                        &nbsp;
+                    </label>
+                    <label class="radio radio-info me-2">
+                        <input type="radio" id="chkShowChipsChild" name="chkSAAcoount" value="false">
+                        <label class="bold" for="chkShowChipsChild">Show Child Credit</label>
+                        &nbsp;
+                    </label>
+                    <label class="radio radio-info me-2">
+                        <input type="radio" id="chkShowPnl" name="chkSAAcoount" value="false">
+                        <label class="bold" for="chkShowPnl">Show Market Profit &amp; Loss</label>
+                        &nbsp;
+                    </label>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="row mt-2 mb-2 d-flex align-items-center flex-row-reverse tableTopRow ">
+                <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12 ps-md-0">
+                    <input type="text" placeholder="Search Min. 2 characters" class="form-control">
+                </div>
+                <div class="dt-buttons flex-wrap mt-2 mt-md-0 col-lg-7 col-md-6 col-sm-12 col-xs-12 text-end">
+                    <!-- <button class="btn downloadTableBtn me-2" type="button" data-bs-toggle="modal"
+                          data-bs-target="#filter"><i class="fa fa-filter"></i></button>
+                    <button class="btn downloadTableBtn me-2" type="button"><i class="fas fa-sync-alt"></i></button> -->
+                    <button class="btn downloadTableBtn me-2" type="button"><i class="fas fa-file-csv"></i></button>
+                    <button class="btn downloadTableBtn me-2" type="button"><i class="far fa-file-excel"></i></button>
+                    <button class="btn downloadTableBtn" type="button"><i class="far fa-file-pdf"></i></button>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-12 mt-2 mt-md-0">
+                    <p class="tableP mb-0">Showing 1 of 20 entries
+                </div>
+            </div>
+            <div class="table-responsive border">
+                <table class="datatable table nowrapTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                            <th>Cr (Deposit)</th>
+                            <th>Dr (Withdraw)</th>
+                            <th>Balance	</th>
+                            <th>From/To</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>20-02-2024</td>
+                            <td>type</td>
+                            <td>desc...</td>
+                            <td>100</td>
+                            <td>100</td>
+                            <td>100</td>
+                            <td>100</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="load-more"><span>No More Data Available.</span></div>
+        </div>
+    </div>
+</div>

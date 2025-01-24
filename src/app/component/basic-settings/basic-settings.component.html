@@ -1,0 +1,292 @@
+<div class="page-title-box mb-3 mb-ms-4">
+    <h4 class="page-title">Basic Settings</h4>
+</div>
+<div class="row subPages">
+    <div class="col-md-12">
+        <div class="card">
+            <form [formGroup]="basicSettingsForm" (ngSubmit)="addSettings()" *ngIf="!isSettings">
+                <div class="row basicSettingRow">
+                    <!-- <div class="col-lg-4 col-md-6 mb-3">
+                        <div class="form-field">
+                            <label>Basic Color</label>
+                            <div class="d-flex">
+                                <input type="text" class="form-control" placeholder="" formControlName="BaseColour">
+                                <input class="form-control border-3 selectColor" [(colorPicker)]="color"
+                                    [style.background]="color" (colorPickerChange)="onColorChange($event)"/>
+                            </div>
+                            <div *ngIf="basicSettingsForm.get('BaseColour')?.errors?.['required'] && (basicSettingsForm.get('BaseColour')?.dirty || basicSettingsForm.get('BaseColour')?.touched)"
+                                class="text-danger">
+                                BaseColour field is required.
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="col-lg-4 col-md-6 mb-3">
+                        <div class="form-field">
+                            <label>Website Title</label>
+                            <input type="text" class="form-control" placeholder="" formControlName="WebsiteTitle">
+                            <div *ngIf="basicSettingsForm.get('WebsiteTitle')?.errors?.['required'] && (basicSettingsForm.get('WebsiteTitle')?.dirty || basicSettingsForm.get('WebsiteTitle')?.touched)"
+                                class="text-danger">
+                                WebsiteTitle field is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mb-3">
+                        <div class="form-field">
+                            <label>Whatsapp</label>
+                            <input type="text" class="form-control" placeholder="" formControlName="WhatsAppNumber">
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mb-3">
+                        <div class="form-field">
+                            <label>Telegram</label>
+                            <input type="text" class="form-control" placeholder="" formControlName="Telegram">
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mb-3">
+                        <div class="form-field">
+                            <label>Instagram</label>
+                            <input type="text" class="form-control" placeholder="" formControlName="Instagram">
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mb-3">
+                        <div class="form-field">
+                            <label>Email</label>
+                            <input type="email" class="form-control" placeholder="" formControlName="Email">
+                            <div *ngIf="basicSettingsForm.get('Email')?.errors?.['email'] && (basicSettingsForm.get('Email')?.dirty || basicSettingsForm.get('Email')?.touched)"
+                                class="text-danger">
+                                Invalid email format.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mb-3">
+                        <div class="form-field">
+                            <label>Enquiry Number</label>
+                            <input type="text" class="form-control" placeholder="" formControlName="EnquiryNumber">
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mb-3">
+                        <div class="form-field">
+                            <label>Logo</label>
+                            <div class="upload-container d-flex flex-column">
+                                <div class="custom-file mb-0">
+                                    <input type="file" (change)="onFileSelected($event, 'Logo')">
+                                    <label class="custom-file-label text-center" for="customFile">
+                                        <i class="fa-regular fa-file-image me-1"></i>
+                                        Choose Logo
+                                    </label>
+                                </div>
+                                <img alt="icon" class="img-fluid paymtImg cursor-pointer" *ngIf="logoPreview " [src]="logoPreview">
+                                <div *ngIf="basicSettingsForm.get('LogoPath')?.errors?.['required'] && (basicSettingsForm.get('LogoPath')?.dirty || basicSettingsForm.get('LogoPath')?.touched)"
+                                    class="text-danger">
+                                    LogoPath field is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mb-3">
+                        <div class="form-field">
+                            <label>Favicon</label>
+                            <div class="upload-container d-flex flex-column">
+                                <div class="custom-file mb-0">
+                                    <input type="file" (change)="onFileSelected($event, 'Favicon')">
+                                    <label class="custom-file-label text-center" for="customFile">
+                                        <i class="fa-regular fa-file-image me-1"></i>
+                                        Choose Favicon
+                                    </label>
+                                </div>
+                                <img alt="icon" class="img-fluid paymtImg cursor-pointer" *ngIf="feviconPreview" [src]="feviconPreview">
+                                <div *ngIf="basicSettingsForm.get('FaviconPath')?.errors?.['required'] && (basicSettingsForm.get('FaviconPath')?.dirty || basicSettingsForm.get('FaviconPath')?.touched)"
+                                    class="text-danger">
+                                    FaviconPath field is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 mb-3 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary" [disabled]="basicSettingsForm.invalid">Submit</button>
+                    </div>
+                </div>
+            </form>
+            <div class="row mt-1" *ngIf="isSettings">
+                <div class="card">
+                    <div class="table-responsive">
+                        <table class="table  mb-0">
+                            <thead>
+                                <tr>
+                                    <!-- <th>Basic Color</th> -->
+                                    <th>Website Title</th>
+                                    <th>Whatsapp</th>
+                                    <th>Telegram</th>
+                                    <th>Instagram</th>
+                                    <th>Email</th>
+                                    <th>Enquiry Number</th>
+                                    <th>Logo</th>
+                                    <th>Favicon</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <!-- <td>{{basicSettings.baseColour}}</td> -->
+                                    <td>{{basicSettings.websiteTitle}}</td>
+                                    <td>{{basicSettings.whatsAppNumber}}</td>
+                                    <td>{{basicSettings.telegram}}</td>
+                                    <td>{{basicSettings.instagram}}</td>
+                                    <td>{{basicSettings.email}}</td>
+                                    <td>{{basicSettings.enquiryNumber}}</td>
+                                   
+                                    <td><img [src]="basicSettings.logoPath" alt="img" class="tableImg"></td>
+                                    <td><img [src]="basicSettings.faviconPath" alt="img" class="tableImg faviconImg"></td>
+                                    <td>
+                                        <div class="act_btn d-flex">
+                                            <button type="button" class="btn btn-info me-1 px-2 py-1"
+                                                data-bs-toggle="modal" data-bs-target="#editBasicModal" (click)="getModelValue(basicSettings)">
+                                                <i class="far fa-edit"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-danger px-2 py-1">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit basic settings modal -->
+<div class="modal fade custoModal" id="editBasicModal" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="editBasicModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="editBasicModalLabel">Edit Basic Settings</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="clsmdl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+                    <div class="bankingForm">
+                        <form [formGroup]="basicSettingsForm" (ngSubmit)="updateSettings()">
+                            <div class="row basicSettingRow">
+                                <!-- <div class="col-md-6 mb-3">
+                                    <div class="form-field">
+                                        <label>Basic Color</label>
+                                        <div class="d-flex">
+                                            <input type="text" class="form-control" placeholder="" formControlName="BaseColour">
+                                            <input class="form-control border-3 selectColor" [(colorPicker)]="color"
+                                                [style.background]="color" (colorPickerChange)="onColorChange($event)"/>
+                                        </div>
+                                        <div *ngIf="basicSettingsForm.get('BaseColour')?.errors?.['required'] && (basicSettingsForm.get('BaseColour')?.dirty || basicSettingsForm.get('BaseColour')?.touched)"
+                                            class="text-danger">
+                                            BaseColour field is required.
+                                        </div>
+                                    </div>
+                                </div> -->
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-field">
+                                        <label>Website Title</label>
+                                        <input type="text" class="form-control" placeholder=""
+                                            formControlName="WebsiteTitle">
+                                        <div *ngIf="basicSettingsForm.get('WebsiteTitle')?.errors?.['required'] && (basicSettingsForm.get('WebsiteTitle')?.dirty || basicSettingsForm.get('WebsiteTitle')?.touched)"
+                                            class="text-danger">
+                                            WebsiteTitle field is required.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-field">
+                                        <label>Whatsapp</label>
+                                        <input type="text" class="form-control" placeholder=""
+                                            formControlName="WhatsAppNumber">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-field">
+                                        <label>Telegram</label>
+                                        <input type="text" class="form-control" placeholder=""
+                                            formControlName="Telegram">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-field">
+                                        <label>Instagram</label>
+                                        <input type="text" class="form-control" placeholder=""
+                                            formControlName="Instagram">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-field">
+                                        <label>Email</label>
+                                        <input type="email" class="form-control" placeholder="" formControlName="Email">
+                                        <div *ngIf="basicSettingsForm.get('Email')?.errors?.['email'] && (basicSettingsForm.get('Email')?.dirty || basicSettingsForm.get('Email')?.touched)"
+                                            class="text-danger">
+                                            Invalid email format.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-field">
+                                        <label>Enquiry Number</label>
+                                        <input type="number" class="form-control" placeholder=""
+                                            formControlName="EnquiryNumber">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-field">
+                                        <label>Logo</label>
+                                        <div class="upload-container d-flex flex-column">
+                                            <div class="custom-file mb-0">
+                                                <input type="file" (change)="onFileSelected($event, 'Logo')">
+                                                <label class="custom-file-label text-center" for="customFile">
+                                                    <i class="fa-regular fa-file-image me-1"></i>
+                                                    Choose Logo
+                                                </label>
+                                            </div>
+                                            <img alt="icon" class="img-fluid paymtImg cursor-pointer" *ngIf="logoPreview " [src]="logoPreview">
+                                            <div *ngIf="basicSettingsForm.get('LogoPath')?.errors?.['required'] && (basicSettingsForm.get('LogoPath')?.dirty || basicSettingsForm.get('LogoPath')?.touched)"
+                                                class="text-danger">
+                                                LogoPath field is required.
+                                            </div>
+                                        </div>
+                                        <div *ngIf="fileError" class="text-danger mb-3">
+                                            {{ fileError }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-field">
+                                        <label>Favicon</label>
+                                        <div class="upload-container d-flex flex-column">
+                                            <div class="custom-file mb-0">
+                                                <input type="file" (change)="onFileSelected($event, 'Favicon')">
+                                                <label class="custom-file-label text-center" for="customFile">
+                                                    <i class="fa-regular fa-file-image me-1"></i>
+                                                    Choose Favicon
+                                                </label>
+                                            </div>
+                                            <img alt="icon" class="img-fluid paymtImg cursor-pointer" *ngIf="feviconPreview" [src]="feviconPreview">
+                                            <div *ngIf="basicSettingsForm.get('FaviconPath')?.errors?.['required'] && (basicSettingsForm.get('FaviconPath')?.dirty || basicSettingsForm.get('FaviconPath')?.touched)"
+                                                class="text-danger">
+                                                FaviconPath field is required.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer mt-4 pb-0">
+                                <button type="submit" class="btn btn-primary" [disabled]="basicSettingsForm.invalid">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

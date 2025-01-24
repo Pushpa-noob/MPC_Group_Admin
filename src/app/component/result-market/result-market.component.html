@@ -1,0 +1,211 @@
+<div class="page-title-box mb-3 mb-ms-4">
+    <h4 class="page-title">Result Market </h4>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="row">
+                <div class="col-lg-3 col-md-5 col-sm-6 mt-3 mt-lg-0">
+                    <div class="form-field">
+                        <label for="">Select Sports</label>
+                        <select class="form-control" (change)="onSportsIdChange($event)">
+                            <option value="4">Cricket</option>
+                            <option value="2">Tennis</option>
+                            <option value="1">Soccer</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-5 col-sm-6 mt-3 mt-lg-0">
+                    <div class="form-field">
+                        <label for="">Select Market</label>
+                        <select class="form-control" (change)="onMarketChange($event)">
+                            <option *ngIf="sportsId==4" selected="" value="To Win the Toss">To Win the Toss</option>
+                            <option *ngIf="sportsId==4" value="BookMaker">BookMaker</option>
+                            <option value="Match Odds">Match Odds</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-5 col-sm-6 mt-3 mt-lg-0 d-flex align-items-end">
+                    <div class="form-field">
+                        <button type="button" (click)="deletePendingEvent()" class="btn btn-danger">Delete Pending Events</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="table-responsive mb-3">
+                <table class="table  mb-0">
+                    <thead>
+                        <tr>
+                            <th>MatchName</th>
+                            <th>MarketName</th>
+                            <th>MatchTime</th>
+                            <th>Runner</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of eventList">
+                            <td>
+                                <button type="button" data-bs-toggle="modal" data-bs-target="#marketModal"
+                                    class="btn p-0" style="color: var(--blackTextColor);">{{data.eventName}}</button>
+                            </td>
+                            <td>
+                                <button type="button" data-bs-toggle="modal" data-bs-target="#marketModal"
+                                    class="btn p-0" style="color: var(--blackTextColor);">{{data.betfairMarketName}}</button>
+                            </td>
+                            <td>{{data.eventTime | date:'short'}}
+                            </td>
+                            <td>
+                                <select class="form-control customSelect" (change)="onRunnerChange($event)">
+                                    <option value="">Runner Name</option>
+                                    <option *ngFor="let rnr of data.runnerDetails" [value]="getRunnerValue(rnr)">
+                                        {{rnr.runnerName}}
+                                    </option>
+
+                                </select>
+                                <div class="text-danger mt-1" *ngIf="runnerError">*Please Select Runner First</div>
+                            </td>
+
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <button (click)="setUpModal(data)" type="button" title="Result Declare"
+                                        class="btn btn-success icon_btn mx-1">
+                                        <i class="fa-regular fa-circle-check"></i>
+                                    </button>
+                                    <button (click)="setvalue(data)"  type="button" title="Abandon" data-bs-toggle="modal"
+                                        data-bs-target="#abandond" class="btn btn-danger icon_btn mx-1">
+                                        <i class="fa-solid fa-ban"></i>
+                                    </button>
+                                    <button (click)="setvalue(data)" type="button" title="Delete" data-bs-toggle="modal" data-bs-target="#delete"
+                                        class="btn btn-danger icon_btn mx-1">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button type="button" title="Result Declare" data-bs-toggle="modal" id="modalTriggerButton"
+    data-bs-target="#confirmModal" class="btn btn-success icon_btn mx-1 d-none">
+    <i class="fa-regular fa-circle-check"></i>
+</button>
+
+
+<!-- Market modal -->
+<div id="marketModal" data-bs-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="marketModalLabel"
+    class="modal fade custoModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="marketModalLabel" class="modal-title">Bangladesh v Zimbabwe</h5>
+                <button type="button" id="marketModal" data-bs-dismiss="modal" class="btn-close"><i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive mb-3">
+                    <table class="table  mb-0">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Market name </th>
+                                <th>BetDelay</th>
+                                <th>MinStake</th>
+                                <th>MaxStake</th>
+                                <th>BeforeInplayMinStake</th>
+                                <th>BeforeInplayMaxStake</th>
+                                <th>MaxProfit</th>
+                                <th>Save</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="fancySwitch">
+                                    </div>
+                                </td>
+                                <td>Match Odds</td>
+                                <td><input type="number" name="BetDelay" class="form-control"></td>
+                                <td><input type="number" name="MinStake" class="form-control"></td>
+                                <td><input type="number" name="MaxStake" class="form-control"></td>
+                                <td><input type="number" name="BeforeInplayMinStake" class="form-control"></td>
+                                <td><input type="number" name="BeforeInplayMaxStake" class="form-control"></td>
+                                <td><input type="number" name="MaxProfit" class="form-control"></td>
+                                <td class="text-center">
+                                    <button class="btn p-0" title="save">
+                                        <i class="fa-solid fa-circle-check fs-5 text-success"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- declear result modal -->
+<div id="confirmModal" data-bs-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="confirmModalLabel"
+    class="modal fade custoModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="confirmModalLabel" class="modal-title text-white"><b>{{eventName}}({{marketName}})</b></h5>
+            </div>
+            <div class="modal-body">
+                <h6 class="text-center">Declare <b>{{runnerName}}</b> as a Result</h6>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" (click)="declare()">Yes</button>
+                <button type="button" id="closeDeclareBtn" data-bs-dismiss="modal" class="btn btn-danger"
+                    (click)="reset()">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="abandond" tabindex="-1" aria-labelledby="abbandonLabel" data-bs-backdrop="static" data-keyboard="false"
+    aria-hidden="true" class="modal fade custoModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="abbandonLabel" class="modal-title text-white">{{eventName}}({{marketName}})</h5>
+            </div>
+            <div class="modal-body">
+                <h6 class="text-center">Abandoned Market</h6>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success"  (click)="abandonedMarket()">Yes</button>
+                <button type="button" id="clsAbn" data-bs-dismiss="modal" class="btn btn-danger">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- delete result moadal -->
+<div id="delete" tabindex="-1" aria-labelledby="abbandonLabel" data-bs-backdrop="static" data-keyboard="false"
+    aria-hidden="true" class="modal fade custoModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="abbandonLabel" class="modal-title text-white">{{eventName}}({{marketName}})</h5>
+            </div>
+            <div class="modal-body">
+                <h6 class="text-center">Delete Market</h6>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" (click)="deleteMarket()">Yes</button>
+                <button type="button" id="clsDlt" data-bs-dismiss="modal" class="btn btn-danger"> No</button>
+            </div>
+        </div>
+    </div>
+</div>

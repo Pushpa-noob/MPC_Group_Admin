@@ -1,0 +1,190 @@
+<div class="page-title-box mb-3 mb-ms-4">
+    <div class="row align-items-center">
+        <div class="col-12">
+            <h4 class="page-title mb-0">Open Bets</h4>
+        </div>
+    </div>
+</div>
+<!-- <div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="row">
+                <div class=" col-md-6 col-lg-6 col-xs-12 px-1">
+                </div>
+                <div class="col-md-6 col-lg-6 col-xs-12 accordion custom-accordion text-sm-end">
+                    <a class="link m-1" data-bs-toggle="collapse" href="#advanceearch" role="button"
+                        aria-expanded="false" aria-controls="advanceearch">
+                        Advance Search <i class="ms-1 fa-solid fa-chevron-right"></i>
+                    </a>
+
+                </div>
+
+            </div>
+            <div class="collapse" id="advanceearch">
+                <div class="row">
+                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 mt-2 mt-md-0">
+                        <div class="form-group mb-0">
+                            <label class="checkbox checkbox-info d-flex align-items-center mb-2">Select Sports</label>
+                            <select class="form-control" [(ngModel)]="sportsId" (change)="onSportsChange($event)">
+                                <option [value]="4">Cricket</option>
+                                <option [value]="1">Football</option>
+                                <option [value]="2">Tennis</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 mt-2 mt-md-0">
+                        <div class="form-group mb-0">
+                            <label class="checkbox checkbox-info d-flex align-items-center mb-2">Select Tournament</label>
+                            <select class="form-control" [(ngModel)]="seriesId" (change)="onTournamentChange($event)">
+                                <option *ngFor="let data of seriesList" [value]="data.tournamentId">{{data.tournamentName}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 mt-2 mt-md-0">
+                        <div class="form-group mb-0">
+                            <label class="checkbox checkbox-info d-flex align-items-center mb-2">Select Match</label>
+                            <select class="form-control" [(ngModel)]="eventId" (change)="onEventChange($event)">
+                                <option *ngFor="let list of eventList" [value]="list.eventId">{{list.eventName}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 mt-2 mt-md-0">
+                        <div class="form-group mb-0">
+                            <label class="checkbox checkbox-info d-flex align-items-center mb-2">Select Market</label>
+                            <select class="form-control" [(ngModel)]="marketId">
+                                <option *ngFor="let mrkt of marketList" [value]="mrkt.marketId">{{mrkt.betfairMarketName}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            </div>
+            
+
+        </div>
+    </div>
+</div> -->
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="row mt-2 mb-2 d-flex align-items-center flex-row-reverse tableTopRow ">
+                <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12 ps-md-0">
+                    <input type="text" class="form-control" placeholder="Search Min. 2 characters"
+                        [(ngModel)]="username" name="username" (ngModelChange)="onUsernameChange($event)">
+                </div>
+
+                <div class="dt-buttons flex-wrap mt-2 mt-md-0 col-lg-7 col-md-6 col-sm-12 col-xs-12 text-end">
+                    <!-- <button class="btn downloadTableBtn me-2" type="button" data-bs-toggle="modal"
+                          data-bs-target="#filter"><i class="fa fa-filter"></i></button>
+                    <button class="btn downloadTableBtn me-2" type="button"><i class="fas fa-sync-alt"></i></button> -->
+                    <button class="btn downloadTableBtn me-2" type="button"><i class="fas fa-file-csv"></i></button>
+                    <button class="btn downloadTableBtn me-2" type="button"><i class="far fa-file-excel"></i></button>
+                    <button class="btn downloadTableBtn" type="button"><i class="far fa-file-pdf"></i></button>
+                </div>
+                <div *ngIf="betList?.length>0" class="col-lg-3 col-md-3 col-sm-12 mt-2 mt-md-0">
+                    <p class="tableP mb-0">Showing {{betList?.length}} of {{count}} entries
+                </div>
+            </div>
+            <div class="form-check d-flex align-items-center flex-wrap ps-0 openBet-formCheck">
+                <label class="radio radio-info me-4 my-1">
+                    <input type="radio" id="All" name="option" value="All" checked (change)="filterBets('All')">
+                    <label for="All" class="bold">All</label> 
+                </label>
+                <label class="radio radio-info me-4 my-1">
+                    <input type="radio" id="Back" name="option" value="Match Odds" (change)="filterBets('Match Odds')">
+                    <label for="Back" class="bold">Match Odds</label> 
+                </label>
+                <label class="radio radio-info me-4 my-1">
+                    <input type="radio" id="Lay" name="option" value="BookMaker" (change)="filterBets('BookMaker')">
+                    <label for="Lay" class="bold">BookMaker</label> 
+                </label>
+                <label class="radio radio-info me-4 my-1">
+                    <input type="radio" id="Match" name="option" value="Fancy" (change)="filterBets('Fancy')">
+                    <label for="Match" class="bold">Fancy</label> 
+                </label>
+                <label class="radio radio-info me-4 my-1">
+                    <input type="radio" id="Unmatch" name="option" value="Toss" (change)="filterBets('To Win The Toss')">
+                    <label for="Unmatch" class="bold">Toss</label> 
+                </label>
+            </div>
+            <div class="table-responsive tableCstm tbHoverCol">
+                <table class="datatable table  mb-0 nowrapTable">
+                    <thead>
+                        <tr>
+                            <th><small>Client</small></th>
+                            <th><small>Market Details</small></th>
+                            <th><small>Rate</small></th>
+                            <th><small>Stake</small></th>
+                            <!-- <th><small>Bet Type</small></th> -->
+                            <th><small>PL</small></th>
+                            <th><small>Date</small></th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="betList?.length>0">
+                        <tr *ngFor="let data of betList | paginate: { itemsPerPage:takeRecords, currentPage:pageNum,totalItems: count };"
+                            [ngClass]="{'back': data.selection === 'Back' || data.selection === 'Yes', 'lay': data.selection === 'Lay' || data.selection === 'No'}">
+                            <td>
+                                <div class="d-flex flex-column">
+                                    <span>{{data.userName}}</span>
+                                    <span>{{data.parentName}}</span>
+                                </div>
+                            </td>
+                            <td *ngIf="data.marketName=='Fancy'">
+                                <div class="d-flex flex-column">
+                                    <span>{{data.eventName}}</span>
+                                    <span>{{data.marketName}}</span>
+                                    <span> {{data.runnerName}}</span>
+                                <span><small>{{data.odds}}</small></span>
+                                </div>
+                            </td>
+                            <td *ngIf="data.marketName!='Fancy'">
+                                <div class="d-flex flex-column">
+                                <span>{{data.eventName}}</span>
+                                <span>{{data.marketName}}</span>
+                                <span><small>{{data.runnerName}}</small></span>
+                            </div>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column">
+                                {{data.odds}} <span
+                                [ngClass]="{'back': data.selection === 'Back' || data.selection === 'Yes', 'lay': data.selection === 'Lay' || data.selection === 'No'}">{{data.selection}}</span>
+                            </div>
+                            </td>
+                            <td>{{data.stake}}</td>
+                            <!-- <td><span
+                                    [ngClass]="{'back': data.selection === 'Back' || data.selection === 'Yes', 'lay': data.selection === 'Lay' || data.selection === 'No'}">{{data.selection}}</span>
+                            </td> -->
+                            <td  [ngClass]="data.selection === 'Back' || data.selection === 'Yes' ? 'text-success' : 'text-danger'">{{data.profit}}</td>
+                            <td>
+                                <!-- {{data.betTime | date:'dd/MM/yyyy h:mm:ss a'}} -->
+                                <div class="d-flex flex-column">
+                                    <span>P: {{ data.betTime | date:'dd/MM/yyyy hh:mm:ss a' }}</span>
+                                    <span>M: {{ data.createdOn | date:'dd/MM/yyyy hh:mm:ss a' }}</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div *ngIf="betList?.length>0" class="pagination_filter justify-content-between pt-3 d-flex  row">
+                <div class="col-sm-6 mb- mb-sm-0">
+                    <select class="form-control w-auto mr-2 " id="" (change)="updateRecValue($event)">
+                        <option value="takeRecords" selected>{{takeRecords}}</option>
+                        <option value="10" *ngIf="takeRecords!=10">10</option>
+                        <option value="20" *ngIf="takeRecords!=20">20</option>
+                        <option value="30" *ngIf="takeRecords!=30">30</option>
+                        <option value="40" *ngIf="takeRecords!=40">40</option>
+                        <option value="50" *ngIf="takeRecords!=50">50</option>
+                    </select>
+                </div>
+                <div class="col-sm-6 d-flex justify-content-end">
+                    <pagination-controls class="pagination" [maxSize]="5" *ngIf="betList?.length>0"
+                        (pageChange)="pageChanged($event)">
+                    </pagination-controls>
+                </div>
+            </div>
+            <div *ngIf="betList?.length==0" class="load-more"><span>No Data Available.</span></div>
+        </div>
+    </div>
+</div>

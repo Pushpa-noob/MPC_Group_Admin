@@ -1,0 +1,192 @@
+<div class="page-title-box mb-3 mb-ms-4">
+    <div class="row align-items-center">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <h4 class="page-title mb-0">Market Profit Loss Report </h4>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12 pull-right mt-3 mt-md-0">
+            <span><b>Note :</b> <span class="text-danger"> minus value indicates your loss.</span></span>
+            <span class="text-success ms-4 d-block"> (+ve) plus value indicates your profit.</span>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="row">
+                <div class="col-md-6 col-lg-6 col-xs-12 px-1">
+                </div>
+                <div class="col-md-6 col-lg-6 col-xs-12 accordion custom-accordion text-sm-end">
+                    <a class="link m-1" data-bs-toggle="collapse" href="#advanceearch" role="button"
+                        aria-expanded="false" aria-controls="advanceearch">
+                        Advance Search <i class="ms-1 fa-solid fa-chevron-right"></i>
+                    </a>
+
+                </div>
+
+            </div>
+            <div class="collapse" id="advanceearch">
+                <div class="row">
+                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 mt-2 mt-md-0">
+                        <div class="form-group mb-0">
+                            <label class="checkbox checkbox-info d-flex align-items-center mb-2">Select Sports</label>
+                            <select class="form-control">
+                                <option>Select</option>
+                                <option>select</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 mt-2 mt-md-0">
+                        <div class="form-group mb-0">
+                            <label class="checkbox checkbox-info d-flex align-items-center mb-2">Select
+                                Tournament</label>
+                            <select class="form-control">
+                                <option>Select</option>
+                                <option>select</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 mt-2 mt-md-0">
+                        <div class="form-group mb-0">
+                            <label class="checkbox checkbox-info d-flex align-items-center mb-2">Select Match</label>
+                            <select class="form-control">
+                                <option>Select</option>
+                                <option>select</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 mt-2 mt-md-0">
+                        <div class="form-group mb-0">
+                            <label class="checkbox checkbox-info d-flex align-items-center mb-2">Select Market</label>
+                            <select class="form-control">
+                                <option>Select</option>
+                                <option>select</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            </div>
+            <div class="row">
+                <div class="col-lg-5 col-md-8 col-sm-12 col-xs-12 mb-2">
+                    <div class="notification-list d-flex align-items-center flex-wrap">
+                        <label class="checkbox checkbox-info  me-2 mb-1">
+                            <input type="checkbox" id="chkIsDate" value="true" checked="checked">
+                            <label for="chkIsDate" class="bold ps-1">Date Wise</label>
+                        </label>
+                        <label class="radio radio-info me-2 mb-1">
+                            <input type="radio" id="MatchDate" name="chkSAAcoount" value="true" checked="checked">
+                            <label class="bold" for="MatchDate">Match Date</label>
+                            &nbsp;
+                        </label>
+                        <label class="radio radio-info me-2 mb-1">
+                            <input type="radio" id="SettlementDate " name="chkSAAcoount" value="true" checked="checked">
+                            <label class="bold" for="SettlementDate ">Settlement Date </label>
+                            &nbsp;
+                        </label>
+                    </div>
+                    <div class="input-group marginb5 div-datepicker">
+                        <input type="datetime-local" class="form-control">
+                        <span class="col-form-label">to</span>
+                        <input type="datetime-local" class="form-control">
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12 mb-2">
+                    <label class="mb-1">User </label>
+                    <select class="form-control">
+                        <option value="0">Select User</option>
+                    </select>
+                </div>
+                <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12 mb-2">
+                    <label class="mb-1">Market Type
+                    </label>
+                    <select class="form-control">
+                        <option value="-1">Select Market Type</option>
+                        <option value="0">Market</option>
+                        <option value="6">AdvanceSession</option>
+                        <option value="7">Bookmakers</option>
+                        <option value="9">LineMarket</option>
+                        <option value="10">ManualOdds</option>
+                        <option value="14">VirtualSportBook</option>
+                        <option value="15">SportBook</option>
+                    </select>
+                </div>
+                <!-- <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 mb-2">
+                    <label class="mb-1">RateSource Type </label>
+                    <select class="form-control ">
+                        <option value="">Select Rate Source</option>
+                        <option value="1">BS_Manual</option>
+                        <option value="5">Betfair</option>
+                        <option value="22">BF_Betfair</option>
+                        <option value="23">Auto_Manual</option>
+                        <option value="24">Manual</option>
+                        <option value="25">LS_Sportbook</option>
+                        <option value="26">Super_Over_Virtual</option>
+                    </select>
+                </div> -->
+                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 mb-2">
+                    <!-- <label class=" d-none d-md-block d-lg-block mb-1">&nbsp;</label> -->
+                    <button type="button" class="btn btn-success">
+                        <i class="fa fa-search"></i> Search
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12">
+                        <label class="backupDateLabel mr-1">
+                            <label for="" class="bold mb-0">Backup Data</label>
+                        </label>
+                    <div class="input-group">
+                        <select class="form-control">
+                            <option value="10">29/08/2023 - 18/02/2024</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2 mb-2 d-flex align-items-center flex-row-reverse tableTopRow ">
+                <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12 ps-md-0">
+                    <input type="text" class="form-control" placeholder="Search Min. 2 characters">
+                </div>
+                <div class="dt-buttons flex-wrap mt-2 mt-md-0 col-lg-7 col-md-6 col-sm-12 col-xs-12 text-end">
+                    <!-- <button class="btn downloadTableBtn me-2" type="button" data-bs-toggle="modal"
+                          data-bs-target="#filter"><i class="fa fa-filter"></i></button>
+                    <button class="btn downloadTableBtn me-2" type="button"><i class="fas fa-sync-alt"></i></button> -->
+                    <button class="btn downloadTableBtn me-2" type="button"><i class="fas fa-file-csv"></i></button>
+                    <button class="btn downloadTableBtn me-2" type="button"><i class="far fa-file-excel"></i></button>
+                    <button class="btn downloadTableBtn" type="button"><i class="far fa-file-pdf"></i></button>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-12 mt-2 mt-md-0">
+                    <p class="tableP mb-0">Showing 1 of 20 entries
+                </div>
+            </div>
+            <div class="table-responsive border">
+                <table class="datatable table nowrapTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Market</th>
+                            <th>Upline</th>
+                            <th>Testing07</th>
+                            <th>Downline</th>
+                            <th>Total</th>
+                            <th>Commision</th>
+                            <th>Profit Loss</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Date</td>
+                            <td>Market</td>
+                            <td>Upline</td>
+                            <td>Testing07</td>
+                            <td>Downline</td>
+                            <td>Total</td>
+                            <td>Commision</td>
+                            <td>Profit Loss</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="load-more"><span>No More Data Available.</span></div>
+        </div>
+    </div>
+</div>

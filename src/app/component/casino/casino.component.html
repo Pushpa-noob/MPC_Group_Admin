@@ -1,0 +1,191 @@
+<div class="page-title-box mb-3 mb-ms-4">
+  <h4 class="page-title">Casino</h4>
+
+
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <!-- Breadcrumb Navigation -->
+      <nav aria-label="breadcrumb" *ngIf="subCategories?.length>0">
+        <ol class="breadcrumb mb-0">
+          <li class="breadcrumb-item">
+            <a (click)="navigateToCategory()">Casino</a>
+          </li>
+          <li class="breadcrumb-item" *ngIf="selectedCategory">
+            <a (click)="navigateToSubCategory()">{{ selectedCategory.providerName }}</a>
+          </li>
+          <li class="breadcrumb-item active" *ngIf="selectedSubCategory" aria-current="page">
+            {{ selectedSubCategory.name }}
+          </li>
+        </ol>
+      </nav>
+      <div class="row mt-2 mb-2 d-flex align-items-center flex-row-reverse tableTopRow">
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 ps-md-0 d-flex" *ngIf="isGames">
+          <input type="text" name="searchKeyword" class="form-control" [(ngModel)]="searchQuery" placeholder="Search..."
+            (input)="onSearchChange($event)">
+          <button type="button" class="btn btn-success ms-1">
+            <i class="fa fa-search"></i>
+          </button>
+        </div>
+
+        <div class="dt-buttons flex-wrap mt-2 mt-md-0 col-md-8 col-sm-12 col-xs-12 text-end">
+          <button class="btn downloadTableBtn me-2" type="button" (click)="downloadExcel()"><i
+              class="far fa-file-excel"></i></button>
+        </div>
+      </div>
+
+      <div class="table-responsive border">
+        <!-- Categories Table -->
+        <table class="datatable table nowrapTable " *ngIf="isCat">
+          <thead>
+            <tr>
+              
+              <th>Name</th>
+              <th>Min Stake</th>
+              <th>Max Stake</th>
+              <th>Max Day Profit</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let cat of categories; let i = index">
+              
+              <td>
+                
+                  <label for="popolargame{{i}}">
+                    <a (click)="getSubCategories(cat.id)" class="atag">{{cat.providerName}}</a></label>
+              </td>
+              <td>
+                <input type="number" class="form-control tableInput" name="min" [(ngModel)]="cat.settings.afterInplayMinStake">
+              </td>
+              <td>
+                <input type="number" class="form-control tableInput" name="max"  [(ngModel)]="cat.settings.afterInplayMaxStake">
+              </td>
+              <td>
+                <input type="number" class="form-control tableInput" name="profit"  [(ngModel)]="cat.settings.maxProfit">
+              </td>
+              <td>
+                <span class="frstLet btn btn-success" *ngIf="!cat.isBlocked">Open</span>
+                <span class="frstLet btn btn-danger" *ngIf="cat.isBlocked">Close</span>
+              </td>
+              <td>
+                <div class="d-flex align-items-center">
+                  <button type="button" class="btn btn-success mx-1 px-2 py-1" data-bs-toggle="modal"
+                    data-bs-target="#blockModal" (click)="setModelValues(cat.id,'Category',cat.isBlocked)">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </button>
+                  <button type="button" class="btn btn-success mx-1 px-2 py-1" (click)="updateSettings(i)">
+                    <i class="fa-regular fa-floppy-disk"></i>
+                  </button>
+
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Subcategories Table -->
+        <table class="datatable table nowrapTable " *ngIf="isSubCat">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Min Stake</th>
+              <th>Max Stake</th>
+              <th>Max Day Profit</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let sub of subCategories; let i = index">
+              
+              <td >
+                <a (click)="getGames(sub.id)" class="atag"> {{sub.name}}</a></td>
+                <td>
+                  <input type="number" class="form-control tableInput" name="min" [(ngModel)]="sub.settings.afterInplayMinStake">
+                </td>
+                <td>
+                  <input type="number" class="form-control tableInput" name="max"  [(ngModel)]="sub.settings.afterInplayMaxStake">
+                </td>
+                <td>
+                  <input type="number" class="form-control tableInput" name="profit"  [(ngModel)]="sub.settings.maxProfit">
+                </td>
+              <td>
+                <span class="frstLet btn btn-success" *ngIf="!sub.isBlocked">Open</span>
+                <span class="frstLet btn btn-danger" *ngIf="sub.isBlocked">Close</span>
+              </td>
+              <td>
+                <div class="d-flex align-items-center">
+                  <button type="button" class="btn btn-success mx-1 px-2 py-1" data-bs-toggle="modal"
+                    data-bs-target="#blockModal" (click)="setModelValues(sub.id,'SubCategory',sub.isBlocked)">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </button>
+                  <button type="button" class="btn btn-success mx-1 px-2 py-1" (click)="updateSettings(i)">
+                    <i class="fa-regular fa-floppy-disk"></i>
+                  </button>
+
+
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Games Table -->
+        <table class="datatable table nowrapTable " *ngIf="isGames">
+          <thead>
+            <tr>
+              <th>Name</th>             
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let game of games; let i = index">
+              
+              <td>{{game.name}}</td>
+             
+              <td>
+                <span class="frstLet btn btn-success" *ngIf="!game.isLocked">Open</span>
+                <span class="frstLet btn btn-danger" *ngIf="game.isLocked">Close</span>
+              </td>
+              <td>
+                <div class="d-flex align-items-center">
+                  <button type="button" class="btn btn-success mx-1 px-2 py-1" data-bs-toggle="modal"
+                    data-bs-target="#blockModal" (click)="setModelValues(game.code,'Game',game.isLocked)">
+                    <i class="fa-regular fa-circle-check"></i>
+                  </button>
+
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade custoModal actdeactiveModal" id="blockModal" data-bs-backdrop="static" tabindex="-1"
+  aria-labelledby="blockModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="card-body p-4">
+        <div class="swalIcon">
+          <span class="swa-icon-text">!</span>
+        </div>
+        <div class="text-center px-md-4">
+          <h4>Are you sure?</h4>
+          <p>Are you sure to {{isLocked?'UnBlock':'Block'}} this {{title}}.!</p>
+        </div>
+        <div class="modal-footer border-0 justify-content-center order-0 p-0 mt-3">
+          <button type="button" class="btn btn-success" (click)="blockUnBlock()">Yes, Do it.!</button>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="clsdltmdl">No, cancel.!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,82 @@
+<div class="page-title-box mb-3 mb-ms-4">
+    <h4 class="page-title">RollBack Sessions </h4>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="row">
+                <div *ngIf="fancyList.length>0" class="col-lg-3 col-md-5 col-sm-6 mt-3 mt-lg-0">
+                    <div class="form-field">
+                        <label>Market Search</label>
+                        <input type="search" name="searchKey" (keyup)="searchFancy()" class="form-control"  [(ngModel)]="searchKey">
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-5 col-sm-6 mt-3 mt-lg-0">
+                    <div class="form-field">
+                        <label>Select Match</label>
+                        <select class="form-control" (click)="getFancyEvents()" (change)="onEventChange($event)">
+                            <option selected="" [value]="">Select</option>
+                            <option *ngFor="let event of eventList" [value]="event.eventId">
+                                {{event.eventName}}({{event.eventTime | date:'short' }}) </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="table-responsive mb-3">
+                <table class="table  mb-0">
+                    <thead>
+                        <tr>
+                            <th>Sr No.</th>
+                            <th>Match Name</th>
+                            <th>Session Name</th>
+                            <th>Result</th>
+                            <th>Settlement Time</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of fancyList;let i=index">
+                            <td>{{i+1}}</td>
+                            <td>{{data.eventName  }}</td>
+                            <td>{{data.runnerName}}</td>
+                            <td>{{data.result}}</td>
+                            <td>{{data.updatedOn | date:'short'}}</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <button (click)="setModel(data)" type="button" data-bs-toggle="modal" data-bs-target="#rollBackModal"
+                                        class="btn btn-success mx-2 icon_btn ">
+                                        <i class="fa-solid fa-clock-rotate-left"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- rollback result modal -->
+<div id="rollBackModal" data-bs-backdrop="static" data-keyboard="false" tabindex="-1"
+    aria-labelledby="rollBackModalLabel" class="modal fade custoModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="rollBackModalLabel" class="modal-title"><b>{{runnerName}}</b></h5>
+            </div>
+            <div class="modal-body">
+                <h6 class="text-center"><b>RollBack Fancy</b></h6>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" (click)="rollbackfancy()">Yes</button>
+                <button type="button" id="closeBtnfancyAbnd" data-bs-dismiss="modal" class="btn btn-danger">No</button>
+            </div>
+        </div>
+    </div>
+</div>

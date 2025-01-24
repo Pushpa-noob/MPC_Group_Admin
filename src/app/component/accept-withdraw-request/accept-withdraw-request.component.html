@@ -1,0 +1,180 @@
+<div class="page-title-box mb-3 mb-ms-4">
+    <h4 class="page-title">Accept Withdraw </h4>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="row">
+                <div class="col-6 col-lg-2 col-md-4 col-sm-6 col-xs-12 mt-3 mt-lg-0">
+                    <div class="form-field">
+                        <label>Select</label>
+                        <select class="form-control" (change)="setTransactionType($event)"
+                            [(ngModel)]="transactionType">
+                            <option value="1">Accepted</option>
+                            <option value="2">Rejected</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-2 col-md-4 col-sm-6 col-xs-12 mt-3 mt-lg-0">
+                    <div class="form-field">
+                        <label>Start Date</label>
+                        <input class="form-control" type="date" id="start-date" [value]="startDate | date:'yyyy-MM-dd'"
+                            (change)="setStartDateRange($event)">
+                    </div>
+                </div>
+                <div class="col-6 col-lg-2 col-md-4 col-sm-6 col-xs-12 mt-3 mt-lg-0">
+                    <div class="form-field">
+                        <label>End Date</label>
+                        <input class="form-control" type="date" id="end-date" [value]="endDate | date:'yyyy-MM-dd'"
+                            (change)="setEndDateRange($event)">
+                    </div>
+                </div>
+                <div class="col-6 col-lg-4 col-md-6 col-sm-6 col-xs-12 d-flex align-items-end mt-3 mt-lg-0">
+                    <button type="submit" class="btn btn-success me-2 ms-0"
+                        (click)="getApprovedAndRejectedRequests()">Load</button>
+                    <button type="button" class="btn file_btn btn-primary excel" (click)="downloadExcel()"><i
+                            class="fas fa-file-excel"></i></button>
+
+                    <button type="submit" class="btn btn-warning mx-2" (click)="reset()">Reset</button>
+                </div>
+                <div class="col-lg-12 mt-3 d-flex justify-content-md-end">
+                    <div class="d-flex flex-md-column flex-column-reverse">
+                        <p class="mb-0">Total Withdrawal: <b>{{withdrawalRequests?.sum | number:'1.2-2'}}</b></p>
+                        <div class="searchUtr d-flex mb-md-0 mb-2">
+                            <input type="search" placeholder="Enter 1st 6 digit of UTR" name="utrNumber"
+                                [(ngModel)]="utrNumber" class="form-control">
+                            <button class="btn btn-primary ml-2"
+                                (click)="getApprovedAndRejectedRequests()">Search</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="table-responsive mb-3">
+                <table class="table  mb-0">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>ParentName</th>
+                            <th>Amount</th>
+                            <th>BankDetails</th>
+                            <th>UTR</th>
+                            <th>Remarks</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Proof</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            *ngFor="let requests of withdrawalRequests.data | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage,totalItems: totalItems}">
+                            <td>{{requests?.clientLoginId}}</td>
+                            <td>{{requests?.parentLoginId}}</td>
+                            <td>{{requests?.amount | number:'1.2-2'}}</td>
+                            <td>
+                                <p class="mb-0 bankDet">Account Holder Name :-
+                                    <span>{{requests?.bankDetails.accountHolderName}}</span>
+                                </p>
+                                <p class="mb-0 bankDet">Bank Name :-
+                                    <span>{{requests?.bankDetails.bankName}}</span>
+                                </p>
+                                <p class="mb-0 bankDet">Account No :-
+                                    <span>{{requests?.bankDetails.accountNumber}}</span>
+                                </p>
+                                <p class="mb-0 bankDet">IFSC Code :-
+                                    <span>{{requests?.bankDetails.ifscCode}}</span>
+                                </p>
+                            </td>
+                            <td>
+                                <div class="reqSt">
+                                    <span class="reqStatus  text-success accept">{{requests?.utrNumber}}</span>
+                                </div>
+                            </td>
+                            <td>{{requests?.remarks}}</td>
+                            <td>
+                                <div class="d-flex flex-column reqSt">
+                                    <span class="reqStatus  text-success accept" *ngIf="requests?.transactionStatus==1">Accept</span>
+                                    <span class="reqStatus  text-danger reject" *ngIf="requests?.transactionStatus==2">Reject</span>
+                                </div>
+                            </td>
+                            <td>
+                                <p class="bankDet m-0 d-flex flex-column">Requested Time:- <span>{{requests?.createdOn |
+                                        date:'dd/MM/yyyy h:mm:ss a'}}</span></p>
+                                <p class="bankDet m-0 d-flex flex-column">Accepted Time:- <span>{{requests?.updatedOn |
+                                        date:'dd/MM/yyyy h:mm:ss a'}}</span></p>
+                            </td>
+                            <td *ngIf="requests?.imagePath; else uploadSection"
+                                (click)="getImageAndId(requests.id, requests.imagePath)">
+                                <img [src]="requests.imagePath" alt="Screenshot" class="img-fluid paymtImg paymentIcon"
+                                    data-bs-toggle="modal" data-bs-target="#imgViewModal">
+                            </td>
+                            <ng-template #uploadSection>
+                                <td>
+                                    <div class="upload-container d-flex flex-column">
+                                        <div class="custom-file mb-0">
+                                            <input type="file" (change)="onFileSelected($event, requests.id)">
+                                            <label class="custom-file-label text-center" for="customFile"><i
+                                                    class="fa-regular fa-file-image me-1"></i> Choose File</label>
+                                        </div>
+                                        <img *ngIf="previewUrl" alt="icon"
+                                            class="img-fluid paymtImg paymentIcon cursor-pointer" data-bs-toggle="modal"
+                                            data-bs-target="#imgViewModal" [src]="previewUrl">
+                                        <button class="btn btn-primary d-flex align-items-center nowrap"
+                                            (click)="uploadImage()">
+                                            <i class="fas fa-upload me-2"></i> Upload Image
+                                        </button>
+                                    </div>
+
+                                </td>
+                            </ng-template>
+                        </tr>
+
+                    </tbody>
+                </table>
+                <div class="text-center" *ngIf="totalItems == 0">No record found</div>
+               
+            </div>
+            <pagination-controls class="pagination" (pageChange)="pageChange($event)" [maxSize]="5" *ngIf="totalItems > 0"></pagination-controls>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade p-0 custoModal" id="imgViewModal" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="imgViewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="imgViewModalLabel">Screenshot</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="clsimgmdl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <!-- Image Preview -->
+                <div class="qrCodeCol">
+                    <img *ngIf="previewUrl" [src]="previewUrl" alt="Screenshot" class="img-fluid img-thumbnail">
+                </div>
+
+                <!-- Upload Button and Input -->
+                <div class="form-field w-100 mt-2 mx-auto d-flex flex-column">
+                    <div class="custom-file mb-3">
+                        <input type="file" id="customFile" class="custom-file-input"
+                            (change)="onFileSelected($event, 0)">
+                        <label class="custom-file-label" for="customFile"><i class="fa-regular fa-file-image me-1"></i>
+                            Choose File</label>
+                    </div>
+                    <div *ngIf="fileError" class="text-danger mb-3">
+                        {{ fileError }}
+                    </div>
+                    <button class="btn btn-primary mx-auto" (click)="uploadImage()">
+                        <i class="fas fa-upload me-2"></i> Upload Image
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

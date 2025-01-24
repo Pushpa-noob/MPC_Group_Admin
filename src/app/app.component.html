@@ -1,0 +1,22 @@
+<div class="mainBody">
+  <div class="headerMain" *ngIf="showHeaderSidebar">
+    <app-header></app-header>
+  </div>
+  <div class="dashboardCont">
+    <div class="sidebarMain" *ngIf="showHeaderSidebar">
+      <app-sidebar></app-sidebar>
+    </div>
+    <div class="mainCont p-2.5 p-md-3">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+
+
+
+<button class="button-back-top custom-back-top" [class.show]="showButton" (click)="scrollToTop()">
+  <i class="fa-solid fa-chevron-up"></i>
+</button>
+<div class="loaderMain">
+  <span class="loaderCstm"></span>
+</div>

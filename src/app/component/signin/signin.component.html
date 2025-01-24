@@ -1,0 +1,67 @@
+<!-- Login form for Admin -->
+<div class="loginWrap">
+    <div class="row loginMds">
+        <div class="col-md-6 mx-auto position-relative ">
+            <div class="loginWrapInner">
+                <img [src]="logo" alt="" class="img-fluid modalLogo mb-4" width="200px">
+                <div class="logBodyWrap">
+                    <h5 class="text-white text-center mb-3">Welcome Back!</h5>
+                    <form class="form" [formGroup]="loginForm" (ngSubmit)="login()" class="w-100">
+                        <div class="form-group">
+                            <label>Username</label>
+                            <div class="position-relative">
+                                <input placeholder="Enter Username*" name="username" type="text" class="form-control"
+                                    formControlName="LoginId">
+                            </div>
+                            <div *ngIf="loginForm.get('LoginId')?.errors?.['required'] && (loginForm.get('LoginId')?.dirty || loginForm.get('LoginId')?.touched)"
+                                class="text-danger">
+                                Please enter your LoginId.
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Password</label>
+                            <div class="position-relative">
+                                <input placeholder="Password*" name="password"
+                                    [type]="showPassword ? 'text' : 'password'" class="form-control"
+                                    formControlName="Password" autocomplete="Password">
+                                <button (click)="togglePasswordVisibility()" type="button" class="eye_ic btn p-0"
+                                    *ngIf="!showPassword">
+                                    <i class="far eye_icon fa-eye"></i>
+                                </button>
+                                <button (click)="togglePasswordVisibility()" type="button" class="eye_ic btn p-0"
+                                    *ngIf="showPassword">
+                                    <i class="far eye_icon fa-eye-slash"></i>
+                                </button>
+                            </div>
+                            <div *ngIf="loginForm.get('Password')?.errors?.['required'] && (loginForm.get('Password')?.dirty || loginForm.get('Password')?.touched)"
+                                class="text-danger">
+                                Please enter your password.
+                            </div>
+                        </div>
+
+                        <div class=" form-check">
+                            <input type="checkbox" class="form-check-input" id="exampleCheck1"
+                                (change)="keepMeSignedIn()" name="keepMeSignedInChecked"
+                                [checked]="keepMeSignedInChecked">
+                            <label class="form-check-label" for="exampleCheck1">Keep me signed in</label>
+                        </div>
+                        <div class="sub_btn_area">
+                            <button class="btn btn-primary btnPrimaryCstm" type="submit"><span class="animate-btn">Sign
+                                    in</span></button>
+
+
+                            <button class="btn btn-primary mt-2" id="cnfrmPwd" data-bs-toggle="modal"
+                                data-target="#changePassword" type="button" style="display: none;">Change
+                                Password</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ngx-spinner type="ball-scale-multiple" class="loader">
+
+</ngx-spinner>

@@ -1,0 +1,81 @@
+<div class="page-title-box mb-3 mb-ms-4">
+    <h4 class="page-title">Sports Setting</h4>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table  mb-0">
+                    <thead>
+                        <tr>
+                            <!-- <th>Status</th> -->
+                            <th>SportName</th>
+                            <th>MaxStake</th>
+                            <th>MinStake</th>
+                            <th>BeforeInPlayMaxStake</th>
+                            <th>BeforeInPlayMinStake</th>
+                            <th>MaxOdds</th>
+                            <th>MaxProfit</th>
+                            <th>BetDelay</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let list of sportsList;let i=index">
+                            <!-- <td><input type="checkbox" class=""></td> -->
+                            <td>{{list.sportsName}}</td>
+                            <td>
+                                <span class="edit_field">
+                                    <input type="text" name="OddsMaxStake" class="form-control"
+                                        [(ngModel)]="list.afterInplayMaxStake">
+                                </span>
+                            </td>
+                            <td>
+                                <span class="edit_field">
+                                    <input type="text" name="OddsMinStake" class="form-control"
+                                        [(ngModel)]="list.afterInplayMinStake">
+                                </span>
+                            </td>
+                            <td>
+                                <span class="edit_field">
+                                    <input type="text" name="BeforeInplayMaxStake" class="form-control"
+                                        [(ngModel)]="list.beforeInplayMaxStake">
+                                </span>
+                            </td>
+                            <td>
+                                <span class="edit_field">
+                                    <input type="text" name="BeforeInPlayMinStake" class="form-control"
+                                        [(ngModel)]="list.beforeInplayMinStake">
+                                </span>
+                            </td>
+                            <td>
+                                <span class="edit_field">
+                                    <input type="text" name="MaxOdds" class="form-control" [(ngModel)]="list.maxOdds">
+                                </span>
+                            </td>
+                            <td>
+                                <span class="edit_field">
+                                    <input type="text" name="maxProfit" class="form-control" [(ngModel)]="list.maxProfit">
+                                </span>
+                            </td>
+                            <td>
+                                <span class="edit_field">
+                                    <input type="text" name="MatchDelay" class="form-control"
+                                        [(ngModel)]="list.betDelay">
+                                </span>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <!-- <button type="button" class="btn btn-info mx-1 px-2 py-1"><i class="far fa-edit"
+                                            *ngIf="edit[i]" (click)="enable()"></i></button> -->
+                                    <button type="button" class="btn btn-success mx-1 px-2 py-1"
+                                        (click)="update(list)"><i class="far fa-save"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,174 @@
+<div class="page-title-box mb-3 mb-ms-4">
+    <h4 class="page-title">Odd/Even Market </h4>
+</div>
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="card">
+            <div class="oddevnTable">
+                <div class="row tableRowT">
+                    <div class="col-6 col-md-3 tableth">
+                        EventName
+                    </div>
+                    <div class="col-3 col-md-2 col-lg-2 tableth">
+                        EventTime
+                    </div>
+                    <div class="col-3 col-md-2 col-lg-1 tableth">
+                        EventId
+                    </div>
+                    <div class="col-2 col-md-2 col-lg-1 tableth">
+                        InPlay
+                    </div>
+                    <div class="col-2 tableth">
+                        T-20
+                    </div>
+                    <div class="col-2 tableth">
+                        ODI
+                    </div>
+                    <div class="col-2 col-md-1 tableth">
+                        Action
+                    </div>
+                </div>
+                <div *ngFor="let event of events;let i=index">
+
+                    <div class="row tabletd">
+                        <div class="col-6 col-md-3 tableth">
+                            {{event.eventName}}
+                        </div>
+                        <div class="col-3 col-md-2 col-lg-2 tableth">
+                            {{event.eventTime | date:'dd/MM/yyyy hh:mm:ss a'}}
+                        </div>
+                        <div class="col-3 col-md-2 col-lg-1 tableth">
+                            {{event.betfairEventId}}
+                        </div>
+                        <div class="col-2 col-md-2 col-lg-1 tableth">
+                            {{event.inPlay}}
+                        </div>
+                        <div class="col-2 tableth">
+                            <div class="form-check form-switch">
+                                <input type="checkbox" checked class="form-check-input" [(ngModel)]="event.t20"
+                                    (change)="activeMarket(event.betfairEventId,'T20')">
+                            </div>
+                        </div>
+                        <div class="col-2 tableth">
+                            <div class="form-check form-switch">
+                                <input type="checkbox" class="form-check-input" [(ngModel)]="event.oneDay"
+                                    (change)="activeMarket(event.betfairEventId,'OneDay')">
+                            </div>
+                        </div>
+                        <div class="col-2 col-md-1 tableth">
+                            <button type="button" class="btn bg-transparent line-height-normal"
+                            (click)="toggleCollapse(i)">
+                                <i class="fa-solid fa-angle-down" [ngClass]="{
+                                    'fa-angle-down': !collapsedRows[i],
+                                    'fa-angle-up': collapsedRows[i]
+                                }"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="collapseTable" *ngIf="collapsedRows[i]">
+                        <div class=" w-100">
+                            <table class="table ">
+                                <thead>
+                                    <tr>
+                                        <th>MarketId</th>
+                                        <th>MarketName</th>
+                                        <th>Status</th>
+                                        <th class="runnernameCol">Runners</th>
+                                        <th class="actionMax">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let market of event.markets;let m=index">
+                                        <td>
+                                            {{market.id}}
+                                        </td>
+                                        <td>
+                                            {{market.betfairMarketName}}
+                                        </td>
+                                        <td>
+                                            <span
+                                                [ngClass]="{'active':!market.isLocked,'inactive':market.isLocked}">{{!market.isLocked?'Active':'InActive'}}</span>
+                                        </td>
+                                        <td class="runnernameCol">
+                                            <div class="d-flex align-items-center ">
+                                                <select class="form-control customSelect" (change)="onRunnerChange($event,m)">
+                                                    <option value="">Runner Name</option>
+                                                    <option *ngFor="let rnr of market.runners;let r=index" [value]="getRunnerValue(rnr)">
+                                                        {{rnr.runnerName}}
+                                                    </option>
+                
+                                                </select>
+                                                <div class="text-danger mt-1" *ngIf="runnerError[m]">*Please Select Runner First</div>
+                                                <button type="button" title="Result Declare"  class="btn btn-success icon_btn mx-1" (click)="setUpModal(event,market,m)"><i class="fa-regular fa-circle-check"></i></button>
+                                                <button type="button" title="Abandon" data-bs-toggle="modal" data-bs-target="#abandond" class="btn btn-danger icon_btn mx-1" (click)="setvalue(event,market)"><i class="fa-solid fa-ban"></i></button>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-check form-switch">
+                                                <input type="checkbox" checked class="form-check-input"
+                                                    [(ngModel)]="market.isLocked" (change)="updateMarket(market.id)">
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+            
+        </div>
+    </div>
+</div>
+<button type="button" title="Result Declare" data-bs-toggle="modal" id="modalTriggerButton"
+    data-bs-target="#declear" class="btn btn-success icon_btn mx-1 d-none">
+    <i class="fa-regular fa-circle-check"></i>
+</button>
+
+<!-- declear result moadal -->
+<div id="declear" data-bs-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="confirmModalLabel"
+    class="modal fade custoModal" aria-hidden="true" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="confirmModalLabel" class="modal-title"><b>{{eventName}}({{marketName}})</b></h5>
+            </div>
+            <div class="modal-body">
+                <h6 class="text-center">Declare <b>{{runnerName}}</b> as a Result</h6>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" (click)="declare()">Yes</button>
+                <button type="button" id="closeDeclareBtn" data-bs-dismiss="modal" class="btn btn-danger"
+                    (click)="reset()">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- <div id="abandond" tabindex="-1" aria-labelledby="abbandonLabel" data-bs-backdrop="static" data-keyboard="false"
+    aria-hidden="true" class="modal fade custoModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="abbandonLabel" class="modal-title">{{eventName}}({{marketName}})</h5>
+            </div>
+            <div class="modal-body">
+                <h6 class="text-center">Abandoned Market</h6>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success"  (click)="abandonedMarket()">Yes</button>
+                <button type="button" id="clsAbn" data-bs-dismiss="modal" class="btn btn-danger">No</button>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+

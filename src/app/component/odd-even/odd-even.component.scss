@@ -1,0 +1,158 @@
+.oddevnTable {
+    overflow: auto;
+
+    .tableRowT {
+        flex-wrap: nowrap;
+        margin: 0;
+
+        .tableth {
+            border: 1px solid #ccc;
+            padding: 5px;
+            border-bottom: 0;
+            font-weight: 500;
+
+            @media(max-width:575.98px) {
+                padding: 3px;
+            }
+
+            // @media(max-width:359px) {
+            //     min-width: 50px;
+            // }
+        }
+    }
+
+    .tabletd {
+        flex-wrap: nowrap;
+        margin: 0;
+
+        .tableth {
+            border: 1px solid #ccc;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+
+            @media(max-width:575.98px) {
+                padding: 3px;
+            }
+
+            // @media(max-width:359px) {
+            //     min-width: 50px;
+            // }
+        }
+    }
+}
+
+.collapseTable {
+    margin-top: 0px;
+    background-color: #fff;
+    display: flex;
+    width: 100%;
+    position: relative;
+    padding: 0;
+
+    table {
+        tr {
+            .minwmax {
+                width: 150px;
+
+                @media(max-width:575.98px) {
+                    width: 70px;
+                }
+            }
+
+            .actionMax {
+                width: 100px;
+
+                @media(max-width:575.98px) {
+                    width: 60px;
+                }
+            }
+
+            th {
+                font-weight: 500 !important;
+
+                .back {
+                    background-color: #bbe1ee;
+                    height: 28px;
+                    min-width: 50px;
+                    color: #000;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 5px;
+                    max-width: 98px;
+                    width: 100%;
+                }
+
+                .lay {
+                    background-color: #f6c5c8;
+                    height: 28px;
+                    min-width: 50px;
+                    color: #000;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 5px;
+                    max-width: 98px;
+                    width: 100%;
+                }
+            }
+
+            td {
+                .back {
+                    background-color: #bbe1ee;
+                    height: 40px;
+                    min-width: 50px;
+                    color: #000;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 5px;
+                    max-width: 98px;
+                    width: 100%;
+                }
+
+                .lay {
+                    background-color: #f6c5c8;
+                    height: 40px;
+                    min-width: 50px;
+                    color: #000;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 5px;
+                    max-width: 98px;
+                    width: 100%;
+                }
+
+                .active {
+                    background: #daffda;
+                    display: flex;
+                    width: max-content;
+                    padding: 2px 8px;
+                    border-radius: 4px;
+                    color: #015601;
+                }
+
+                .inactive {
+                    background: #ffdede;
+                    display: flex;
+                    width: max-content;
+                    padding: 2px 8px;
+                    border-radius: 4px;
+                    color: red;
+                }
+                .customSelect{
+                    width: 160px;
+                }
+            }
+        }
+    }
+}
+
+.nowrap {
+    flex-wrap: nowrap;
+}
+.runnernameCol{
+    width: 220px;
+}

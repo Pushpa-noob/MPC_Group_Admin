@@ -1,0 +1,48 @@
+.subPages {
+    .form-group {
+        textarea {
+            min-height: 60px;
+            &::placeholder{
+                color: #94a0ad;
+            }
+        }
+    }
+
+    .table {
+        tr {
+            td {
+                vertical-align: middle;
+                textarea {
+                    width: 100%;
+                    outline: none;
+                    border: 1px solid #ced4da;
+                    padding: 4px 8px;
+                    color: var(--blackTextColorSec);
+                    &::placeholder{
+                        color: #94a0ad;
+                    }
+                }
+
+                .simple_area {
+                    border: unset;
+                    padding: 4px 8px;
+                    background: none;
+                    resize: none;
+                }
+                .btn{
+                    padding: 0.2rem 0.5rem;
+                }
+            }
+        }
+    }
+}
+.modal{
+    .form-group {
+        textarea {
+            min-height: 60px;
+            &::placeholder{
+                color: #94a0ad;
+            }
+        }
+    }
+}

@@ -1,0 +1,89 @@
+<div class="content_area">
+    <div class="title_bar">
+        <h4 class="page-title">Winner & Loser</h4>
+    </div>
+    <div class="col-md-12">
+        <div class="card winlossTable">
+            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button  class="nav-link active" id="pills-Winners-tab" data-bs-toggle="pill"
+                        data-bs-target="#pills-Winners" type="button" role="tab" aria-controls="pills-Winners"
+                        aria-selected="true">Winners</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-Losers-tab" data-bs-toggle="pill" data-bs-target="#pills-Losers"
+                        type="button" role="tab" aria-controls="pills-Losers" aria-selected="false">Losers</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button  class="nav-link" id="pills-Match-tab" data-bs-toggle="pill" data-bs-target="#pills-Match"
+                        type="button" role="tab" aria-controls="pills-Match" aria-selected="false">Top Games</button>
+                </li>
+            </ul>
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-Winners" role="tabpanel"
+                    aria-labelledby="pills-Winners-tab">
+                    <div class="table-responsive mt-2">
+                        <table class="table mb-0 border">
+                            <thead>
+                                <tr>
+                                    <th>UserName</th>
+                                    <th>PL</th>
+                                    <th>Risk</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let winner of details.topWinners">
+                                    <td>{{winner.loginId}}</td>
+                                    <td>{{winner.totalAmount  | number:'1.2-2'}}</td>
+                                    <td>{{winner.totalStake}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-Losers" role="tabpanel" aria-labelledby="pills-Losers-tab">
+                    <div class="table-responsive mt-2">
+                        <table class="table mb-0 border">
+                            <thead>
+                                <tr>
+                                    <th>UserName</th>
+                                    <th>PL</th>
+                                    <th>Risk</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let losers of details.topLosser">
+                                    <td>{{losers.loginId}}</td>
+                                    <td>{{losers.totalAmount  | number:'1.2-2'}}</td>
+                                    <td>{{losers.totalStake}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-Match" role="tabpanel" aria-labelledby="pills-Match-tab">
+                    <div class="table-responsive mt-2">
+                        <table class="table mb-0 border">
+                            <thead>
+                                <tr>
+                                    <th>Event Name</th>
+                                    <th>Game</th>
+                                    <th>PL</th>
+                                    <th>TotalClients</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let event of details.topgames">
+                                    <td>{{event.eventName}}</td>
+                                    <td>{{event.sportName}}</td>
+                                    <td>{{event.totalProfit  | number:'1.2-2'}}</td>
+                                    <td>{{event.totalPlayers}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

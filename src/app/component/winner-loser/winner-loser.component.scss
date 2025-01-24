@@ -1,0 +1,20 @@
+.winlossTable{
+    ul.nav{
+        li{
+            button{
+                color: var(--blackTextColorSec);
+                font-size: 16px;
+                padding: 8px 10px;
+                margin-right: 20px;
+                border-bottom: 2px solid transparent;
+                border-radius: 0;
+                &.active{
+                    color: var(--blackTextColorSec);
+                    background-color: transparent;
+                    border-bottom: 2px solid var(--searchBarColor);
+                   
+                }
+            }
+        }
+    }
+}

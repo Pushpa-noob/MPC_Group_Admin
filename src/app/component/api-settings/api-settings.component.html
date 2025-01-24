@@ -1,0 +1,221 @@
+<div class="page-title-box mb-3 mb-ms-4">
+    <h4 class="page-title">BetFair Api Settings <button type="button" data-bs-toggle="modal"
+            data-bs-target="#addBetfairApi" class="btn btn-primary m-0 ms-3">Add New</button> </h4>
+</div>
+<div class="row subPages">
+    <div class="col-md-12">
+        <div class="card">
+            <!-- <div class="row">
+                <div class="col-md-6 mb-3 mb-md-4">
+                    <label class="mb-1">SportsId</label>
+                    <input type="number" class="form-control" placeholder="Enter SportsId">
+                </div>
+                <div class="col-md-6 mb-3 mb-md-4">
+                    <label class="mb-1">FancyUrl</label>
+                    <input type="text" class="form-control" placeholder="Enter FancyUrl">
+                </div>
+                <div class="col-md-6 mb-3 mb-md-4">
+                    <label class="mb-1">BetfairUrl</label>
+                    <input type="text" class="form-control" placeholder="Enter BetfairUrl">
+                </div>
+                <div class="col-md-6 mb-3 mb-md-4">
+                    <label class="mb-1">DiamondUrl</label>
+                    <input type="text" class="form-control" placeholder="Enter DaimondUrl">
+                </div>
+                <div class="col-md-6 mb-3 mb-md-4">
+                    <label class="mb-1">BookmakerUrl</label>
+                    <input type="text" class="form-control" placeholder="Enter BookMakerUrl">
+                </div>
+                <div class="col-md-6 mb-3 mb-md-4">
+                    <label class="mb-1">ScoreUrl</label>
+                    <input type="text" class="form-control" placeholder="Enter ScoreUrl">
+                </div>
+                <div class="col-md-6 mb-3 mb-md-4">
+                    <label class="mb-1">TvUrl </label>
+                    <input type="text" class="form-control" placeholder="Enter TvUrl">
+                </div>
+                <div class="col-md-6 mb-3 mb-md-4 d-flex align-items-end">
+                    <button type="button" class="btn btn-primary">Add</button>
+                </div>
+            </div> -->
+            <div class="row mb-3">
+                <div class="table-responsive">
+                    <table class="table ">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>SportsId</th>
+                                <th>ProviderName</th>
+                                <th>ProviderId</th>
+                                <th>ApiType</th>
+                                <th>Url</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let api of apiList;let i=index">
+                                <td>{{i+1}}</td>
+                                <td>{{api.sportsId}}</td>
+                                <td>{{api.providerName}}</td>
+                                <td>{{api.providerId}}</td>
+                                <td>{{api.apiType}}</td>
+                                <td>{{api.url}}</td>
+                                <td>
+                                    <div class="act_btn">
+                                        <button type="button" class="btn btn-info me-1 px-2 py-1" data-bs-toggle="modal"
+                                            data-bs-target="#editBetfairApi" (click)="getData(api)">
+                                            <i class="far fa-edit"></i>
+                                        </button>
+                                        
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- add BetFair Api Settings modal -->
+<div class="modal fade custoModal" id="addBetfairApi" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="addBetfairApiLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="addBetfairApiLabel">Add Api Urls</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="clsaddmdl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+                    <div class="bankingForm">
+                        <form [formGroup]="apiForm" (ngSubmit)="onSubmit()">
+                            <div class="row">
+                              <div class="col-md-6 mb-3 mb-md-4">
+                                <label class="mb-1">SportsId</label>
+                                <input type="number" formControlName="SportsId" class="form-control" placeholder="Enter SportsId">
+                                <div *ngIf="apiForm.get('SportsId')?.invalid && apiForm.get('SportsId')?.touched"
+                                class="text-danger">
+                                Please enter SportsId.
+                            </div>
+                              </div>
+                              
+                              <div class="col-md-6 mb-3 mb-md-4">
+                                <label class="mb-1">ProviderId</label>
+                                <input type="number" formControlName="ProviderId" class="form-control" placeholder="Enter ProviderId">
+                                <div *ngIf="apiForm.get('ProviderId')?.invalid && apiForm.get('ProviderId')?.touched"
+                                class="text-danger">
+                                Please enter ProviderId.
+                            </div>
+                              </div>
+                          
+                              <div class="col-md-6 mb-3 mb-md-4">
+                                <label class="mb-1">ProviderName</label>
+                                <input type="text" formControlName="ProviderName" class="form-control" placeholder="Enter ProviderName">
+                                <div *ngIf="apiForm.get('ProviderName')?.invalid && apiForm.get('ProviderName')?.touched"
+                                class="text-danger">
+                                Please enter ProviderName.
+                            </div>
+                              </div>
+                          
+                              <div class="col-md-6 mb-3 mb-md-4">
+                                <label class="mb-1">ApiType</label>
+                                <input type="text" formControlName="ApiType" class="form-control" placeholder="Enter ApiType">
+                                <div *ngIf="apiForm.get('ApiType')?.invalid && apiForm.get('ApiType')?.touched"
+                                class="text-danger">
+                                Please enter ApiType.
+                            </div>
+                              </div>
+                          
+                              <div class="col-md-6 mb-3 mb-md-4">
+                                <label class="mb-1">ApiUrl</label>
+                                <input type="text" formControlName="Url" class="form-control" placeholder="Enter Url">
+                                <div *ngIf="apiForm.get('Url')?.invalid && apiForm.get('Url')?.touched"
+                                class="text-danger">
+                                Please enter Url.
+                            </div>
+                              </div>
+                          
+                              <div class="col-md-6 mb-3 mb-md-4 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary">Add</button>
+                              </div>
+                            </div>
+                          </form>
+                          
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit BetFair Api Settings modal -->
+<div class="modal fade custoModal" id="editBetfairApi" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="editBetfairApiLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="editBetfairApiLabel">Edit BetFair Api Settings</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="clsmdl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+                    <div class="bankingForm">
+                        <div class="row">
+                            <form>
+                                <div class="row">
+                                    
+                                    <div class="col-md-6 mb-3 mb-md-4">
+                                        <label class="mb-1">ApiType</label>
+                                        <input type="text" class="form-control" placeholder="Enter ApiType" name="apiType" [(ngModel)]="data.apiType">
+                                    </div>
+                                    <div class="col-md-6 mb-3 mb-md-4">
+                                        <label class="mb-1">Url</label>
+                                        <input type="text" class="form-control" placeholder="Enter Url" name="Url" [(ngModel)]="data.url">
+                                    </div>
+                                    
+                                    <div class="col-md-6 mb-3 mb-md-4 d-flex align-items-end">
+                                        <button type="button" class="btn btn-primary" (click)="update()">Update</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--delete BetFair Api Settings Modal -->
+<div class="modal fade custoModal actdeactiveModal" id="BetfairApiDelete" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="BetfairApiDeleteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content">
+            <div class="card-body p-4">
+                <div class="swalIcon">
+                    <span class="swa-icon-text">!</span>
+                </div>
+                <div class="text-center px-md-4">
+                    <h4>Are you sure?</h4>
+                    <p>You wan't to delete this BetFair Api Settings </p>
+                </div>
+                <div class="modal-footer border-0 justify-content-center order-0 p-0 mt-3">
+                    <button type="button" class="btn btn-success">Yes, Delete it.!</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" >No, cancel.!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

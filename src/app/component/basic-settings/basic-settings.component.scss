@@ -1,0 +1,41 @@
+.basicSettingRow {
+    input {
+        &.border-3 {
+            &:focus {
+                box-shadow: none;
+                border-color: #ced4da;
+            }
+        }
+
+    }
+}
+
+
+
+
+#faviconViewModal {
+    .custom-file {
+        width: 170px;
+    }
+}
+
+table {
+    tr {
+        td {
+            img {
+                &.tableImg {
+                    width: 100%;
+                    object-fit: contain;
+                    height: 20px;
+                }
+            }
+        }
+    }
+}
+.selectColor{
+    width: 50px;
+    border-radius: 8PX;
+    margin-left: 10px;
+    cursor: pointer;
+    padding: 0;
+}

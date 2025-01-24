@@ -1,0 +1,232 @@
+<div class="page-title-box mb-3 mb-ms-4">
+    <h4 class="page-title">Tournament List</h4>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="col-6 col-md-2 mb-2">
+                <select class="form-control" [(ngModel)]="sportsId" (change)="onSportChange()">
+                    <option value="4">Cricket</option>
+                    <option value="2">Tennis</option>
+                    <option value="1">Soccer</option>
+                </select>
+            </div>
+
+            <div class="table-responsive sticky-table">
+                <table class="table  mb-0">
+                    <thead>
+                        <tr>
+                            <th>Tournament name</th>
+                            <th>PreMO_Stakes</th>
+                            <th>PostMO_Stakes</th>
+
+                            <th>PreBM_Stakes</th>
+                            <th>PostBM_Stakes</th>
+
+                            <th>PreFany_Stakes</th>
+                            <th>PostFancy_Stakes</th>
+
+                            <th>Toss_Stake</th>
+                            <th>OddEven</th>
+
+                            <th>BetDelay</th>
+
+                            <th>MaxProfit</th>
+                            <th>MaxOdds</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let list of tournamentList">
+                            <td>{{list.tournamentName}}</td>
+                            <td>
+                                <div class="minMaxIn">
+                                    <div class="d-flex align-items-center nowrap mb-2">
+                                        Min : <input class="form-control ms-1" type="number"
+                                            [(ngModel)]="list.beforeInplayMinStake" name="BeforeInplayMinStake">
+                                    </div>
+                                    <div class="d-flex align-items-center nowrap">
+                                        Max : <input class="form-control ms-1" type="number"
+                                            [(ngModel)]="list.beforeInplayMaxStake" name="BeforeInplayMaxStake">
+                                    </div>
+                                </div>
+                                <!-- <input class="form-control" type="number" [(ngModel)]="list.beforeInplayMaxStake"
+                                name="BeforeInplayMaxStake"> -->
+                            </td>
+                            <td>
+                                <div class="minMaxIn">
+                                    <div class="d-flex align-items-center nowrap mb-2">
+                                        Min : <input class="form-control ms-1" type="number"
+                                            [(ngModel)]="list.afterInplayMinStake" name="AfterInplayMinStake">
+                                    </div>
+                                    <div class="d-flex align-items-center nowrap">
+                                        Max : <input class="form-control ms-1" type="number"
+                                            [(ngModel)]="list.afterInplayMaxStake" name="AfterInplayMaxStake">
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="minMaxIn">
+                                    <div class="d-flex align-items-center nowrap mb-2">
+                                        Min : <input class="form-control ms-1" type="number"
+                                            [(ngModel)]="list.beforeInplayBooKMakerMinStake"
+                                            name="BeforeInplayBooKMakerMaxStake">
+                                    </div>
+                                    <div class="d-flex align-items-center nowrap">
+                                        Max : <input class="form-control ms-1" type="number"
+                                            [(ngModel)]="list.beforeInplayBooKMakerMaxStake"
+                                            name="BeforeInplayBooKMakerMaxStake">
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="minMaxIn">
+                                    <div class="d-flex align-items-center nowrap mb-2">
+                                        Min : <input class="form-control ms-1" type="number"
+                                            [(ngModel)]="list.afterInplayBooKMakerMinStake"
+                                            name="AfterInplayBooKMakerMinStake">
+                                    </div>
+                                    <div class="d-flex align-items-center nowrap">
+                                        Max : <input class="form-control ms-1" type="number"
+                                            [(ngModel)]="list.afterInplayBooKMakerMaxStake"
+                                            name="AfterInplayBooKMakerMaxStake">
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="minMaxIn">
+                                    <div class="d-flex align-items-center nowrap mb-2">
+                                        Min : <input class="form-control ms-1" type="number"
+                                            [(ngModel)]="list.beforeInplayFancyMinStake"
+                                            name="BeforeInplayFancyMinStake">
+                                    </div>
+                                    <div class="d-flex align-items-center nowrap">
+                                        Max : <input class="form-control ms-1" type="number"
+                                            [(ngModel)]="list.beforeInplayFancyMaxStake"
+                                            name="BeforeInplayFancyMaxStake">
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="minMaxIn">
+                                    <div class="d-flex align-items-center nowrap mb-2">
+                                        Min : <input class="form-control ms-1" type="number"
+                                            [(ngModel)]="list.afterInplayFancyMinStake" name="AfterInplayFancyMinStake">
+                                    </div>
+                                    <div class="d-flex align-items-center nowrap">
+                                        Max : <input class="form-control ms-1" type="number"
+                                            [(ngModel)]="list.afterInplayFancyMaxStake" name="a">
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="minMaxIn">
+                                    <div class="d-flex align-items-center nowrap mb-2">
+                                        Min : <input class="form-control ms-1" type="number"
+                                            [(ngModel)]="list.tossMinStake" name="TossMinStake">
+                                    </div>
+                                    <div class="d-flex align-items-center nowrap">
+                                        Max : <input class="form-control ms-1" type="number"
+                                            [(ngModel)]="list.tossMaxStake" name="TossMaxStake">
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="minMaxIn">
+                                    <div class="d-flex align-items-center nowrap mb-2">
+                                        Min : <input class="form-control ms-1" type="number"
+                                            [(ngModel)]="list.oddEvenMinStake" name="oddEvenMinStake">
+                                    </div>
+                                    <div class="d-flex align-items-center nowrap">
+                                        Max : <input class="form-control ms-1" type="number"
+                                            [(ngModel)]="list.oddEvenMaxStake" name="oddEvenMaxStake">
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="minMaxIn">
+                                    <div class="d-flex align-items-center nowrap mb-2">
+                                        MO : <input class="form-control ms-1" type="number" [(ngModel)]="list.betDelay"
+                                            name="BetDelay">
+                                    </div>
+                                    <div class="d-flex align-items-center nowrap mb-2">
+                                        BM : <input class="form-control ms-1" type="number"
+                                            [(ngModel)]="list.bookMakerBetDelay" name="BookMakerBetDelay">
+                                    </div>
+                                    <div class="d-flex align-items-center nowrap">
+                                        FA : <input class="form-control ms-1" type="number"
+                                            [(ngModel)]="list.fancyBetDelay" name="FancyBetDelay">
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="minMaxIn">
+                                    <div class="d-flex align-items-center nowrap mb-2">
+                                        MO : <input class="form-control ms-1" type="number"
+                                            [(ngModel)]="list.matchMaxProfit" name="MatchMaxProfit">
+                                    </div>
+                                    <div class="d-flex align-items-center nowrap mb-2">
+                                        BM : <input class="form-control ms-1" type="number"
+                                            [(ngModel)]="list.bookMaxProfit" name="BookMaxProfit">
+                                    </div>
+
+                                    <div class="d-flex align-items-center nowrap mb-2">
+                                        TO : <input class="form-control ms-1" type="number"
+                                            [(ngModel)]="list.tossMaxProfit" name="TossMaxProfit">
+                                    </div>
+                                    <div class="d-flex align-items-center nowrap">
+                                        FA : <input class="form-control ms-1" type="number"
+                                            [(ngModel)]="list.fancyMaxProfit" name="FancyMaxProfit">
+                                    </div>
+                                    <div class="d-flex align-items-center nowrap">
+                                        OE : <input class="form-control ms-1" type="number"
+                                            [(ngModel)]="list.oddEvenMaxProfit" name="oddEvenMaxProfit">
+                                    </div>
+                                </div>
+                            </td>
+
+
+                            <td>
+                                <input class="form-control" type="number" [(ngModel)]="list.maxOdds" name="MaxOdds">
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <button (click)="updateTournament(list)" type="button"
+                                        class="btn btn-success mx-1 py-1 px-2 text-white"><i
+                                            class="fa-solid fa-circle-check fs-6"></i></button>
+                                    <button (click)="dltMdl(list.tournamentId)" type="button"
+                                        class="btn btn-danger mx-1 py-1 px-2" data-bs-toggle="modal"
+                                        data-bs-target="#dltModal"><i class="fa-solid fa-trash-can"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- delete modal -->
+<div class="modal fade custoModal" id="dltModal" data-bs-backdrop="static" data-keyboard="false" tabindex="-1"
+    aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="confirmModalLabel" class="modal-title">Delete Tournament</h5>
+            </div>
+            <div class="modal-body">
+                <h6 class="text-center">Are you sure want to delete this tournament</h6>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="deleteTournament()">Yes</button>
+                <button type="button" id="clsMdlTo" data-bs-dismiss="modal" class="btn btn-danger">No</button>
+            </div>
+        </div>
+    </div>
+</div>

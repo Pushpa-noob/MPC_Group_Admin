@@ -1,0 +1,2258 @@
+<div class="page-title-box mb-3 mb-ms-4">
+   <h4 class="page-title">User List</h4>
+</div>
+<div class="row">
+   <div class="col-md-12">
+      <div class="card">
+         <div class="row">
+            <div class="col-sm-12 col-md-9 col-lg-10">
+               <div class="d-flex align-items-center flex-wrap">
+                  <button class="btn btn-warning mb-1" (click)="UnblockUsers()">Allow</button>
+                  <button class="btn btn-danger mb-1 ms-1" (click)="BlockUsers()">Block</button>
+                  <button [routerLink]="['/add_user']" [queryParams]="{ type: 'client', parentId: parentId }"
+                     class="btn btn-success mb-1 ms-1" *ngIf="parentId!=1">Add
+                     Client</button>
+                  <button *ngIf="role!='SubAgent'" [routerLink]="['/add_user']"
+                     [queryParams]="{ type: 'agent', parentId: parentId }" class="btn btn-success mb-1 ms-1">Add
+                     Agent</button>
+                  <button class="btn btn-primary mb-1 ms-1" (click)="resetAll()">Reset</button>
+                  <div class="ms-1 switchCommon mb-1">
+                     <label class="switchBtnCommon">
+                        <input type="checkbox" id="togBtn" [checked]="!isLocked" (change)="toggleLock($event)">
+                        <div class="slider round">
+                           <span class="on">Active</span>
+                           <span class="off">In-Active</span>
+                        </div>
+                     </label>
+                  </div>
+
+
+
+               </div>
+            </div>
+         </div>
+         <div class="row mt-2 mb-2 d-flex align-items-center flex-row-reverse tableTopRow ">
+            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 ps-md-0 d-flex">
+               <input type="text" class="form-control" name="searchKeyword" [(ngModel)]="searchKeyword"
+                  placeholder="Search by UserName">
+               <button *ngIf="searchKeyword.length>0" class="btn btn-primary ms-1" (click)="getUserList()"><i
+                     class="fa fa-search"></i></button>
+            </div>
+
+            <div class="dt-buttons flex-wrap mt-2 mt-md-0 col-lg-3 col-md-3 col-sm-12 col-xs-12 text-end">
+               <button class="btn downloadTableBtn me-2" type="button" (click)="downloadCSV('userList')"><i
+                     class="fas fa-file-csv"></i> </button>
+               <button class="btn downloadTableBtn me-2" type="button" (click)="downloadExcel('userList')"><i
+                     class="far fa-file-excel"></i> </button>
+               <button class="btn downloadTableBtn" type="button" (click)="downloadPDF('userList')"><i
+                     class="far fa-file-pdf"></i> </button>
+            </div>
+            <div *ngIf="userList?.length>0" class="col-md-7 col-sm-12 mt-2 mt-md-0">
+               <p class="tableP mb-0">Showing {{userList?.length}} of {{Count}} entries</p>
+            </div>
+            <div class="row mt-2 mb-2 p-0 m-0" *ngIf="breadcrumbs.length > 0">
+               <div class="col-md-6 col-sm-12 mt-2 mt-md-0">
+                  <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+                     <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item">
+                           <a (click)="resetAll()"> <i class="fa-solid fa-house-chimney"></i> </a>
+                        </li>
+                        <li *ngFor="let crumb of breadcrumbs; let i = index" class="breadcrumb-item">
+                           <a (click)="navToList(crumb)">{{ crumb.username }}</a>
+                        </li>
+                     </ol>
+                  </nav>
+
+               </div>
+            </div>
+         </div>
+         <div class="table-responsive border">
+            <table class="datatable table mb-1">
+               <thead>
+                  <tr>
+                     <th>
+                        
+                     </th>
+                     <th>Role</th>
+                     <th>UserName [FullName]</th>
+                     <th>Downline</th>
+                     <!-- <th>Credit Ref. </th> -->
+                     <th>P/L</th>
+                     <!-- <th>Settlement(P|L)</th> -->
+                     <th>Exposure</th>
+                     <th>Availabel Bal.</th>
+                     <!-- <th>Bonus Bal.</th> -->
+                     <th *ngIf="getRoleId==1 || getRoleId==2 || getRoleId==3">D/W</th>
+                     <th>Mobile Number</th>
+                     <th *ngIf="parentId==1">Domain</th>
+                     <th>Joining Date</th>
+                     <th>Action</th>
+                     <th>Edit</th>
+                     <th *ngIf="parentId==1">Maintenance</th>
+                  </tr>
+               </thead>
+               <tbody *ngIf="userList?.length>0">
+
+
+                  <tr
+                     *ngFor="let list of userList | paginate: {  itemsPerPage:takeRecords, currentPage:pageNum,totalItems: Count };">
+                     <td>
+                        <input type="checkbox" name="chkAllUser" (change)="selectUsers(list)">
+                     </td>
+                     <td>
+                        <span *ngIf="list.role!='Client'" class="frstLet btn btn-danger" data-bs-toggle="tooltip"
+                           data-bs-placement="top" title="{{list.role}}">A</span>
+                        <span *ngIf="list.role=='Client'" class="frstLet btn btn-warning" data-bs-toggle="tooltip"
+                           data-bs-placement="top" title="{{list.role}}">c</span>
+                     </td>
+                     <td>{{list.loginId}} [{{list.fullName}}]</td>
+
+                     <td *ngIf="list.role=='Client'"></td>
+                     <td *ngIf="list.role!='Client'" (click)="getChilds(list.userId,list.loginId,list.role)">
+                        <a><img src="./assets/img/downline.svg" alt="" width="15px">-({{list.count}})</a>
+                     </td>
+                     <!-- <td>{{ formatNumber( list.creditLimit )}}</td>-->
+                     <td>
+                        <span [ngClass]="{'text-danger':list.profitLoss<0,'text-success':list.profitLoss>0}">{{ formatNumber( list.profitLoss )}}</span>
+                     </td>
+
+                     <!-- <td>
+                        <div (click)="getSettlement(list)" class="d-flex align-items-center">
+                           <button class="settlementBtn btn btn-secondary"
+                              [ngClass]="{'bg-success': list.totalSettlement > 0, 'bg-danger': list.totalSettlement < 0}"
+                              data-bs-toggle="modal" data-bs-target="#settlement">
+                              {{ formatNumber( list.totalSettlement ) }}
+                           </button>
+
+                           <button (click)="getHistory(list,'history')" class="bedgeBtn ms-1" data-bs-toggle="modal"
+                              data-bs-target="#history"><span class="frstLet btn btn-info" data-bs-toggle="tooltip"
+                                 data-bs-placement="top" title="History">H</span></button>
+                        </div>
+                     </td> -->
+                     <td *ngIf="list.role!='Client'" class="text-danger">
+                        {{formatNumber(list.exposure)}}
+                     </td>
+                     <td *ngIf="list.role=='Client'"><span data-bs-toggle="modal" data-bs-target="#exposureModal"
+                           (click)="getClientAllPendingBets(list.userId)" class="text-danger">
+                           {{formatNumber(list.exposure)}}</span>
+                     </td>
+                     <td>{{formatNumber(list.availBalance)}}</td>
+                     <!-- <td>{{formatNumber(list.bonusBalance)}}</td> -->
+                     <td *ngIf="getRoleId==1 || getRoleId==2 || getRoleId==3">
+                        <div class="d-flex align-items-center">
+                           <button (click)="getParentDetails(list,'D')" type="button" class="bedgeBtn"
+                              data-bs-toggle="modal" data-bs-target="#deposit"><span class="frstLet btn btn-warning"
+                                 data-bs-toggle="tooltip" data-bs-placement="top"
+                                 title="Deposit Credit">D</span></button>
+                           <button (click)="getParentDetails(list,'W')" type="button" class="bedgeBtn"
+                              data-bs-toggle="modal" data-bs-target="#withdraw"><span class="frstLet btn btn-info"
+                                 data-bs-toggle="tooltip" data-bs-placement="top"
+                                 title="Withdraw Credit">W</span></button>
+                        </div>
+                     </td>
+
+                     <td>{{list.mobile}}</td>
+
+                     <td *ngIf="parentId==1">
+                        <a [href]="list.domainName" target="_blank">{{ list.domainName }}</a>
+                     </td>
+
+                     <td>{{list.createdOn | date:'dd/MM/yyyy hh:mm:ss a'}}</td>
+                     <td>
+                        <div class="d-flex align-items-center">
+                           <button type="button" class="bedgeBtn" data-bs-toggle="modal" data-bs-target="#limitSetting"
+                              (click)="getSetting(list)"><span class="frstLet btn btn-info" data-bs-toggle="tooltip"
+                                 data-bs-placement="top" title="Limit Setting">L</span></button>
+
+                           <button type="button" class="bedgeBtn" data-bs-toggle="modal" (click)="getSports(list)"
+                              data-bs-target="#sportslimitSetting"><span class="frstLet btn btn-primary"
+                                 data-bs-toggle="tooltip" data-bs-placement="top"
+                                 title="Sport-Tournament Limit">ST-L</span></button>
+
+                           <button *ngIf="list.role!='Client'" type="button" class="bedgeBtn" data-bs-toggle="modal"
+                              data-bs-target="#userShares" (click)="getUserShare(list)"><span
+                                 class="frstLet btn btn-pink" data-bs-toggle="tooltip" data-bs-placement="top"
+                                 title="Share">S</span></button>
+
+                           <button (click)="getHistory(list,'report')" type="button" class="bedgeBtn"
+                              data-bs-toggle="modal" data-bs-target="#reportHistory"><span
+                                 class="frstLet btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top"
+                                 title="Report">R</span></button>
+
+                           <button (click)="getUserDetails(list)" type="button" class="bedgeBtn" data-bs-toggle="modal"
+                              data-bs-target="#permission"><span class="frstLet btn btn-success"
+                                 data-bs-toggle="tooltip" data-bs-placement="top" title="Permission">P</span></button>
+
+                           <button type="button" class="bedgeBtn" data-bs-toggle="modal"
+                              *ngIf="getRoleId==1 || getRoleId==2" data-bs-target="#permissionblockmarket"
+                              (click)="chkSportsStatus(list.userId,list.loginId,list.role)"><span
+                                 class="frstLet btn btn-info" data-bs-toggle="tooltip" data-bs-placement="top"
+                                 title="Permission Block Market">P-B</span>
+                           </button>
+
+                           <button *ngIf="list.role!='Client'" (click)="GetRolesToUpdate(list)" type="button"
+                              class="bedgeBtn" data-bs-toggle="modal" data-bs-target="#maxchildlavel"><span
+                                 class="frstLet btn btn-info" data-bs-toggle="tooltip" data-bs-placement="top"
+                                 title="Level - {{list.role}}">C|L
+                                 ({{list.childLevel - 1}})</span></button>
+
+                           <button (click)="getUserProfileById(list)" type="button" class="bedgeBtn"
+                              data-bs-toggle="modal" data-bs-target="#userDetailmore"><span class="frstLet btn btn-pink"
+                                 data-bs-toggle="tooltip" data-bs-placement="top" title="More"><i
+                                    class="fa-solid fa-ellipsis"></i></span></button>
+                        </div>
+                     </td>
+                     <td>
+                        <button type="button" class="editBtn" [routerLink]="['/edit_user']"
+                           [queryParams]="{ type: list.role=='Client'?'client':list.role=='Admin'?'Admin':'agent', parentId: list.userId }"><i
+                              class="fa-regular fa-pen-to-square"></i></button>
+                     </td>
+                     <td *ngIf="parentId==1">
+                        <div class="form-group d-flex align-items-center mb-0">
+                           <div class="form-check form-switch ms-1">
+                              <input type="checkbox" class="form-check-input" [(ngModel)]="list.isUnderMaintenace"
+                                 (change)="maintainSetting(list.userId)">
+                           </div>
+                        </div>
+                     </td>
+                  </tr>
+               </tbody>
+            </table>
+         </div>
+         <div *ngIf="userList?.length>0" class="pagination_filter justify-content-between pt-3 d-flex  row">
+            <!-- <div class="col-sm-6 mb- mb-sm-0">
+               <select class="form-control w-auto mr-2 " id="" (change)="updateRecValue($event,'user')">
+                  <option value="takeRecords" selected>{{takeRecords}}</option>
+                  <option value="10" *ngIf="takeRecords!=10">10</option>
+                  <option value="20" *ngIf="takeRecords!=20">20</option>
+                  <option value="30" *ngIf="takeRecords!=30">30</option>
+                  <option value="40" *ngIf="takeRecords!=40">40</option>
+                  <option value="50" *ngIf="takeRecords!=50">50</option>
+               </select>
+            </div> -->
+            <div class="col-sm-6 d-flex justify-content-end">
+               <pagination-controls class="pagination" [maxSize]="5" *ngIf="userList?.length > 0"
+                  (pageChange)="pageChanged($event,'initial')">
+               </pagination-controls>
+            </div>
+         </div>
+         <div *ngIf="userList?.length==0" class="load-more"><span>No Data Available.</span></div>
+      </div>
+   </div>
+</div>
+
+
+
+<!--History Modal -->
+<div class="modal fade custoModal" id="history" data-bs-backdrop="static" tabindex="-1" aria-labelledby="historyLabel"
+   aria-hidden="true">
+   <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h4 class="modal-title" id="historyLabel">Balance Sheet History <span
+                  class="fs-14">({{selectedUserName}}:[{{selectedUserRole}}])</span>
+            </h4>
+            <button type="button" (click)="clsHistoryModel()" class="btn-close" data-bs-dismiss="modal"
+               aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+         </div>
+         <div class="content text-left ms-2 mt-2" style="color: red;">*Showing data of last one 7 days by default</div>
+         <div class="modal-body">
+            <div class="card cardFilter">
+               <div class="text-end">
+                  <a class="link" data-bs-toggle="collapse" href="#advanceearch" role="button" aria-expanded="false"
+                     aria-controls="advanceearch">
+                     Advance Search <i class="ms-1 fa-solid fa-chevron-right"></i>
+                  </a>
+                  <div class="collapse" id="advanceearch">
+                     <hr>
+                     <div class="row mb-4">
+                        <div class="col-lg-5 col-md-8 col-sm-12 col-xs-12">
+                           <div class="input-group marginb5 div-datepicker">
+                              <input type="datetime-local" class="form-control" name="startTime"
+                                 [(ngModel)]="startTime">
+                              <span class="col-form-label">to</span>
+                              <input type="datetime-local" class="form-control" name="endTime" [(ngModel)]="endTime">
+                           </div>
+                        </div>
+                     </div>
+
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-lg-12 col-md-8 col-sm-12 col-xs-12">
+                     <div class="d-flex align-items-center flex-wrap">
+                        <label class="radio radio-info">
+                           <input type="radio" (click)="getHistoryData('All')" id="chkShowAll1" name="chkSAAcoount"
+                              [(ngModel)]="valueType" value="All">
+                           <label class="bold" for="chkShowAll1">All</label>
+                           &nbsp;
+                        </label>
+                        <label class="radio radio-info">
+                           <input (click)="getHistoryData('Cash')" type="radio" id="chkShowCash" name="chkSAAcoount"
+                              [(ngModel)]="valueType" value="Cash">
+                           <label class="bold" for="chkShowCash">Show Cash Entry</label>
+                           &nbsp;
+                        </label>
+                        <label class="radio radio-info">
+                           <input type="radio" (click)="getHistoryData('ProfitLoss')" id="chkShowPnl"
+                              name="chkSAAcoount" [(ngModel)]="valueType" value="ProfitLoss">
+                           <label class="bold" for="chkShowPnl">Show Market Profit & Loss</label>
+                           &nbsp;
+                        </label>
+                        <button type="button" (click)="getTransationHistory()" class="btn btn-success"
+                           style="margin-left:10px;">
+                           <i class="fa fa-search"></i> Search
+                        </button>
+                     </div>
+                  </div>
+               </div>
+
+            </div>
+            <div class="card">
+               <div class="row mt-4 mb-2 d-flex align-items-center flex-row-reverse tableTopRow">
+                  <!-- <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 ps-md-0">
+                     <input type="text" class="form-control" placeholder="Search Min. 2 characters">
+                  </div> -->
+                  <div class="dt-buttons flex-wrap col-lg-3 col-md-3 col-sm-12 col-xs-12 text-end">
+                     <button class="btn downloadTableBtn me-2" type="button"><i class="fas fa-file-csv"></i>
+                        CSV</button>
+                     <button class="btn downloadTableBtn me-2" type="button"><i class="far fa-file-excel"></i>
+                        Excel</button>
+                     <button class="btn downloadTableBtn" type="button"><i class="far fa-file-pdf"></i> Pdf</button>
+                  </div>
+                  <div *ngIf="returnObj.length>0" class="col-md-7 col-sm-12 ">
+                     <p class="tableP mb-0">Showing {{returnObj.length}} of {{CountInner}} entries</p>
+                  </div>
+               </div>
+               <div *ngIf="returnObj?.length>0" class="table-responsive border">
+                  <table class="table dataNowrap mb-0">
+                     <thead>
+                        <tr>
+                           <th>Date</th>
+                           <th>Type</th>
+                           <th>Description</th>
+                           <th>Cr (Deposit)</th>
+                           <th>Dr (Withdraw)</th>
+                           <th>Balance</th>
+                           <th>From/To</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr
+                           *ngFor="let data of returnObj  | paginate: {  itemsPerPage:takeRecordsInner, currentPage:pageNumInner,totalItems: CountInner };">
+                           <td>
+                              {{data.createdOn | date:'short'}}
+                           </td>
+                           <td>
+                              <label *ngIf="data.sportsId==0" class=" text-info "
+                                 style="cursor:text;">{{data.sportsName}}</label>
+                              <label *ngIf="data.sportsId!=0" class=" text-success "
+                                 style="cursor:text;">{{data.sportsName}}</label>
+                           </td>
+                           <td *ngIf="data.marketName==='Fancy'">
+                              <div class="d-flex flex-column">
+                                 <p class="mb-0">{{data.sportsName
+                                    }}/{{data.eventName}}/{{data.marketName}}/{{data.runnerId}}
+                                 </p>
+                                 <p *ngIf="data.sportsId!=0" class="mb-0">Result :<b> {{data?.tournamentName}} </b></p>
+                              </div>
+                           </td>
+                           <td *ngIf="data.marketName!=='Fancy'">
+                              <div class="d-flex flex-column">
+                                 <p class="mb-0">{{data.sportsName
+                                    }}/{{data.eventName}}/{{data.marketName}}
+                                 </p>
+                                 <p *ngIf="data.sportsId!=0 || data.sportsId==5" class="mb-0">Result :<b>
+                                       {{data?.tournamentName}} </b></p>
+                              </div>
+                           </td>
+                           <td><span [ngClass]="{'text-success':data.amount>0}">{{ data.type === 'Credit'
+                                 ? (data.amount | number:'1.2-2') : '0' }}</span></td>
+                           <td><span [ngClass]="{'text-danger':data.amount<0}">{{ data.type === 'Debit' ?
+                                 (data.amount | number:'1.2-2') : '0' }}</span></td>
+                           <td>{{data.balance | number:'1.2-2'}}</td>
+                           <td>{{ data.type === 'Debit' ? (data.name + ' >> ' + data.parentName) : (data.parentName + '
+                              >> ' + data.name) }}</td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+               <div *ngIf="returnObj?.length>0" class="pagination_filter justify-content-between pt-3 d-flex  row">
+                  <div class="col-sm-6 mb- mb-sm-0">
+                     <select class="form-control w-auto mr-2 " id="" (change)="updateRecValue($event,'history')">
+                        <option value="takeRecordsInner" selected>{{takeRecordsInner}}</option>
+                        <option value="10" *ngIf="takeRecordsInner!=10">10</option>
+                        <option value="20" *ngIf="takeRecordsInner!=20">20</option>
+                        <option value="30" *ngIf="takeRecordsInner!=30">30</option>
+                        <option value="40" *ngIf="takeRecordsInner!=40">40</option>
+                        <option value="50" *ngIf="takeRecordsInner!=50">50</option>
+                     </select>
+                  </div>
+                  <div class="col-sm-6 d-flex justify-content-end">
+                     <pagination-controls class="pagination" [maxSize]="5" *ngIf="returnObj?.length > 0"
+                        (pageChange)="pageChangedInner($event)">
+                     </pagination-controls>
+                  </div>
+               </div>
+               <div *ngIf="returnObj?.length==0" class="load-more"><span>No Data Available.</span></div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<!--deposit Modal -->
+<div class="modal fade custoModal settlementMod" id="deposit" data-bs-backdrop="static" tabindex="-1"
+   aria-labelledby="depositLabel" aria-hidden="true">
+   <div class="modal-dialog modal-md">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h1 class="modal-title" id="depositLabel">{{selectedUserName}}: [{{selectedUserRole}}]</h1>
+            <button type="button" (click)="resetBalances()" id="clsdep" class="btn-close" data-bs-dismiss="modal"
+               aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+         </div>
+         <div class="modal-body">
+            <div class="settlementBody">
+               <form>
+                  <table class="datatable table dt-responsive nowrap">
+                     <tbody>
+                        <tr>
+                           <td>
+                              <label class="col-form-label">Deposit Credit :</label>
+                           </td>
+                           <td>
+                              <div class="input-group">
+                                 <input type="number" autocomplete="off" class="form-control" placeholder="Enter Chips"
+                                    name="amount" [(ngModel)]="amount" (input)="updateBalancesDeposit()">
+                                 <span class="input-group-text hidden-sm">INR</span>
+                              </div>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td><label class="col-form-label">{{userDetails.loginId}} [{{userDetails.fullName}}]
+                                 :</label></td>
+                           <td>
+                              <div class="input-group">
+                                 <input type="text" disabled class="form-control" name="balance"
+                                    [(ngModel)]="userDetails.balance">
+                                 <span class="input-group-text hidden-sm">INR</span>
+                              </div>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td><label class="col-form-label">{{selectedUserName}}: [{{selectedUserRole}}] :</label></td>
+                           <td>
+                              <div class="input-group">
+                                 <input type="text" id="txtAgentNewBalance" disabled class="form-control"
+                                    name="userBalance" [(ngModel)]="userBalance">
+                                 <span class="input-group-text hidden-sm">INR</span>
+                              </div>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td><label class="col-form-label">Remarks :</label></td>
+                           <td><textarea class="form-control textarea" cols="20" id="1" name="txtRemarkAgentDW" rows="2"
+                                 [(ngModel)]="remark"></textarea></td>
+                        </tr>
+                        <tr class="b2bDWPassword">
+                           <td><label class="col-form-label">Password :</label></td>
+                           <td><input class="form-control AllowDecimal" name="txtPassword" id="txtPassword1"
+                                 autocomplete="txtPassword" placeholder="password" required type="password"
+                                 [(ngModel)]="password"></td>
+                        </tr>
+                     </tbody>
+
+                  </table>
+               </form>
+               <div class="text-end">
+                  <button type="submit" class="btn btn-primary" (click)="manualDeposit()">Deposit</button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<!--withdraw Modal -->
+<div class="modal fade custoModal settlementMod" id="withdraw" data-bs-backdrop="static" tabindex="-1"
+   aria-labelledby="withdrawLabel" aria-hidden="true">
+   <div class="modal-dialog modal-md">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h1 class="modal-title" id="withdrawLabel">{{selectedUserName}}: [{{selectedUserRole}}]</h1>
+            <button type="button" (click)="resetBalances()" id="clsWith" class="btn-close" data-bs-dismiss="modal"
+               aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+         </div>
+         <div class="modal-body">
+            <div class="settlementBody">
+               <form>
+                  <table class="datatable table dt-responsive nowrap">
+                     <tbody>
+                        <tr>
+                           <td>
+                              <label class="col-form-label">Withdraw Credit :</label>
+                           </td>
+                           <td>
+                              <div class="input-group">
+                                 <input type="number" autocomplete="off" class="form-control" placeholder="Enter Chips"
+                                    name="amount" [(ngModel)]="amount" (input)="updateBalancesWithdraw()">
+                                 <span class="input-group-text hidden-sm">INR</span>
+                              </div>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td><label class="col-form-label">{{userDetails.loginId}} [{{userDetails.fullName}}]
+                                 :</label></td>
+                           <td>
+                              <div class="input-group">
+                                 <input type="text" disabled class="form-control" name="balance"
+                                    [(ngModel)]="userDetails.balance">
+                                 <span class="input-group-text hidden-sm">INR</span>
+
+                              </div>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td><label class="col-form-label">{{selectedUserName}}: [{{selectedUserRole}}] :</label></td>
+                           <td>
+                              <div class="input-group">
+                                 <input type="text" id="txtAgentNewBalance1" disabled class="form-control"
+                                    name="userBalance" [(ngModel)]="userBalance">
+                                 <span class="input-group-text hidden-sm">INR</span>
+
+                              </div>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td><label class="col-form-label">Remarks :</label></td>
+                           <td><textarea class="form-control textarea" cols="20" id="txtRemarkAgentDW2"
+                                 name="txtRemarkAgentDW" rows="2" [(ngModel)]="remark"></textarea></td>
+                        </tr>
+                        <tr class="b2bDWPassword">
+                           <td><label class="col-form-label">Password :</label></td>
+                           <td><input class="form-control AllowDecimal" name="txtPassword" id="txtPassword3"
+                                 autocomplete="txtPassword" placeholder="password" required type="password"
+                                 [(ngModel)]="password"></td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </form>
+               <div class="text-end">
+                  <button type="submit" class="btn btn-primary" (click)="manualWithdraw()">Withdraw</button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<!--Bonus refill Modal -->
+<div class="modal fade custoModal settlementMod" id="bonusModal" data-bs-backdrop="static" tabindex="-1"
+   aria-labelledby="bonusModalLabel" aria-hidden="true">
+   <div class="modal-dialog modal-md">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h1 class="modal-title" id="bonusModalLabel">Bonus Info</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+               <i class="fa-solid fa-xmark"></i>
+            </button>
+         </div>
+         <div class="modal-body">
+            <div class="settlementBody">
+               <form>
+                  <div class="form-field">
+                     <label>Refill Bonus</label>
+                     <input type="number" class="form-control" name="refillBonus" [(ngModel)]="refillBonus">
+                  </div>
+                  <div class="form-field">
+                     <label>Every Refill Bonus</label>
+                     <input type="number" class="form-control" name="everyRefillBonus" [(ngModel)]="everyRefillBonus">
+                  </div>
+                  <!-- <div class="text-end">
+                     <button type="submit" class="btn btn-primary mt-3">Update</button>
+                  </div> -->
+               </form>
+
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<!-- casino share sports share modal -->
+
+<div class="modal fade custoModal settlementMod" id="shareCasinoSportsModal" data-bs-backdrop="static" tabindex="-1"
+   aria-labelledby="shareCasinoSportsModalLabel" aria-hidden="true">
+   <div class="modal-dialog modal-md">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h1 class="modal-title" id="shareCasinoSportsModalLabel">Share Info</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+               <i class="fa-solid fa-xmark"></i>
+            </button>
+         </div>
+         <div class="modal-body pt-1">
+            <div class="settlementBody">
+               <table class="datatable table dt-responsive nowrap mb-0">
+                  <tbody>
+                     <tr>
+                        <td class="p-2"><label class="col-form-label">Casino Share :</label></td>
+                        <td class="p-2">list.casinoShare</td>
+                     </tr>
+                     <tr>
+                        <td class="p-2"><label class="col-form-label">Sports Share :</label></td>
+                        <td class="p-2">list.sportsShare</td>
+                     </tr>
+                  </tbody>
+               </table>
+
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<!--Limit Setting Modal -->
+<div class="modal fade custoModal" id="limitSetting" data-bs-backdrop="static" tabindex="-1"
+   aria-labelledby="limitSettingLabel" aria-hidden="true">
+   <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h1 class="modal-title" id="limitSettingLabel">Limit Settings: {{selectedUserName}} [{{selectedUserRole}}]
+            </h1>
+            <button type="button" (click)="resetSettings()" class="btn-close" data-bs-dismiss="modal"
+               aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+
+         </div>
+
+         <div class="modal-body">
+            <div class="col-md-4 mb-1">
+               <div class="input-group">
+                  <select class="form-control filteroption" name="sports" data-style="btn-danger"
+                     (change)="onSportChange($event)">
+                     <option value="0">All</option>
+                     <option *ngFor="let data of activeSports" [value]="data.betfairSportsId">{{data.sportsName}}</option>
+                  </select>
+               </div>
+
+            </div>
+            <div class="accordionQs">
+               <div class="accordion" id="accordionExample">
+                  <div class="accordion-item card mb-0">
+                     <div id="collapseOne" class="accordion-collapse " aria-labelledby="headingOne"
+                        data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                           <div class="Portletcard-body">
+
+                              <div class="row">
+                                 <div class="col-md-6" *ngIf="sportsId!=5">
+                                    <div class="form-group row">
+                                       <label class="col-md-4 col-xs-6 col-form-label">Bet Delay<span
+                                             class="text-danger">*</span></label>
+                                       <div class="col-md-6 col-xs-6">
+                                          <div class="input-group">
+                                             <input type="text" class="form-control AllowDecimal checkrange" required=""
+                                                [(ngModel)]="returnObj.betDelay">
+                                          </div>
+                                       </div>
+                                       <div class="offset-4 col-md-8">
+                                          <div class="invalid-feedback">
+                                             Please enter Bet Delay.
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div class="col-md-6" *ngIf="sportsId==4">
+                                    <div class="form-group row">
+                                       <label class="col-md-4 col-xs-6 col-form-label">Fancy Delay<span
+                                             class="text-danger">*</span></label>
+                                       <div class="col-md-6 col-xs-6">
+                                          <div class="input-group">
+                                             <input type="text" ename="Fancy Delay" [(ngModel)]="returnObj.fancyDelay"
+                                                class="form-control AllowDecimal checkrange" min="0" max="2147483">
+                                          </div>
+                                          <!-- <span class="notefont">R: 100 to 500000</span> -->
+                                       </div>
+                                       <div class="offset-4 col-md-8">
+                                          <div class="invalid-feedback">
+                                             Please enter Fancy Delay.
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="row">
+                                 <div class="col-md-6">
+                                    <div class="form-group row">
+                                       <label class="col-md-4 col-xs-6 col-form-label">Max Profit<span
+                                             class="text-danger">*</span></label>
+                                       <div class="col-md-6 col-xs-6">
+                                          <div class="input-group">
+                                             <input type="text" class="form-control AllowDecimal checkrange"
+                                                [(ngModel)]="returnObj.maxProfit" required="">
+                                          </div>
+                                       </div>
+                                       <div class="offset-4 col-md-8">
+                                          <div class="invalid-feedback">
+                                             Please enter Max Profit.
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div class="col-md-6" *ngIf="sportsId!=5">
+                                    <div class="form-group row">
+                                       <label class="col-md-4 col-xs-6 col-form-label">Max Odds<span
+                                             class="text-danger">*</span></label>
+                                       <div class="col-md-6 col-xs-6">
+                                          <div class="input-group">
+                                             <input type="text" ename="Max Profit" [(ngModel)]="returnObj.maxOdds"
+                                                class="form-control AllowDecimal checkrange" min="0" max="2147483">
+                                          </div>
+                                          <!-- <span class="notefont">R: 100 to 500000</span> -->
+                                       </div>
+                                       <div class="offset-4 col-md-8">
+                                          <div class="invalid-feedback">
+                                             Please enter Max Odds.
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="row" *ngIf="sportsId!=5">
+                                 <div class="col-md-6">
+                                    <div class="form-group row">
+                                       <label class="col-md-4 col-xs-6 col-form-label">Before-Inplay Min Stake<span
+                                             class="text-danger">*</span></label>
+                                       <div class="col-md-6 col-xs-6">
+                                          <div class="input-group">
+                                             <input type="text" class="form-control AllowDecimal checkrange"
+                                                [(ngModel)]="returnObj.beforeInplayMinStake">
+                                          </div>
+                                          <!-- <span class="notefont">R: 100 to 500000</span> -->
+                                       </div>
+                                       <div class="offset-4 col-md-8">
+                                          <div class="invalid-feedback">
+                                             Please enter Before-Inplay Min Stake.
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div class="col-md-6" *ngIf="sportsId!=5">
+                                    <div class="form-group row">
+                                       <label class="col-md-4 col-xs-6 col-form-label">Before-Inplay Max Stake<span
+                                             class="text-danger">*</span></label>
+                                       <div class="col-md-6 col-xs-6">
+                                          <div class="input-group">
+                                             <input type="text" class="form-control AllowDecimal checkrange"
+                                                [(ngModel)]="returnObj.beforeInplayMaxStake">
+                                          </div>
+                                          <!-- <span class="notefont">R: -1 to 500000</span> -->
+                                       </div>
+                                       <div class="offset-4 col-md-8">
+                                          <div class="invalid-feedback">
+                                             Please enter Before-Inplay Max Stake.
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="row">
+                                 <div class="col-md-6">
+                                    <div class="form-group row">
+                                       <label class="col-md-4 col-xs-6 col-form-label">After In-Play Min Stake<span
+                                             class="text-danger">*</span></label>
+                                       <div class="col-md-6 col-xs-6">
+                                          <div class="input-group">
+                                             <input type="text" class="form-control AllowDecimal checkrange"
+                                                [(ngModel)]="returnObj.afterInplayMinStake">
+                                          </div>
+                                          <!-- <span class="notefont">R: -1 to 0</span> -->
+                                       </div>
+                                       <div class="offset-4 col-md-8">
+                                          <div class="invalid-feedback">
+                                             Please enter After In-Play Min Stake.
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div class="col-md-6">
+                                    <div class="form-group row">
+                                       <label class="col-md-4 col-xs-6 col-form-label">After In-Play Max Stake<span
+                                             class="text-danger">*</span></label>
+                                       <div class="col-md-6 col-xs-6">
+                                          <div class="input-group">
+                                             <input type="text" class="form-control AllowDecimal checkrange"
+                                                [(ngModel)]="returnObj.afterInplayMaxStake">
+                                          </div>
+                                          <!-- <span class="notefont">R: -1 to 0</span> -->
+                                       </div>
+                                       <div class="offset-4 col-md-8">
+                                          <div class="invalid-feedback">
+                                             Please enter After In-Play Max Stake.
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="row">
+               <div class="col-md-12 modal-footer">
+                  <form class="form-inline d-flex align-items-center w-100">
+                     <div class="row">
+                        <!-- <input type="hidden"> -->
+                        <div class="col-md-4 my-2 my-md-0">
+                           <select class="form-control" (change)="selectSaveType($event)">
+                              <option value="">Select Apply Type</option>
+                              <option value="Save">Save</option>
+                              <option value="SaveToAll">Save &amp; Save to all</option>
+                              <option value="SaveToChild">Save &amp; Save to child</option>
+                              <option value="SaveToAllAgent">Save &amp; Save to all agent</option>
+                              <option value="SaveToAllClient">Save &amp; Save to all client</option>
+                           </select>
+                        </div>
+                        <div class="col-md-4">
+                           <input class="form-control" type="password" placeholder="Enter Password"
+                              autocomplete="new-password" [(ngModel)]="password" name="password">
+                           <div *ngIf="password.length==0" class="text-danger text-start">
+                              *Password is required.
+                           </div>
+                        </div>
+                        <div class="col-md-4">
+                           <button class="btn btn-success" type="button" id="btnUpdateUserLimit"
+                              (click)="updateSportsSetting()">Save</button>
+                        </div>
+                     </div>
+                  </form>
+               </div>
+            </div>
+            <!-- <div class="row">
+               <div class="col-md-12 modal-footer">
+                  <form class="row">
+                     <input type="hidden">
+                     <div class="col-12 col-sm-6 col-md-4 ">
+                     <select class="form-control" (change)="selectSaveType($event)">
+                        <option value="">Select Apply Type</option>
+                        <option value="Save">Save</option>
+                        <option value="SaveToAll">Save &amp; Save to all</option>
+                        <option value="SaveToChild">Save &amp; Save to child</option>
+                        <option value="SaveToAllAgent">Save &amp; Save to all agent</option>
+                        <option value="SaveToAllClient">Save &amp; Save to all client</option>
+                     </select>
+                  </div>
+                     <div class="col-12 col-sm-6 col-md-4 my-2 my-md-0 d-flex flex-column">
+                        <input class="form-control" type="password" placeholder="Enter Password"
+                           autocomplete="new-password" [(ngModel)]="password">
+                        <div *ngIf="password.length==0" class="text-danger text-start">
+                           *Password is required.
+                        </div>
+                     </div>
+                     <div class="col-12 col-sm-6 col-md-4 ">
+                     <button class="btn btn-success" type="button" id="btnUpdateUserLimit"
+                        (click)="updateSportsSetting()">Save</button>
+                     </div>
+                  </form>
+               </div>
+            </div> -->
+         </div>
+      </div>
+   </div>
+</div>
+
+
+<!--sports tournament Limit Setting Modal -->
+<div class="modal fade custoModal" id="sportslimitSetting" data-bs-backdrop="static" tabindex="-1"
+   aria-labelledby="limitSettingLabel" aria-hidden="true">
+   <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h1 class="modal-title" id="sportslimitSettingLabel">Tournament Limit Settings: {{selectedUserName}}
+               [{{selectedUserRole}}]</h1>
+
+            <button type="button" (click)="resetSettings()" class="btn-close" data-bs-dismiss="modal"
+               aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+         </div>
+         <div class="modal-body">
+            <div class="row">
+               <div class="col-6 mb-1">
+                  <div class="input-group">
+                     <select class="form-control filteroption" name="sports" data-style="btn-danger"
+                        (change)="onSportChange($event)">
+                        <option value="0">All</option>
+                        <option *ngFor="let data of activeSports" [value]="data.betfairSportsId">{{data.sportsName}}
+                        </option>
+                     </select>
+                  </div>
+               </div>
+               <div class="col-6">
+                  <select class="form-control filteroption" data-style="btn-danger"
+                     (change)="onTournamentSelected($event)">
+                     <option value="">Tournament Limit</option>
+                     <option *ngFor="let list of seriesList" [value]="list.tournamentId">{{list.tournamentName}}
+                     </option>
+                  </select>
+               </div>
+
+
+            </div>
+            <div class="accordionQs">
+               <div class="accordion" id="accordionExample">
+                  <div class="accordion-item card mb-0">
+                     <div id="collapseOne" class="accordion-collapse " aria-labelledby="headingOne"
+                        data-bs-parent="#accordionExample">
+                        <div class="accordion-body px-0">
+                           <div class="Portletcard-body">
+                              <div class="border-bottom pb-2 mb-4">
+                                 <h4 class=" mb-4">Match Odds Setting:-</h4>
+                                 <div class="row">
+                                    <div class="col-md-6">
+                                       <div class="form-group row">
+                                          <label class="col-md-4 col-xs-6 col-form-label">Bet Delay<span
+                                                class="text-danger">*</span></label>
+                                          <div class="col-md-6 col-xs-6">
+                                             <div class="input-group">
+                                                <input type="text" class="form-control AllowDecimal checkrange"
+                                                   required="" [(ngModel)]="returnObj.betDelay">
+                                             </div>
+                                          </div>
+                                          <div class="offset-4 col-md-8">
+                                             <div class="invalid-feedback">
+                                                Please enter Bet Delay.
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                       <div class="form-group row">
+                                          <label class="col-md-4 col-xs-6 col-form-label">Max Odds<span
+                                                class="text-danger">*</span></label>
+                                          <div class="col-md-6 col-xs-6">
+                                             <div class="input-group">
+                                                <input type="text" ename="Max Profit" [(ngModel)]="returnObj.maxOdds"
+                                                   class="form-control AllowDecimal checkrange" min="0" max="2147483">
+                                             </div>
+                                             <!-- <span class="notefont">R: 100 to 500000</span> -->
+                                          </div>
+                                          <div class="offset-4 col-md-8">
+                                             <div class="invalid-feedback">
+                                                Please enter Max Odds.
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div class="row">
+                                    <div class="col-md-6">
+                                       <div class="form-group row">
+                                          <label class="col-md-4 col-xs-6 col-form-label">Before-Inplay Match Min
+                                             Stake<span class="text-danger">*</span></label>
+                                          <div class="col-md-6 col-xs-6">
+                                             <div class="input-group">
+                                                <input type="text" class="form-control AllowDecimal checkrange"
+                                                   [(ngModel)]="returnObj.beforeInplayMinStake">
+                                             </div>
+                                             <!-- <span class="notefont">R: 100 to 500000</span> -->
+                                          </div>
+                                          <div class="offset-4 col-md-8">
+                                             <div class="invalid-feedback">
+                                                Please enter Before-Inplay Match Min Stake.
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                       <div class="form-group row">
+                                          <label class="col-md-4 col-xs-6 col-form-label">Before-Inplay Match Max
+                                             Stake<span class="text-danger">*</span></label>
+                                          <div class="col-md-6 col-xs-6">
+                                             <div class="input-group">
+                                                <input type="text" class="form-control AllowDecimal checkrange"
+                                                   [(ngModel)]="returnObj.beforeInplayMaxStake">
+                                             </div>
+                                             <!-- <span class="notefont">R: -1 to 500000</span> -->
+                                          </div>
+                                          <div class="offset-4 col-md-8">
+                                             <div class="invalid-feedback">
+                                                Please enter Before-Inplay Match Max Stake.
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div class="row">
+                                    <div class="col-md-6">
+                                       <div class="form-group row">
+                                          <label class="col-md-4 col-xs-6 col-form-label">After In-Play Match Min
+                                             Stake<span class="text-danger">*</span></label>
+                                          <div class="col-md-6 col-xs-6">
+                                             <div class="input-group">
+                                                <input type="text" class="form-control AllowDecimal checkrange"
+                                                   [(ngModel)]="returnObj.afterInplayMinStake">
+                                             </div>
+                                             <!-- <span class="notefont">R: -1 to 0</span> -->
+                                          </div>
+                                          <div class="offset-4 col-md-8">
+                                             <div class="invalid-feedback">
+                                                Please enter After In-Play Match Min Stake.
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                       <div class="form-group row">
+                                          <label class="col-md-4 col-xs-6 col-form-label">After In-Play Match Max
+                                             Stake<span class="text-danger">*</span></label>
+                                          <div class="col-md-6 col-xs-6">
+                                             <div class="input-group">
+                                                <input type="text" class="form-control AllowDecimal checkrange"
+                                                   [(ngModel)]="returnObj.afterInplayMaxStake">
+                                             </div>
+                                             <!-- <span class="notefont">R: -1 to 0</span> -->
+                                          </div>
+                                          <div class="offset-4 col-md-8">
+                                             <div class="invalid-feedback">
+                                                Please enter After In-Play Match Max Stake.
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div class="row">
+                                    <div class="col-md-6">
+                                       <div class="form-group row">
+                                          <label class="col-md-4 col-xs-6 col-form-label">Match Max Profit<span
+                                                class="text-danger">*</span></label>
+                                          <div class="col-md-6 col-xs-6">
+                                             <div class="input-group">
+                                                <input type="text" class="form-control AllowDecimal checkrange"
+                                                   [(ngModel)]="returnObj.matchMaxProfit" required="">
+                                             </div>
+                                          </div>
+                                          <div class="offset-4 col-md-8">
+                                             <div class="invalid-feedback">
+                                                Please enter Match Max Profit.
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+
+                              <div *ngIf="sportsId==4" class="border-bottom pb-2 mb-4">
+                                 <h4 class=" mb-4">Bookmaker Settings:-</h4>
+                                 <div class="row">
+                                    <div class="col-md-6">
+                                       <div class="form-group row">
+                                          <label class="col-md-4 col-xs-6 col-form-label">Before-Inplay Book Min
+                                             Stake<span class="text-danger">*</span></label>
+                                          <div class="col-md-6 col-xs-6">
+                                             <div class="input-group">
+                                                <input type="text" class="form-control AllowDecimal checkrange"
+                                                   [(ngModel)]="returnObj.beforeInplayBooKMakerMinStake">
+                                             </div>
+                                             <!-- <span class="notefont">R: 100 to 500000</span> -->
+                                          </div>
+                                          <div class="offset-4 col-md-8">
+                                             <div class="invalid-feedback">
+                                                Please enter Before-Inplay Book Min Stake.
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                       <div class="form-group row">
+                                          <label class="col-md-4 col-xs-6 col-form-label">Before-Inplay Book Max
+                                             Stake<span class="text-danger">*</span></label>
+                                          <div class="col-md-6 col-xs-6">
+                                             <div class="input-group">
+                                                <input type="text" class="form-control AllowDecimal checkrange"
+                                                   [(ngModel)]="returnObj.beforeInplayBooKMakerMaxStake">
+                                             </div>
+                                             <!-- <span class="notefont">R: -1 to 500000</span> -->
+                                          </div>
+                                          <div class="offset-4 col-md-8">
+                                             <div class="invalid-feedback">
+                                                Please enter Before-Inplay Book Max Stake.
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div class="row">
+                                    <div class="col-md-6">
+                                       <div class="form-group row">
+                                          <label class="col-md-4 col-xs-6 col-form-label">After In-Play Book Min
+                                             Stake<span class="text-danger">*</span></label>
+                                          <div class="col-md-6 col-xs-6">
+                                             <div class="input-group">
+                                                <input type="text" class="form-control AllowDecimal checkrange"
+                                                   [(ngModel)]="returnObj.afterInplayBooKMakerMinStake">
+                                             </div>
+                                             <!-- <span class="notefont">R: -1 to 0</span> -->
+                                          </div>
+                                          <div class="offset-4 col-md-8">
+                                             <div class="invalid-feedback">
+                                                Please enter After In-Play Book Min Stake.
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                       <div class="form-group row">
+                                          <label class="col-md-4 col-xs-6 col-form-label">After In-Play Book Max
+                                             Stake<span class="text-danger">*</span></label>
+                                          <div class="col-md-6 col-xs-6">
+                                             <div class="input-group">
+                                                <input type="text" class="form-control AllowDecimal checkrange"
+                                                   [(ngModel)]="returnObj.afterInplayBooKMakerMaxStake">
+                                             </div>
+                                             <!-- <span class="notefont">R: -1 to 0</span> -->
+                                          </div>
+                                          <div class="offset-4 col-md-8">
+                                             <div class="invalid-feedback">
+                                                Please enter After In-Play Book Max Stake.
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div class="row">
+                                    <div class="col-md-6">
+                                       <div class="form-group row">
+                                          <label class="col-md-4 col-xs-6 col-form-label">Book Max Profit<span
+                                                class="text-danger">*</span></label>
+                                          <div class="col-md-6 col-xs-6">
+                                             <div class="input-group">
+                                                <input type="text" class="form-control AllowDecimal checkrange"
+                                                   [(ngModel)]="returnObj.bookMaxProfit" required="">
+                                             </div>
+                                          </div>
+                                          <div class="offset-4 col-md-8">
+                                             <div class="invalid-feedback">
+                                                Please enter Book Max Profit.
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                       <div class="form-group row">
+                                          <label class="col-md-4 col-xs-6 col-form-label">Book Bet Delay<span
+                                                class="text-danger">*</span></label>
+                                          <div class="col-md-6 col-xs-6">
+                                             <div class="input-group">
+                                                <input type="text" class="form-control AllowDecimal checkrange"
+                                                   required="" [(ngModel)]="returnObj.bookMakerBetDelay">
+                                             </div>
+                                          </div>
+                                          <div class="offset-4 col-md-8">
+                                             <div class="invalid-feedback">
+                                                Please enter Boook Bet Delay.
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+
+                              <div *ngIf="sportsId==4" class="border-bottom pb-2 mb-4">
+                                 <h4 class=" mb-4">Fancy Settings:-</h4>
+                                 <div class="row">
+                                    <div class="col-md-6">
+                                       <div class="form-group row">
+                                          <label class="col-md-4 col-xs-6 col-form-label">Before-Inplay Fancy Min
+                                             Stake<span class="text-danger">*</span></label>
+                                          <div class="col-md-6 col-xs-6">
+                                             <div class="input-group">
+                                                <input type="text" class="form-control AllowDecimal checkrange"
+                                                   [(ngModel)]="returnObj.beforeInplayFancyMinStake">
+                                             </div>
+                                             <!-- <span class="notefont">R: 100 to 500000</span> -->
+                                          </div>
+                                          <div class="offset-4 col-md-8">
+                                             <div class="invalid-feedback">
+                                                Please enter Before-Inplay Fancy Min Stake.
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                       <div class="form-group row">
+                                          <label class="col-md-4 col-xs-6 col-form-label">Before-Inplay Fancy Max
+                                             Stake<span class="text-danger">*</span></label>
+                                          <div class="col-md-6 col-xs-6">
+                                             <div class="input-group">
+                                                <input type="text" class="form-control AllowDecimal checkrange"
+                                                   [(ngModel)]="returnObj.beforeInplayFancyMaxStake">
+                                             </div>
+                                             <!-- <span class="notefont">R: -1 to 500000</span> -->
+                                          </div>
+                                          <div class="offset-4 col-md-8">
+                                             <div class="invalid-feedback">
+                                                Please enter Before-Inplay Fancy Max Stake.
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div class="row">
+                                    <div class="col-md-6">
+                                       <div class="form-group row">
+                                          <label class="col-md-4 col-xs-6 col-form-label">After In-Play Fancy Min
+                                             Stake<span class="text-danger">*</span></label>
+                                          <div class="col-md-6 col-xs-6">
+                                             <div class="input-group">
+                                                <input type="text" class="form-control AllowDecimal checkrange"
+                                                   [(ngModel)]="returnObj.afterInplayFancyMinStake">
+                                             </div>
+                                             <!-- <span class="notefont">R: -1 to 0</span> -->
+                                          </div>
+                                          <div class="offset-4 col-md-8">
+                                             <div class="invalid-feedback">
+                                                Please enter After In-Play Fancy Min Stake.
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                       <div class="form-group row">
+                                          <label class="col-md-4 col-xs-6 col-form-label">After In-Play Fancy Max
+                                             Stake<span class="text-danger">*</span></label>
+                                          <div class="col-md-6 col-xs-6">
+                                             <div class="input-group">
+                                                <input type="text" class="form-control AllowDecimal checkrange"
+                                                   [(ngModel)]="returnObj.afterInplayFancyMaxStake">
+                                             </div>
+                                             <!-- <span class="notefont">R: -1 to 0</span> -->
+                                          </div>
+                                          <div class="offset-4 col-md-8">
+                                             <div class="invalid-feedback">
+                                                Please enter After In-Play Fancy Max Stake.
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div class="row">
+                                    <div class="col-md-6">
+                                       <div class="form-group row">
+                                          <label class="col-md-4 col-xs-6 col-form-label">Fancy Max Profit<span
+                                                class="text-danger">*</span></label>
+                                          <div class="col-md-6 col-xs-6">
+                                             <div class="input-group">
+                                                <input type="text" class="form-control AllowDecimal checkrange"
+                                                   [(ngModel)]="returnObj.fancyMaxProfit" required="">
+                                             </div>
+                                          </div>
+                                          <div class="offset-4 col-md-8">
+                                             <div class="invalid-feedback">
+                                                Please enter Fancy Max Profit.
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                       <div class="form-group row">
+                                          <label class="col-md-4 col-xs-6 col-form-label">Fancy Bet Delay<span
+                                                class="text-danger">*</span></label>
+                                          <div class="col-md-6 col-xs-6">
+                                             <div class="input-group">
+                                                <input type="text" class="form-control AllowDecimal checkrange"
+                                                   required="" [(ngModel)]="returnObj.fancyBetDelay">
+                                             </div>
+                                          </div>
+                                          <div class="offset-4 col-md-8">
+                                             <div class="invalid-feedback">
+                                                Please enter Fancy Bet Delay.
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+
+                              <div *ngIf="sportsId==4" class="border-bottom pb-2 mb-4">
+                                 <h4 class=" mb-4">Toss Settings:-</h4>
+                                 <div class="row">
+                                    <div class="col-md-6">
+                                       <div class="form-group row">
+                                          <label class="col-md-4 col-xs-6 col-form-label">Toss Min Stake<span
+                                                class="text-danger">*</span></label>
+                                          <div class="col-md-6 col-xs-6">
+                                             <div class="input-group">
+                                                <input type="text" class="form-control AllowDecimal checkrange"
+                                                   [(ngModel)]="returnObj.tossMinStake">
+                                             </div>
+                                             <!-- <span class="notefont">R: -1 to 0</span> -->
+                                          </div>
+                                          <div class="offset-4 col-md-8">
+                                             <div class="invalid-feedback">
+                                                Please enter Toss Min Stake.
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                       <div class="form-group row">
+                                          <label class="col-md-4 col-xs-6 col-form-label">Toss Max Stake<span
+                                                class="text-danger">*</span></label>
+                                          <div class="col-md-6 col-xs-6">
+                                             <div class="input-group">
+                                                <input type="text" class="form-control AllowDecimal checkrange"
+                                                   [(ngModel)]="returnObj.tossMaxStake">
+                                             </div>
+                                             <!-- <span class="notefont">R: -1 to 0</span> -->
+                                          </div>
+                                          <div class="offset-4 col-md-8">
+                                             <div class="invalid-feedback">
+                                                Toss Max Stake.
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div class="row">
+                                    <div class="col-md-6">
+                                       <div class="form-group row">
+                                          <label class="col-md-4 col-xs-6 col-form-label">Toss Max Profit<span
+                                                class="text-danger">*</span></label>
+                                          <div class="col-md-6 col-xs-6">
+                                             <div class="input-group">
+                                                <input type="text" class="form-control AllowDecimal checkrange"
+                                                   [(ngModel)]="returnObj.tossMaxProfit">
+                                             </div>
+                                             <!-- <span class="notefont">R: -1 to 0</span> -->
+                                          </div>
+                                          <div class="offset-4 col-md-8">
+                                             <div class="invalid-feedback">
+                                                Toss Max Profit.
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="row">
+               <div class="col-md-4 mt-2">
+                  <span class="text-danger"><i>Note: Please set limit as user wise.</i></span>
+               </div>
+               <div class="col-md-12 modal-footer">
+                  <form class="form-inline d-flex align-items-center w-100">
+                     <input type="hidden">
+                     <div class="row">
+                        <div class="col-md-4 ">
+                           <select class="form-control" (change)="selectSaveType($event)">
+                              <option value="">Select Apply Type</option>
+                              <option value="SaveToAll">Save &amp; Save to all</option>
+                              <option value="SaveToAllAgent">Save &amp; Save to all agent</option>
+                              <option value="SaveToAllClient">Save &amp; Save to all client</option>
+                           </select>
+                        </div>
+                        <div class="col-md-4">
+                           <input class="form-control" type="password" placeholder="Enter Password"
+                              autocomplete="new-password" [(ngModel)]="password" name="password">
+                           <div *ngIf="password.length==0" class="text-danger text-start">
+                              *Password is required.
+                           </div>
+                        </div>
+                        <div class="col-md-4">
+                           <button class="btn btn-success" type="button" id="btnUpdateUserLimit1"
+                              (click)=updateTournamentSetting()>Save</button>
+                        </div>
+                     </div>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<!-- Shares Modal -->
+<div class="modal fade custoModal" id="userShares" data-bs-backdrop="static" tabindex="-1"
+   aria-labelledby="userSharesLabel" aria-hidden="true">
+   <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h1 class="modal-title" id="userSharesLabel">Update Users Shares : {{selectedUserName}}
+               [{{selectedUserRole}}]</h1>
+            <button type="button" class="btn-close" id="clsShare" data-bs-dismiss="modal" aria-label="Close">
+               <i class="fa-solid fa-xmark"></i>
+            </button>
+         </div>
+         <div class="modal-body">
+            <div class="gamesTabs">
+               <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                  <li class="nav-item" role="presentation">
+                     <button class="nav-link active" id="pills-SportGame-tab" data-bs-toggle="pill"
+                        data-bs-target="#pills-SportGame" type="button" role="tab" aria-controls="pills-SportGame"
+                        aria-selected="true">Sport Share</button>
+                  </li>
+               </ul>
+               <div class="tab-content" id="pills-tabContent">
+                  <div class="tab-pane fade show active" id="pills-SportGame" role="tabpanel"
+                     aria-labelledby="pills-SportGame-tab">
+                     <div class="table-responsive border">
+                        <p style="padding:10px 0px 0px 5px; color:red;">
+                           Sports Sharing will use for <span>Cricket, Tennis, Football and Casino Share for Casino
+                              Games</span>
+                        </p>
+                        <table class="table  table-striped">
+                           <thead>
+                              <tr>
+                                 <th>Agent Name</th>
+                                 <th style="min-width: 130px;">Sports Share</th>
+                                 <th style="min-width: 130px;">Casino Share</th>
+                              </tr>
+                           </thead>
+                           <tbody id="tbody_SportGame">
+                              <tr class="shareTr" style="word-wrap:break-word;">
+                                 <td>{{userDetails.parentLoginId}}[{{userDetails.parentFullName}}]</td>
+                                 <td>
+                                    <input type="number" name="SportsShare" placeholder="" class="form-control disabled"
+                                       [value]="userDetails.parentSportShare" disabled>
+                                 </td>
+                                 <td>
+                                    <input type="number" name="CasinoShare" placeholder="" class="form-control disabled"
+                                       [value]="userDetails.parentCasinoShare" disabled>
+                                 </td>
+                              </tr>
+                              <tr class="shareTr" id="editRow" style="word-wrap: break-word;">
+                                 <td>{{selectedUserName}} [{{userDetails.userFullName}}]</td>
+                                 <td>
+                                    <input type="number" name="SportsShare" placeholder="" class="form-control"
+                                       [(ngModel)]="userDetails.userSportsShare" [disabled]="true"
+                                       (input)="checkSaveButtonState()">
+                                    <div *ngIf="userDetails.userSportsShare > userDetails.parentSportShare"
+                                       class="text-danger">
+                                       User sports share must be less than or equal to parent sports share.
+                                    </div>
+                                    <div *ngIf="userDetails.userSportsShare < backupUserDetails.userSportsShare"
+                                       class="text-danger">
+                                       User sports share cannot be less than current value.
+                                    </div>
+                                 </td>
+                                 <td>
+                                    <input type="number" name="CasinoShare" placeholder="" class="form-control"
+                                       [(ngModel)]="userDetails.userCasinoShare" [disabled]="true"
+                                       (input)="checkSaveButtonState()">
+                                    <div *ngIf="userDetails.userCasinoShare > userDetails.parentCasinoShare"
+                                       class="text-danger">
+                                       User casino share must be less than or equal to parent casino share.
+                                    </div>
+                                    <div *ngIf="userDetails.userCasinoShare < backupUserDetails.userCasinoShare"
+                                       class="text-danger">
+                                       User casino share cannot be less than current value.
+                                    </div>
+                                 </td>
+                              </tr>
+
+
+
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <!-- <div class="modal-footer">
+            <div class="d-flex align-items-center">
+               <button type="button" class="btn btn-info px-1 py-0" (click)="toggleEdit()">
+                  <i class="fa-regular fa-pen-to-square"></i> {{ isEditing ? 'Cancel' : 'Edit' }}
+               </button>
+               <button *ngIf="isEditing" type="button" class="btn btn-primary px-1 py-0 ms-2"
+                  (click)="updateUserShare()" [disabled]="isSaveDisabled">
+                  <i class="fa-regular fa-save"></i> Save
+               </button>
+            </div>
+         </div> -->
+      </div>
+   </div>
+</div>
+
+<!--report Modal -->
+<div class="modal fade custoModal" id="reportHistory" data-bs-backdrop="static" tabindex="-1"
+   aria-labelledby="reportHistoryLabel" aria-hidden="true">
+   <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h4 class="modal-title" id="reportHistoryLabel">Account Statement <span
+                  class="fs-14">({{selectedUserName}}:[{{selectedUserRole}}])</span>
+            </h4>
+            <button (click)="clsHistoryModel()" type="button" class="btn-close" data-bs-dismiss="modal"
+               aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+         </div>
+         <div class="content text-left ms-2 mt-2" style="color: red;">*Showing data of last one 7 days by default</div>
+         <div class="modal-body">
+            <div class="card cardFilter">
+               <div class="text-end">
+                  <a class="link" data-bs-toggle="collapse" href="#advanceearch" role="button" aria-expanded="false"
+                     aria-controls="advanceearch">
+                     Advance Search <i class="ms-1 fa-solid fa-chevron-right"></i>
+                  </a>
+                  <div class="collapse" id="advanceearch">
+                     <hr>
+                     <div class="row mb-4">
+                        <div class="col-lg-5 col-md-8 col-sm-12 col-xs-12">
+                           <div class="input-group marginb5 div-datepicker">
+                              <input type="datetime-local" class="form-control" name="startTime" [(ngModel)]="startTime"
+                                 (ngModelChange)="onStartTimeChange($event)" />
+                              <span class="col-form-label">to</span>
+                              <input type="datetime-local" class="form-control" name="endTime" [(ngModel)]="endTime"
+                                 (ngModelChange)="onEndTimeChange($event)" />
+                              <button type="button" class="btn btn-info ms-2"
+                                 (click)="advanceSearchLoad()">Load</button>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-lg-12 col-md-8 col-sm-12 col-xs-12" *ngIf="backupUserDetails.role!='Client'">
+                     <div class="d-flex align-items-center flex-wrap">
+                        <!-- <label class="radio radio-info">
+                           <input type="radio" (click)="getHistoryData('AllCredit')" [(ngModel)]="valueType"
+                              id="AllCredit" name="AllCredit" value="AllCredit">
+                           <label class="bold" for="chkShowAll1">Show All Credit</label>
+                           &nbsp;
+                        </label> -->
+
+                        <label class="radio radio-info">
+                           <input type="radio" (click)="getHistoryData('ChipsOnly')" [(ngModel)]="valueType"
+                              id="ShowOnlyChips" name="ChipsOnly" value="ChipsOnly">
+                           <label class="bold" for="ShowOnlyChips">Show Only Chips</label>
+                           &nbsp;
+                        </label>
+                        <label class="radio radio-info">
+                           <input type="radio" (click)="getHistoryData('CreditTaken')" [(ngModel)]="valueType"
+                              id="CreditGiven" name="CreditGiven" value="CreditTaken">
+                           <label class="bold" for="chkShowCash">Show Parent Credit</label>
+                           &nbsp;
+                        </label>
+                        <label class="radio radio-info">
+                           <input type="radio" (click)="getHistoryData('CreditGiven')" [(ngModel)]="valueType"
+                              id="CreditGiven" name="CreditGiven" value="CreditGiven">
+                           <label class="bold" for="chkShowPnl">Show Child Credit</label>
+                           &nbsp;
+                        </label>
+                        <label class="radio radio-info">
+                           <input type="radio" (click)="getHistoryData('ProfitLoss')" [(ngModel)]="valueType"
+                              id="ProfitLoss" name="ProfitLoss" value="ProfitLoss">
+                           <label class="bold" for="chkShowPnl">Show Market Profit & Loss </label>
+                           &nbsp;
+                        </label>
+                     </div>
+                  </div>
+                  <!-- client report -->
+                  <div class="col-lg-12 col-md-8 col-sm-12 col-xs-12" *ngIf="backupUserDetails.role==='Client'">
+                     <div class="d-flex align-items-center flex-wrap">
+                        <label class="radio radio-info">
+                           <input type="radio" (click)="getHistoryData('All')" [(ngModel)]="valueType" id="All"
+                              name="All" value="All">
+                           <label class="bold" for="All">All</label>
+                           &nbsp;
+                        </label>
+                        <label class="radio radio-info">
+                           <input type="radio" (click)="getHistoryData('ChipsOnly')" [(ngModel)]="valueType"
+                              id="ShowOnlyChips" name="ChipsOnly" value="ChipsOnly">
+                           <label class="bold" for="ShowOnlyChips">Show Only Chips</label>
+                           &nbsp;
+                        </label>
+                        <label class="radio radio-info">
+                           <input type="radio" (click)="getHistoryData('Settlement')" [(ngModel)]="valueType"
+                              id="ShowCashEntry" name="ShowCashEntry" value="Settlement">
+                           <label class="bold" for="ShowCashEntry">Show Cash Entry</label>
+                           &nbsp;
+                        </label>
+                        <label class="radio radio-info">
+                           <input type="radio" (click)="getHistoryData('ProfitLoss')" [(ngModel)]="valueType"
+                              id="ProfitLoss" name="ProfitLoss" value="ProfitLoss">
+                           <label class="bold" for="ProfitLoss">Show Market Profit & Loss </label>
+                           &nbsp;
+                        </label>
+                        <label class="radio radio-info">
+                           <input type="radio" (click)="getHistoryData('CashProfitLoss')" [(ngModel)]="valueType"
+                              id="showCashProfit" name="showCashProfit" value="CashProfitLoss">
+                           <label class="bold" for="showCashProfit">Show Cash Market Profit & Loss </label>
+                           &nbsp;
+                        </label>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="card">
+               <div class="row mt-4 mb-2 d-flex align-items-center flex-row-reverse tableTopRow">
+                  <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 ps-md-0 mb-2 mb-md-0">
+                     <input type="text" class="form-control" placeholder="Search Min. 2 characters">
+                  </div>
+                  <div class="dt-buttons flex-wrap ol-lg-3 col-md-3 col-sm-12 col-xs-12 text-end">
+                     <button class="btn downloadTableBtn me-2" type="button" (click)="downloadCSV('returnObj')"><i
+                           class="fas fa-file-csv"></i> CSV</button>
+                     <button class="btn downloadTableBtn me-2" type="button" (click)="downloadExcel('returnObj')"><i
+                           class="far fa-file-excel"></i> Excel</button>
+                     <button class="btn downloadTableBtn" type="button" (click)="downloadPDF('returnObj')"><i
+                           class="far fa-file-pdf"></i> Pdf</button>
+                  </div>
+                  <div class="col-md-7 col-sm-12 ">
+                     <p class="tableP mb-0">Showing {{returnObj.length}} of {{CountInner}} entries</p>
+                  </div>
+               </div>
+               <div *ngIf="returnObj?.length>0" class="table-responsive border">
+                  <table class="table dataNowrap mb-0">
+                     <thead>
+                        <tr>
+                           <th>Date</th>
+                           <th>Type</th>
+                           <th>Description</th>
+                           <th>Cr (Deposit)</th>
+                           <th>Dr (Withdraw)</th>
+                           <th>Com.</th>
+                           <th>Balance</th>
+                           <!-- <th>From/To</th> -->
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr
+                           *ngFor="let data of returnObj  | paginate: {  itemsPerPage:takeRecordsInner, currentPage:pageNumInner,totalItems: CountInner };">
+                           <td>
+                              {{data?.createdOn | date:'short'}}
+                           </td>
+                           <td>
+                              <label
+                                 [ngClass]="{'text-warning': data?.sportsName === 'Banking', 'text-primary': data?.sportsName !== 'Banking'}"
+                                 style="cursor:text;">
+                                 {{ data?.sportsName === 'Banking' ? 'D|W Cash' : 'P|L Market' }}
+                              </label>
+                           </td>
+
+                           <td *ngIf="data.sportsId != 0">
+                              <div class="d-flex flex-column">
+                                 <a (click)="openInNewTab(data)">
+                                    <p class="mb-0">
+                                       {{data.sportsName}}/{{data.eventName}}/{{data.marketName}}
+                                       <span
+                                          *ngIf="data.marketName === 'Fancy' || data.marketName==='Session Commision'">/{{data.runnerId}}</span>
+                                    </p>
+                                 </a>
+                                 <!-- <p *ngIf="data.sportsId != 5" class="mb-0">Result: <b
+                                       class="text-success">{{data?.tournamentName}}</b></p> -->
+                              </div>
+                           </td>
+                           <td *ngIf="data.sportsId == 0">
+                              <div class="d-flex flex-column">
+                                 <p class="mb-0">
+                                    {{data.eventName}}
+                                 </p>
+                              </div>
+                           </td>
+
+
+                           <td><span [ngClass]="{'text-success ':data.amount>0}">{{ data.type === 'Credit'
+                                 ? (data.amount | number:'1.2-2') : '0' }}</span></td>
+                           <td><span [ngClass]="{'text-danger ':data.amount<0}">{{ data.type === 'Debit' ?
+                                 (data.amount | number:'1.2-2') : '0' }}</span></td>
+                           <td><span
+                                 [ngClass]="{'text-danger':data.commission<0,'text-success':data.commission>=0}">{{data.commission
+                                 |
+                                 number:'1.2-2'}}</span></td>
+                           <td>{{data.balance | number:'1.2-2'}}</td>
+                           <!-- <td>{{ data.type === 'Debit' ? (data.name + ' >> ' + data.parentName) : (data.parentName + '
+                              >> ' + data.name) }}</td> -->
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+               <div *ngIf="returnObj?.length>0" class="pagination_filter justify-content-between pt-3 d-flex  row">
+                  <!-- <div class="col-sm-6 mb- mb-sm-0">
+                     <select class="form-control w-auto mr-2 " id="" (change)="updateRecValue($event,'history')">
+                        <option value="takeRecordsInner" selected>{{takeRecordsInner}}</option>
+                        <option value="10" *ngIf="takeRecordsInner!=10">10</option>
+                        <option value="20" *ngIf="takeRecordsInner!=20">20</option>
+                        <option value="30" *ngIf="takeRecordsInner!=30">30</option>
+                        <option value="40" *ngIf="takeRecordsInner!=40">40</option>
+                        <option value="50" *ngIf="takeRecordsInner!=50">50</option>
+                     </select>
+                  </div> -->
+                  <div class="col-sm-6 d-flex justify-content-end">
+                     <pagination-controls class="pagination" [maxSize]="5" *ngIf="returnObj?.length > 0"
+                        (pageChange)="pageChangedInner($event)">
+                     </pagination-controls>
+                  </div>
+               </div>
+               <div *ngIf="returnObj?.length==0" class="load-more"><span>No Data Available.</span></div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<!--permission Modal -->
+<div class="modal fade custoModal settlementMod perssionModal" id="permission" data-bs-backdrop="static" tabindex="-1"
+   aria-labelledby="permissionLabel" aria-hidden="true">
+   <div class="modal-dialog modal-md">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h1 class="modal-title" id="permissionLabel">Permission : {{selectedUserName}} [{{selectedUserRole}}]</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+               <i class="fa-solid fa-xmark"></i>
+            </button>
+         </div>
+         <div class="modal-body">
+            <div class="settlementBody">
+               <table class="datatable table dt-responsive nowrap ">
+                  <tbody>
+                     <tr>
+                        <td class="width-xl">Block</td>
+                        <td class="text-center">
+                           <div class="ms-1 switchCommon mb-1">
+                              <label class="switchBtnCommon">
+                                 <input data-bs-toggle="modal" data-bs-target="#confirmpasspermission" type="checkbox"
+                                    [checked]="status" id="togBtn" (click)="setPermissions('isLocked', true)">
+                                 <div class="slider round"></div>
+                              </label>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="width-xl">AllowBet [Sport]</td>
+                        <td class="text-center">
+                           <div class="ms-1 switchCommon mb-1">
+                              <label class="switchBtnCommon">
+                                 <input data-bs-toggle="modal" data-bs-target="#confirmpasspermission" type="checkbox"
+                                    [checked]="allowBet" id="togBtn" (click)="setPermissions('isDeleted', true)">
+                                 <div class="slider round"></div>
+                              </label>
+                           </div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="width-xl">AllowBet [Casino]</td>
+                        <td class="text-center">
+                           <div class="ms-1 switchCommon mb-1">
+                              <label class="switchBtnCommon">
+                                 <input data-bs-toggle="modal" data-bs-target="#confirmpasspermission" type="checkbox"
+                                    [checked]="casinoStatus" id="togBtn" (click)="setPermissions('casino', true)">
+                                 <div class="slider round"></div>
+                              </label>
+                           </div>
+                        </td>
+                     </tr>
+                  </tbody>
+               </table>
+               <!-- <button type="button" data-bs-toggle="modal" data-bs-target="#confirmpasspermission">confirm</button> -->
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<!--confirm permission password Modal -->
+<div class="modal fade custoModal settlementMod perssionModal" id="confirmpasspermission" data-bs-backdrop="static"
+   tabindex="-1" aria-labelledby="confirmpasspermissionLabel" aria-hidden="true">
+   <div class="modal-dialog modal-md">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h1 class="modal-title" id="confirmpasspermissionLabel">User:- </h1>
+            <button type="button" id="clsPerMdl" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+               <i class="fa-solid fa-xmark"></i>
+            </button>
+         </div>
+         <div class="modal-body">
+            <form>
+               <div class="form-group">
+                  <div class="row">
+                     <div class="col-lg-5 col-md-3 col-sm-12 col-xs-12">
+                        <input type="hidden" value="">
+                        <input type="password" class="form-control" placeholder="Enter Password"
+                           autocomplete="new-password2" name="password" [(ngModel)]="password">
+                        <div *ngIf="password.length==0" class="text-danger text-start">
+                           *Password is required.
+                        </div>
+                     </div>
+                     <div class="col-lg-7 col-md-3 col-sm-12 col-xs-12">
+                        <button class="btn btn-success ms-2" type="submit" value="Save"
+                           (click)="updateSetting()">Save</button>
+                        <button class="btn btn-danger ms-2" data-bs-dismiss="modal" data-dismiss="modal">Cancel</button>
+                     </div>
+                     <div class="row btnsaveall">
+                        <span class="text-danger mt-1 btnsaveall">Note: <i>Click on "Save All" will save
+                              permission to all downline's user</i></span>
+                     </div>
+                  </div>
+               </div>
+            </form>
+         </div>
+      </div>
+   </div>
+</div>
+<!--Permission Log Modal -->
+<div class="modal fade custoModal" id="permissionLog" data-bs-backdrop="static" tabindex="-1"
+   aria-labelledby="permissionLogLabel" aria-hidden="true">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h4 class="modal-title" id="permissionLogLabel">Account Statement <span class="fs-14">(ak80[ak80])</span>
+            </h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                  class="fa-solid fa-xmark"></i></button>
+         </div>
+         <div class="modal-body">
+            <div class="table-responsive">
+               <table class="datatable table">
+                  <thead>
+                     <tr>
+                        <th class="">User Name</th>
+                        <th class="">Permission</th>
+                        <th class="">Status</th>
+                        <th class="">Blocked By</th>
+                        <th class="">Date</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <tr>
+                        <td>name</td>
+                        <td>permission</td>
+                        <td>true</td>
+                        <td>Admin</td>
+                        <td>11/15/2023</td>
+                     </tr>
+                  </tbody>
+               </table>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<!--Permission block market Modal -->
+<div class="modal fade custoModal" id="permissionblockmarket" data-bs-backdrop="static" tabindex="-1"
+   aria-labelledby="permissionblockmarketLabel" aria-hidden="true">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h4 class="modal-title" id="permissionblockmarketLabel">Block/Unblock Market</h4>
+            <button type="button" (click)="resetBlockunblockMarketModel()" id="clsBUmdl" class="btn-close"
+               data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+         </div>
+         <div class="modal-body">
+            <div class="card-body">
+               <div class="form-group row mb-3">
+                  <div class="col-sm-6 col-xs-12">
+                     <label class="col-form-label">Selected User: <strong>{{selectedUserName}}</strong></label>
+                  </div>
+                  <div class="col-sm-6 col-xs-12">
+                     <label class="col-form-label">Selected Role: <strong>{{selectedUserRole}}</strong></label>
+                  </div>
+               </div>
+
+
+               <hr>
+               <div class="col-xs-12 col-sm-12 SportList">
+                  <ul class="list-unstyled matchList" id="myUL">
+                     <li *ngFor="let sport of sportsList">
+                        <span class="caret" (click)="toggleNested('sport', sport.sports_id)">
+                           <span (click)="chkTournamentStatus(sport.sports_id)">{{sport.sports_name}}</span>
+                           <i *ngIf="!sport.is_locked" class="fa fa-check-circle fa-lg ms-2"
+                              (click)="setValues('sport', sport)"></i>
+                           <i *ngIf="sport.is_locked" class="fa fa-ban fa-lg ms-2 text-danger"
+                              (click)="setValues('sport', sport)"></i>
+                        </span>
+                        <ul class="list-unstyled nested" [class.active]="isActive('sport', sport.sports_id)">
+                           <li *ngFor="let series of seriesList">
+                              <span class="caret" (click)="toggleNested('series', series.series_id)">
+                                 <span (click)="chkEventStatus(series.series_id)">{{series.series_name}}</span>
+                                 <i *ngIf="!series.is_locked" class="fa fa-check-circle fa-lg ms-2"
+                                    (click)="setValues('series', series)"></i>
+                                 <i *ngIf="series.is_locked" class="fa fa-ban fa-lg ms-2 text-danger"
+                                    (click)="setValues('series', series)"></i>
+                              </span>
+                              <ul class="list-unstyled nested" [class.active]="isActive('series', series.series_id)">
+                                 <li *ngFor="let event of eventList">
+                                    <span class="caret" (click)="toggleNested('event', event.event_id)">
+                                       <span (click)="chkMarketStatus(event.event_id)">{{event.event_name}}</span>
+                                       <i *ngIf="!event.is_locked" class="fa fa-check-circle fa-lg ms-2"
+                                          (click)="setValues('event', event)"></i>
+                                       <i *ngIf="event.is_locked" class="fa fa-ban fa-lg ms-2 text-danger"
+                                          (click)="setValues('event', event)"></i>
+                                    </span>
+                                    <ul class="list-unstyled nested" [class.active]="isActive('event', event.event_id)">
+                                       <li *ngFor="let market of marketList">
+                                          <span class="caret">
+                                             <span>{{market.market_name}}</span>
+                                             <i *ngIf="!market.is_locked" class="fa fa-check-circle fa-lg ms-2"
+                                                (click)="setValues('market', market)"></i>
+                                             <i *ngIf="market.is_locked" class="fa fa-ban fa-lg ms-2 text-danger"
+                                                (click)="setValues('market', market)"></i>
+                                          </span>
+                                       </li>
+                                    </ul>
+                                 </li>
+                              </ul>
+                           </li>
+                        </ul>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+
+<!--Permission unblock market Modal -->
+<div class="modal fade custoModal" id="permissionunblockmarket" data-bs-backdrop="static" tabindex="-1"
+   aria-labelledby="permissionunblockmarketLabel" aria-hidden="true">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h4 class="modal-title" id="permissionunblockmarketLabel">Block Market</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                  class="fa-solid fa-xmark"></i></button>
+         </div>
+         <div class="modal-body">
+            <div class="card-body">
+               <div class="blockMarketList">
+                  <div class="cName">
+                     <i class="fa-solid fa-circle-user"></i> <span class="cl">C</span> Gulabi [Gulabi]
+                  </div>
+                  <div class="gameName">
+                     <p>Cricket-> Legends League Cricket 2022 <i class="fa-solid fa-circle-xmark ms-2 text-danger"></i>
+                     </p>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<!-- block market modal -->
+<div class="modal fade custoModal" id="blockmarketModal" data-bs-backdrop="static" tabindex="-1"
+   aria-labelledby="blockmarketModalLabel" aria-hidden="true">
+   <div class="modal-dialog modal-md">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h4 class="modal-title" id="blockmarketModalLabel">{{valueType}} Market</h4>
+            <button type="button" (click)="resetPassword()" id="clsPassModel" class="btn-close" data-bs-dismiss="modal"
+               aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+         </div>
+         <div class="modal-body">
+            <div class="card-body">
+               <div class="text-center">
+                  <h4>Are you sure to {{valueType}} Market ?</h4>
+                  <input type="password" class="form-control" placeholder="password" name="password"
+                     [(ngModel)]="password">
+                  <div *ngIf="password.length==0" class="text-danger text-start">
+                     *Password is required.
+                  </div>
+               </div>
+               <div class="modal-footer border-0 p-2">
+                  <button type="button" class="btn btn-primary" (click)="blockUnblockType()">Ok</button>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+
+
+<!--Max Child Level Modal -->
+<div class="modal fade custoModal settlementMod perssionModal" id="maxchildlavel" data-bs-backdrop="static"
+   tabindex="-1" aria-labelledby="maxchildlavelLabel" aria-hidden="true">
+   <div class="modal-dialog modal-md">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h1 class="modal-title" id="maxchildlavelLabel">Max Child Level : {{selectedUserName}}</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+               <i class="fa-solid fa-xmark"></i>
+            </button>
+         </div>
+         <div class="modal-body">
+            <form>
+               <div class="row">
+                  <div class="form-group col-sm-6 col-xs-12">
+                     <label for="txtMinRate">Max Child No</label>
+                     <div class="input-group">
+                        <select class="form-control directorySelect" (change)="roleChange($event)">
+                           <option selected>Select</option>
+                           <option *ngFor="let list of roleList" [value]="list.id">{{list.level - 1}}-
+                              {{list.role}}
+                           </option>
+                        </select>
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="form-inline text-end">
+                     <button class="btn btn-primary" type="submit" (click)="UpdateUserRole()">Save</button>
+                  </div>
+               </div>
+            </form>
+         </div>
+      </div>
+   </div>
+</div>
+<!--User Details Modal -->
+<div class="modal fade custoModal" id="userDetailmore" data-bs-backdrop="static" tabindex="-1"
+   aria-labelledby="userDetailmoreLabel" aria-hidden="true">
+   <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h1 class="modal-title" id="userDetailmoreLabel">User Details : {{userDetails.data?.loginId}}
+               [{{userDetails.data?.fullName}}]</h1>
+            <button type="button" id="clsPass" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                  class="fa-solid fa-xmark"></i></button>
+         </div>
+         <div class="modal-body">
+            <div class="gamesTabs">
+               <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                  <li class="nav-item" role="presentation">
+                     <button class="nav-link active" id="pills-profile-tab" data-bs-toggle="pill"
+                        data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile"
+                        aria-selected="true">Profile</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                     <button class="nav-link" id="pills-resetPassword-tab" data-bs-toggle="pill"
+                        data-bs-target="#pills-resetPassword" type="button" role="tab"
+                        aria-controls="pills-resetPassword" aria-selected="false">Reset Password</button>
+                  </li>
+               </ul>
+               <div class="tab-content" id="pills-tabContent">
+                  <div class="tab-pane profilePills fade show active" id="pills-profile" role="tabpanel"
+                     aria-labelledby="pills-profile-tab">
+                     <div class="row mt-1">
+                        <div class="col-xl-4 col-lg-4 col-sm-12">
+                           <div class="card-box m-0 ">
+                              <div class="row">
+                                 <div class="col-xl-12 col-lg-12 text-center mb-4">
+                                    <div class="avatar-md bg-blue rounded mx-auto">
+                                       <i class="fa-regular fa-user avatar-title font-22 text-white"></i>
+                                    </div>
+                                    <div *ngIf="userDetails.childLevel!=1" class="col-xl-12 col-lg-12">
+                                       <span id="spnUserType">Agent</span>
+                                    </div>
+                                    <div *ngIf="userDetails.childLevel==1" class="col-xl-12 col-lg-12">
+                                       <span id="spnUserType">Client</span>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-sm-12 isChangesPermission">
+                           <div class="card-box m-0">
+                              <h4>Permission</h4>
+                              <div class="row">
+                                 <label class="col-sm-6 col-6 col-form-label">Is Login:</label>
+                                 <label *ngIf="userDetails.data?.isLoggedIn" class="col-sm-6 col-6 col-form-label"
+                                    id="lblIsAllowMultiLogin"><i data-bs-toggle="modal"
+                                       data-bs-target="#permissionModal" (click)="setPermissions('isLoggedIn',true)"
+                                       class="fas fa-check-circle green"></i></label>
+                                 <label *ngIf="!userDetails.data?.isLoggedIn" class="col-sm-6 col-6 col-form-label"
+                                    id="lblIsReverse"><i (click)="setPermissions('isLoggedIn',false)"
+                                       data-bs-toggle="modal" data-bs-target="#permissionModal"
+                                       class="far fa-times-circle red"></i></label>
+                              </div>
+                              <div class="row">
+                                 <label class="col-sm-6 col-6 col-form-label">Is
+                                    Deleted:</label>
+                                 <label *ngIf="userDetails.data?.isDeleted" class="col-sm-6 col-6 col-form-label"
+                                    id="lblIsApproved"><i (click)="setPermissions('isDeleted',false)"
+                                       data-bs-toggle="modal" data-bs-target="#permissionModal"
+                                       class="fas fa-check-circle green"></i></label>
+                                 <label *ngIf="!userDetails.data?.isDeleted" class="col-sm-6 col-6 col-form-label"
+                                    id="lblIsReverse"><i (click)="setPermissions('isDeleted',true)"
+                                       data-bs-toggle="modal" data-bs-target="#permissionModal"
+                                       class="far fa-times-circle red"></i></label>
+                              </div>
+                              <div class="row">
+                                 <label class="col-sm-6 col-6 col-form-label">Is
+                                    Blocked:</label>
+                                 <label *ngIf="userDetails.data?.isLocked" class="col-sm-6 col-6 col-form-label"
+                                    id="lblIsApproved"><i (click)="setPermissions('isLocked',false)"
+                                       data-bs-toggle="modal" data-bs-target="#permissionModal"
+                                       class="fas fa-check-circle green"></i></label>
+                                 <label *ngIf="!userDetails.data?.isLocked" class="col-sm-6 col-6 col-form-label"
+                                    id="lblIsReverse"><i (click)="setPermissions('isLocked',true)"
+                                       data-bs-toggle="modal" data-bs-target="#permissionModal"
+                                       class="far fa-times-circle red"></i></label>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-sm-12">
+                           <div class="card-box m-0 ">
+                              <div class="row">
+                                 <div class="col-xl-12 col-lg-12">
+                                    <h4>Additional Information</h4>
+                                    <div class="row">
+                                       <label class="col-sm-4 col-6 col-form-label">User Name:</label>
+                                       <label class="col-sm-8 col-6 col-form-label"
+                                          id="lblUserName">{{userDetails.data?.loginId}}</label>
+                                    </div>
+                                    <div class="row">
+                                       <label class="col-sm-4 col-6 col-form-label">Full Name:</label>
+                                       <label class="col-sm-8 col-6 col-form-label"
+                                          id="lblFullName">{{userDetails.data?.fullName}}</label>
+                                    </div>
+                                    <div class="row">
+                                       <label class="col-sm-4 col-6 col-form-label">Balance:</label>
+                                       <label class="col-sm-8 col-6 col-form-label"
+                                          id="lblBalance">{{userDetails.wallet}}</label>
+                                    </div>
+                                    <div class="row">
+                                       <label class="col-sm-4 col-6 col-form-label">CreatedDate:</label>
+                                       <label class="col-sm-6 col-6 col-form-label" id="lblCreatedDate">
+                                          {{ userDetails.data?.createdOn | date:'short' }}
+                                       </label>
+
+                                    </div>
+                                    <div class="row clsAdminInfo">
+                                       <label class="col-sm-4 col-6 col-form-label">Referral
+                                          Link:</label>
+                                       <label class="col-sm-8 col-6 col-form-label word-wrap"
+                                          id="lblReferralCode ">{{profileDomain}}/#/register?referalCode={{userDetails.data?.referralCode}}
+                                          <i class="fa-solid fa-copy ms-2" (click)="copyReferralLink()"></i></label>
+                                    </div>
+                                    <div class="row clsAdminInfo">
+                                       <label class="col-sm-4 col-6 col-form-label">Mobile Number:</label>
+                                       <label class="col-sm-6 col-6 col-form-label"
+                                          id="lblCreatedDate">{{userDetails.data?.mobile}}</label>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="tab-pane fade" id="pills-resetPassword" role="tabpanel"
+                     aria-labelledby="pills-resetPassword-tab">
+                     <div class="card">
+                        <div class="form-group  col-md-5">
+                           <label class="mb-1">Enter Password<span class="text-danger">*</span></label>
+                           <input class="form-control" type="password" placeholder="Enter Password"
+                              autocomplete="new-password3" name="password" [(ngModel)]="password">
+                        </div>
+                        <div class="form-group">
+                           <button class="btn btn-success" type="button" (click)="resetUserPassword()">Submit</button>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<!-- permission password modal -->
+<div class="modal fade custoModal" id="permissionModal" data-bs-backdrop="static" tabindex="-1"
+   aria-labelledby="permissionModalLabel" aria-hidden="true">
+   <div class="modal-dialog modal-md">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h4 class="modal-title" id="permissionModalLabel">Confirm password</h4>
+            <button type="button" (click)="resetPassword()" id="clsPerModel" class="btn-close" data-bs-dismiss="modal"
+               aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+         </div>
+         <div class="modal-body">
+            <div class="card-body">
+               <div class="text-center">
+                  <h4>Are you sure?</h4>
+                  <input type="password" class="form-control" placeholder="password" name="password"
+                     [(ngModel)]="password">
+                  <div *ngIf="password.length==0" class="text-danger text-start">
+                     *Password is required.
+                  </div>
+               </div>
+               <div class="modal-footer border-0 p-2">
+                  <button type="button" class="btn btn-primary" (click)="updateSetting()">Ok</button>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+
+<!-- exposure Modal -->
+<div class="modal fade custoModal " id="exposureModal" tabindex="-1" aria-labelledby="exposureModalLabel"
+   aria-hidden="true" data-bs-backdrop="static">
+   <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h1 class="modal-title" id="exposureModalLabel" style="font-size: 16px !important;">Pending Bets</h1>
+            <button type="button" id="clsWallet" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                  class="fa-solid fa-xmark"></i></button>
+         </div>
+         <div class="modal-body">
+            <div class="table-responsive tableCstm tbHoverCol">
+               <table class="datatable table  mb-0 nowrapTable">
+                  <thead>
+                     <tr>
+                        <th>UserName</th>
+                        <th>Market Details</th>
+                        <th>Rate</th>
+                        <th>Stake</th>
+                        <!-- <th>Bet Type</th> -->
+                        <th>PL</th>
+                        <th>Date</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <tr *ngFor="let bet of betList;let i=index"
+                        [ngClass]="{'back': bet.selection === 'Back' || bet.selection === 'Yes', 'lay': bet.selection === 'Lay' || bet.selection === 'No'}">
+
+                        <td>
+                           <div class="d-flex flex-column">
+                              <span>{{bet.userName}}</span>
+                              <span>{{bet.userName}}</span>
+                           </div>
+                        </td>
+                        <td>
+                           <div class="d-flex flex-column">
+                              <span>{{bet.runnerName}}</span>
+                              <span class="">{{bet.marketName}}</span>
+                              <span><small>{{bet.eventName}}</small></span>
+                           </div>
+                        </td>
+                        <td>
+                           <div class="d-flex flex-column">
+                              <div class="d-flex">
+                                 {{bet.odds}}<span *ngIf="bet.marketName=='Fancy'">/{{bet.price}}</span></div>
+                              <span
+                                 [ngClass]="{'back': bet.selection === 'Back' || bet.selection === 'Yes', 'lay': bet.selection === 'Lay' || bet.selection === 'No'}">{{bet.selection}}</span>
+                           </div>
+                        </td>
+                        <td>{{bet.stake % 1 !== 0 ? (bet.stake | number:'1.2-2'):bet.stake}}</td>
+                        <!-- <td><span
+                              [ngClass]="{'back': bet.selection === 'Back' || bet.selection === 'Yes', 'lay': bet.selection === 'Lay' || bet.selection === 'No'}">{{bet.selection}}</span>
+                        </td> -->
+                        <td
+                           [ngClass]="bet.selection === 'Back' || bet.selection === 'Yes' ? 'text-success' : 'text-danger'">
+                           {{ (bet.selection === 'Back' || bet.selection === 'Yes') ?
+                           (bet.profit % 1 !==0? (bet.profit | number:'1.2-2'):bet.profit) : (bet.exposure % 1
+                           !==0 ? (bet.exposure | number:'1.2-2'):bet.exposure) }}</td>
+                        <td>
+                           <div class="d-flex flex-column">
+                              <span>P: {{ bet.betTime | date:'dd/MM/yyyy hh:mm:ss a' }}</span>
+                              <span>M: {{ bet.createdOn | date:'dd/MM/yyyy hh:mm:ss a' }}</span>
+                           </div>
+                        </td>
+                     </tr>
+
+
+                  </tbody>
+               </table>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>

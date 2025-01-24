@@ -1,0 +1,36 @@
+.link {
+    text-decoration: none;
+    color: var(--blackTextColor);
+    font-size: 13px;
+}
+.notification-list{
+    .checkbox {
+        input{
+            width: 18px;
+            height: 18px;
+        }
+    }
+}
+span.col-form-label {
+    padding: 8px;
+}
+
+// .table-UserList{
+//     thead{
+//         th{
+//             border-bottom: 4px solid #1abc9c;
+//         }
+//     }
+//     &.table-UserList2{
+//         thead{
+//             th{
+//                 border-bottom: 4px solid #f1556c;
+//             }
+//         }
+//     }
+// }
+.cstmbt{
+    &.btn-success{
+        background-color: green !important;
+    }
+}

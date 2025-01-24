@@ -1,0 +1,125 @@
+.gamesTabs {
+    .nav-item {
+        button {
+            color: var(--blackTextColor);
+            border-radius: 0;
+
+            &.active {
+                background: linear-gradient(180deg, #d0541f 0%, #b84413 100%);
+                border-radius: 5px;
+                color: #fff;
+            }
+
+            &:focus-visible {
+                outline: 0;
+            }
+        }
+    }
+}
+
+.actdeactiveModal {
+    .swalIcon {
+        color: #f7b84b;
+        width: 5em;
+        height: 5em;
+        margin: 1.25em auto 1.875em;
+        border: .25em solid #f7b84b;
+        border-radius: 50%;
+        line-height: 5em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .swa-icon-text {
+            font-size: 3.75em;
+        }
+    }
+}
+
+.accorBtn {
+    i {
+        font-size: 10px;
+        position: relative;
+        top: -2px;
+        color: var(--blackTextColor);
+    }
+}
+
+.mainDetailCol {
+    margin: .275rem 0;
+    .market-row {
+        &:hover {
+            box-shadow: inset 0 0 30px #ddd;
+        }
+
+        &.noShadowHover {
+            &:hover {
+                box-shadow: none;
+            }
+        }
+
+        .tr-matchdetail {
+            .divmarketTitle {
+                font-weight: 400;
+                font-size: 12px;
+                @media(min-width:768px) {
+                    padding-left: 45px;
+                }
+            }
+        }
+
+        .table-wrap {
+            border: 1px solid rgba(209, 208, 209, 0.29);
+            border-radius: 4px;
+
+            &::-webkit-scrollbar-track {
+                background-color: transparent;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                border-radius: 10px;
+
+                &:hover {
+                    background: #ffcb2f;
+                }
+            }
+
+            .table {
+                margin: 0;
+                padding: 5px 0;
+
+                tr {
+                    &:hover {
+                        box-shadow: none;
+                    }
+
+                    td,
+                    h6 {
+                        font-weight: 400;
+                        font-size: 11px;
+                    }
+
+                    td {
+                        border-right: 1px solid rgba(209, 208, 209, 0.29);
+                        padding: 0.2rem !important;
+                        vertical-align: top;
+                        white-space: nowrap;
+                    }
+
+                    h6 {
+                        min-width: 90px;
+                        margin: 0;
+
+                        &.red {
+                            color: red;
+                        }
+
+                        &.green {
+                            color: green;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

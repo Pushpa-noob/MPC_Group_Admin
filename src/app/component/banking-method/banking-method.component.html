@@ -1,0 +1,180 @@
+<div class="page-title-box mb-3 mb-ms-4">
+    <h4 class="page-title">Banking Method <button type="button" data-bs-toggle="modal" data-bs-target="#addNewMethod"
+            class="btn btn-primary m-0 ms-3">Add New</button></h4>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="table-responsive mb-3">
+                <table class="table  mb-0">
+                    <thead>
+                        <tr>
+                            <th>S.No</th>
+                            <th>Name</th>
+                            <th>Image</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let bankingMethod of bankingMethods;let i=index">
+                            <td>{{i+1}}</td>
+                            <td>{{bankingMethod.name}}</td>
+                            <td><img alt="icon" class="img-fluid paymtImg" [src]="bankingMethod.imagePath"></td>
+                            <td>
+                                <button type="button" data-bs-toggle="modal" data-bs-target="#statusMethod" class="btn"
+                                    [ngClass]="{'rejectedBtn':bankingMethod.isLocked,'acceptBtn':!bankingMethod.isLocked}"
+                                    (click)="getModelValues(bankingMethod.isLocked,bankingMethod.id)">{{bankingMethod.isLocked?"Inactive":"Active"}}</button>
+                            </td>
+                            <td>
+                                <button type="button" data-bs-toggle="modal" data-bs-target="#deleteMethod"
+                                    class="btn deleteBtn"
+                                    (click)="getModelValues(bankingMethod.isLocked,bankingMethod.id)"><i
+                                        class="fas fa-trash-alt"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- add banking modal -->
+<div class="modal fade custoModal" id="addNewMethod" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="addNewMethodLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="addNewMethodLabel">Add Banking Method</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="clsmdl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+                    <div class="bankingForm">
+                        <form [formGroup]="bankingMethodForm" (ngSubmit)="addBankingMethod()">
+                            <div class="form-field mb-3">
+                                <label>Select Method :</label>
+                                <select class="form-control" formControlName="Name">
+                                    <option selected disabled>Select</option>
+                                    <option value="PhonePe">PhonePe</option>
+                                    <option value="Bank">Bank</option>
+                                    <option value="Gpay">Gpay</option>
+                                    <option value="Paytm">Paytm</option>
+                                </select>
+                                <div *ngIf="bankingMethodForm.get('Name')?.errors?.['required'] && (bankingMethodForm.get('Name')?.dirty || bankingMethodForm.get('Name')?.touched)"
+                                    class="text-danger">
+                                    Please select banking method.
+                                </div>
+                            </div>
+                            <div class="form-field mb-3">
+                                <label>Choose File</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input form-control"
+                                        (change)="onFileSelected($event)" style="opacity: 1;">
+                                </div>
+                                <div *ngIf="fileError" class="text-danger">
+                                    {{ fileError }}
+                                </div>
+                            </div>
+                            <div class="imgViewer" *ngIf="previewUrl">
+                                <img alt="img" class="img-fluid" [src]="previewUrl">
+                            </div>
+                            <div class="modal-footer mt-3 pb-0">
+                                <button type="submit" class="btn btn-primary border-black"
+                                    [disabled]="bankingMethodForm.invalid">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- status method modal -->
+<!-- <div class="modal fade custoModal" id="statusMethod" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="statusMethodLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="statusMethodLabel"> Deactivate Payment Method</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+                    <h5 class="text-center py-1">Are you sure, You want to <span class="d-block red mt-1">{{modelText}}
+                        </span>this payment method</h5>
+                </div>
+                <div class="modal-footer mt-4 pb-0">
+                    <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn btn-danger"
+                        id="clsstsmdl">No</button>
+                    <button type="button" class="btn btn-primary border-black"
+                        (click)="updateBankingMethod()">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<div class="modal fade custoModal actdeactiveModal" id="statusMethod" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="statusMethodLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content">
+            <div class="card-body p-4">
+                <div class="swalIcon">
+                    <span class="swa-icon-text">!</span>
+                </div>
+                <div class="text-center px-md-4">
+                    <h4>Are you sure?</h4>
+                    <p class="text-center py-1">Are you sure, You want to <span class="d-block red mt-1">{{modelText}}
+                    </span>this payment method</p>
+                </div>
+                <div class="modal-footer border-0 justify-content-center order-0 p-0 mt-3">
+                    
+                    <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn btn-danger"
+                        id="clsstsmdl">No, cancel.!</button>
+                    <button type="button" class="btn btn-primary border-black"
+                        (click)="updateBankingMethod()">Yes, Update it.!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- status method modal -->
+<div class="modal fade custoModal" id="deleteMethod" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="deleteMethodLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="deleteMethodLabel"> Delete payment method</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+                    <h5 class="text-center py-1">Are you sure you want to <span class="d-block red mt-1">Delete this
+                            payment method </span></h5>
+                </div>
+                <div class="modal-footer mt-4 pb-0">
+                    <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn btn-danger"
+                        id="clsdltmdl">No</button>
+                    <button type="button" class="btn btn-primary border-black"
+                        (click)="deleteBankingMethod()">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

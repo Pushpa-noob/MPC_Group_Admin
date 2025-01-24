@@ -1,0 +1,157 @@
+<div class="page-title-box mb-3 mb-ms-4">
+    <h4 class="page-title">Add Notifications</h4>
+</div>
+<div class="row subPages">
+    <div class="col-md-12">
+        <div class="card">
+            <h6 class="fw-normal">Main Notification</h6>
+            <form [formGroup]="notificationForm" (ngSubmit)="addNotifications(1)">
+                <div class="form-group">
+                    <textarea type="text" placeholder="Add Notification Here..." name="news" class="form-control mb-2"
+                        formControlName="Notification"></textarea>
+                    <div *ngIf="notificationForm.get('Notification')?.errors?.['required'] && (notificationForm.get('Notification')?.dirty || notificationForm.get('Notification')?.touched)"
+                        class="text-danger">
+                        Notification field is required.
+                    </div>
+                    <button type="submit" class="btn btn-success" [disabled]="notificationForm.invalid">Add</button>
+
+                </div>
+            </form>
+            <div class="table-responsive">
+                <table class="table  mb-0">
+                    <thead>
+                        <tr>
+                            <th>News</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let notification of notifications">
+                            <td>
+                                {{notification.notification}}
+                            </td>
+                            <td>{{notification.updatedOn | date:'dd/MM/yyyy h:mm:ss a'}}</td>
+                            <td>
+                                <div class="act_btn">
+                                    <button type="button" class="btn btn-info ms-1" data-bs-toggle="modal"
+                                        data-bs-target="#editNotiModal" (click)="getModelValues(notification)">
+                                        <i class="far fa-edit"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-danger ms-2" data-bs-toggle="modal"
+                                        data-bs-target="#deleteNotiModal" (click)="getModelValues(notification)">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- inner notification -->
+        <div class="card">
+            <h6 class="fw-normal">Other Notification</h6>
+            <form [formGroup]="notificationForm" (ngSubmit)="addNotifications(2)">
+                <div class="form-group">
+                    <textarea type="text" placeholder="Add Notification Here..." name="news" class="form-control mb-2"
+                        formControlName="Notification"></textarea>
+                    <div *ngIf="notificationForm.get('Notification')?.errors?.['required'] && (notificationForm.get('Notification')?.dirty || notificationForm.get('Notification')?.touched)"
+                        class="text-danger">
+                        Notification field is required.
+                    </div>
+                    <button type="submit" class="btn btn-success" [disabled]="notificationForm.invalid">Add</button>
+
+                </div>
+            </form>
+            <div class="table-responsive">
+                <table class="table  mb-0">
+                    <thead>
+                        <tr>
+                            <th>News</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let notification of otherNotifications">
+                            <td>
+                                {{notification.notification}}
+                            </td>
+                            <td>{{notification.updatedOn | date:'dd/MM/yyyy h:mm:ss a'}}</td>
+                            <td>
+                                <div class="act_btn">
+                                    <button type="button" class="btn btn-info ms-1" data-bs-toggle="modal"
+                                        data-bs-target="#editNotiModal" (click)="getModelValues(notification)">
+                                        <i class="far fa-edit"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-danger ms-2" data-bs-toggle="modal"
+                                        data-bs-target="#deleteNotiModal" (click)="getModelValues(notification)">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade custoModal actdeactiveModal" id="deleteNotiModal" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="deleteNotiModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="card-body p-4">
+                <div class="swalIcon">
+                    <span class="swa-icon-text">!</span>
+                </div>
+                <div class="text-center px-md-4">
+                    <h4>Are you sure?</h4>
+                    <p>Are you sure to delete this notification.!</p>
+                </div>
+                <div class="modal-footer border-0 justify-content-center order-0 p-0 mt-3">
+                    <button type="button" class="btn btn-success" (click)="deleteNotifications()">Yes, Delete
+                        it.!</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="clsdltmdl">No,
+                        cancel.!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit basic settings modal -->
+<div class="modal fade custoModal" id="editNotiModal" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="editNotiModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="editNotiModalLabel">Edit Notification</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="clseditmdl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+                    <div class="bankingForm">
+                        <form>
+                            <div class="form-group">
+                                <textarea type="text" placeholder="Add Notification Here..." name="news"
+                                    class="form-control mb-2" [(ngModel)]="notification"></textarea>
+
+                            </div>
+                            <div class="modal-footer mt-4 pb-0">
+                                <button type="button" class="btn btn-primary" (click)="updateNotifications()">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

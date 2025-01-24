@@ -1,0 +1,1902 @@
+<div class="page-title-box mb-3 mb-ms-4">
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <h4 class="page-title">Bet Failed Reason</h4>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="row m-0">
+                <div class=" col-md-8 col-lg-5 col-xs-12 px-1">
+                    <div class="d-flex align-items-center">
+                        <div class="input-group marginb5 div-datepicker">
+                            <input type="date" class="form-control datepicker flatpickr-input">
+                            <span class="col-form-label">to</span>
+                            <input type="date" class="form-control datepicker flatpickr-input">
+                        </div>
+                    </div>
+                </div>
+                <div class=" col-md-4 col-lg-7 col-xs-12 px-1">
+                    <button type="button" class="btn btn-success">
+                        <i class="fa fa-search"></i> Search
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="row mt-4 mb-2 d-flex align-items-center flex-row-reverse tableTopRow ">
+                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 ps-md-0">
+                    <input type="text" class="form-control" placeholder="Search Min. 2 characters">
+                </div>
+                <div class="dt-buttons flex-wrap mt-2 mt-md-0 col-md-8 col-sm-12 col-xs-12 text-end">
+                    <button class="btn downloadTableBtn me-2" type="button" data-bs-toggle="modal"
+                        data-bs-target="#filter"><i class="fa fa-filter"></i></button>
+                    <button class="btn downloadTableBtn me-2" type="button"><i class="fas fa-sync-alt"></i></button>
+                    <button class="btn downloadTableBtn me-2" type="button"><i class="fas fa-file-csv"></i></button>
+                    <button class="btn downloadTableBtn me-2" type="button"><i class="far fa-file-excel"></i></button>
+                    <button class="btn downloadTableBtn" type="button"><i class="far fa-file-pdf"></i></button>
+                </div>
+                <div class="col-md-2 col-sm-12 mt-2 mt-md-0">
+                    <p class="tableP mb-0">Showing 1 of 1 entries</p>
+                </div>
+            </div>
+            <div class="table-responsive border">
+                <table class="datatable table nowrapTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Market</th>
+                            <th>Client Name</th>
+                            <th>Back/Lay</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>14-08-2023 00:00:00 AM</td>
+                            <td>market name</td>
+                            <td>Client</td>
+                            <td>back</td>
+                            <td>description</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="load-more"><span>No More Data Available.</span></div>
+        </div>
+    </div>
+</div>
+
+
+<!--Search Modal -->
+<div class="modal fade custoModal" id="settlement" tabindex="-1" aria-labelledby="settlementLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="settlementLabel">ak80 : Withdraw Cash</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="settlementBody">
+                    <form>
+                        <table class="datatable table dt-responsive nowrap">
+                            <tbody>
+                                <tr>
+                                    <td><label class="col-form-label">Profit/Loss :</label></td>
+                                    <td><input id="txtCurrentBalance" class="form-control" disabled=""></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label class="col-form-label">Cash :</label>
+                                    </td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="text" id="txtAmount" autocomplete="off"
+                                                class="AllowDecimal form-control" required="">
+                                            <span class="input-group-text hidden-sm">PTS</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <div class="d-flex align-items-center justify-content-evenly">
+                                            <a class="badge-soft-success">Full Amount</a>
+                                            <a class="badge badge-soft-danger">Clear</a>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td><label class="col-form-label">Remain Cash :</label></td>
+                                    <td><span id="lblNewBalance"></span></td>
+                                </tr>
+                                <tr>
+                                    <td><label class="col-form-label">Remarks :</label></td>
+                                    <td><textarea class="form-control textarea" cols="20"
+                                            id="txtRemarkUserListSetellement" name="txtRemarkUserListSetellement"
+                                            rows="2"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td><label class="col-form-label">Password :</label></td>
+                                    <td><input class="form-control AllowDecimal" name="txtSettlementPassword" autocomplete="txtSettlementPassword"
+                                            id="txtSettlementPassword" placeholder="Password" type="password"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary">Cash Settlement</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--History Modal -->
+<div class="modal fade custoModal" id="history" tabindex="-1" aria-labelledby="historyLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="historyLabel">Balance Sheet History <span class="fs-14">(ak80[ak80])</span>
+                </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="card cardFilter">
+                    <div class="text-end">
+                        <a class="link" data-bs-toggle="collapse" href="#advanceearch" role="button"
+                            aria-expanded="false" aria-controls="advanceearch">
+                            Advance Search <i class="ms-1 fa-solid fa-chevron-right"></i>
+                        </a>
+                        <div class="collapse" id="advanceearch">
+                            <hr>
+                            <div class="row mb-4">
+                                <div class="col-lg-5 col-md-8 col-sm-12 col-xs-12">
+                                    <div class="notification-list text-start">
+                                        <label class="checkbox checkbox-info mb-2 d-flex align-items-center">
+                                            <input type="checkbox" id="chkIsDate" value="true">
+                                            <label for="chkIsDate" class="ms-1">Date Wise</label>
+                                        </label>
+                                    </div>
+                                    <div class="input-group marginb5 div-datepicker">
+                                        <input type="text" class="form-control datepicker flatpickr-input"
+                                            name="ReportStartDate" id="StartDateFilter" readonly="readonly" disabled="">
+                                        <span class="col-form-label">to</span>
+                                        <input type="text" class="form-control datepicker flatpickr-input"
+                                            name="ReportEndDate" id="EndDateFilter" readonly="readonly" disabled="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-8 col-sm-12 col-xs-12">
+                            <div class="d-flex align-items-center flex-wrap">
+                                <label class="radio radio-info">
+                                    <input type="radio" id="chkShowAll1" name="chkSAAcoount" value="true"
+                                        checked="checked">
+                                    <label class="bold" for="chkShowAll1">All</label>
+
+                                </label>
+                                <label class="radio radio-info">
+                                    <input type="radio" id="chkShowCash" name="chkSAAcoount" value="false">
+                                    <label class="bold" for="chkShowCash">Show Cash Entry</label>
+
+                                </label>
+                                <label class="radio radio-info">
+                                    <input type="radio" id="chkShowPnl" name="chkSAAcoount" value="false">
+                                    <label class="bold" for="chkShowPnl">Show Market Profit &amp; Loss</label>
+
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="row mt-4 mb-2 d-flex align-items-center flex-row-reverse tableTopRow">
+                        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 ps-md-0">
+                            <input type="text" class="form-control" placeholder="Search Min. 2 characters">
+                        </div>
+                        <div class="dt-buttons flex-wrap ol-lg-3 col-md-3 col-sm-12 col-xs-12 text-end">
+                            <button class="btn downloadTableBtn me-2" type="button"><i
+                                    class="fas fa-file-csv"></i></button>
+                            <button class="btn downloadTableBtn me-2" type="button"><i
+                                    class="far fa-file-excel"></i></button>
+                            <button class="btn downloadTableBtn" type="button"><i class="far fa-file-pdf"></i></button>
+                        </div>
+                        <div class="col-md-7 col-sm-12 ">
+                            <p class="tableP mb-0">Showing 1 of 1 entries</p>
+                        </div>
+                    </div>
+                    <div class="table-responsive border">
+                        <table class="table dataNowrap mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                    <th>Cr (Deposit)</th>
+                                    <th>Dr (Withdraw)</th>
+                                    <th>Balance</th>
+                                    <th>From/To</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        04-08-2023 18:41:34
+                                    </td>
+                                    <td>
+                                        <label class="btn btn-warning grid-button" style="cursor:text;">Session
+                                            Commission</label>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <p class="mb-0">GLOUCESTERSHIRE INNINGS RUNS-Gloucestershire v
+                                                Northamptonshire-Metro Bank One Day Cup-Cricket</p>
+                                            <p class="mb-0">Result : <b>278</b></p>
+                                        </div>
+                                    </td>
+                                    <td>4.00</td>
+                                    <td>4.00</td>
+                                    <td>4.00</td>
+                                    <td>4.00</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        04-08-2023 18:41:34
+                                    </td>
+                                    <td>
+                                        <label class="btn btn-success grid-button" style="cursor:text;">Session
+                                            Commission</label>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <p class="mb-0">GLOUCESTERSHIRE INNINGS RUNS-Gloucestershire v
+                                                Northamptonshire-Metro Bank One Day Cup-Cricket</p>
+                                            <p class="mb-0">Result : <b>278</b></p>
+                                        </div>
+                                    </td>
+                                    <td>4.00</td>
+                                    <td>4.00</td>
+                                    <td>4.00</td>
+                                    <td>4.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--withdraw Modal -->
+<div class="modal fade custoModal" id="deposit" tabindex="-1" aria-labelledby="depositLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title" id="depositLabel">ak80</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="settlementBody">
+                    <form>
+                        <table class="datatable table dt-responsive nowrap">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <label class="col-form-label">Deposit Credit :</label>
+                                    </td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="text" autocomplete="off" class=" form-control"
+                                                placeholder="Enter Chips">
+                                            <span class="input-group-text hidden-sm">PTS</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="col-form-label">gv80 [] :</label></td>
+                                    <td><input type="text" disabled="" class="form-control"></td>
+                                </tr>
+                                <tr>
+                                    <td><label class="col-form-label">ak80 [ak80] :</label></td>
+                                    <td><input type="text" disabled="" class="form-control">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="col-form-label">Remarks :</label></td>
+                                    <td><textarea class="form-control textarea" cols="20" name="txtRemarkAgentDW"
+                                            rows="2">Deposit Credit</textarea></td>
+                                </tr>
+                                <tr class="b2bDWPassword">
+                                    <td><label class="col-form-label">Password :</label></td>
+                                    <td><input class="form-control AllowDecimal" name="txtPassword"
+                                            placeholder="password" required="" autocomplete="txtPassword" type="password"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary">Deposit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--withdraw Modal -->
+<div class="modal fade custoModal" id="withdraw" tabindex="-1" aria-labelledby="withdrawLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title" id="withdrawLabel">ak80</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="settlementBody">
+                    <form>
+                        <table class="datatable table dt-responsive nowrap">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <label class="col-form-label">Withdraw Credit :</label>
+                                    </td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="text" autocomplete="off" class=" form-control"
+                                                placeholder="Enter Chips">
+                                            <span class="input-group-text hidden-sm">PTS</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="col-form-label">gv80 [] :</label></td>
+                                    <td><input type="text" disabled="" class="form-control"></td>
+                                </tr>
+                                <tr>
+                                    <td><label class="col-form-label">ak80 [ak80] :</label></td>
+                                    <td><input type="text" disabled="" class="form-control">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="col-form-label">Remarks :</label></td>
+                                    <td><textarea class="form-control textarea" cols="20" name="txtRemarkAgentDW"
+                                            rows="2">Deposit Credit</textarea></td>
+                                </tr>
+                                <tr class="b2bDWPassword">
+                                    <td><label class="col-form-label">Password :</label></td>
+                                    <td><input class="form-control AllowDecimal" name="txtPassword"
+                                            placeholder="password" required="" autocomplete="txtPassword" type="password"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary">Withdraw</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Limit Setting Modal -->
+<div class="modal fade custoModal" id="limitSetting" tabindex="-1" aria-labelledby="limitSettingLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title" id="limitSettingLabel">Limit Settings: ak80 [ak80]</h1>
+                <div class="row ms-2 col-md-6">
+                    <div class="col-md-6 col-sm-6 col-xs-6 mb-1">
+                        <div class="input-group">
+                            <select class="form-control" name="GeneralLimit">
+                                <option value="">General Limit</option>
+                                <option value="366A716D53314D7A376A493D">Cricket</option>
+                                <option value="71717554687956346B41493D">ExchGame</option>
+                                <option value="6534664F382F31746C56413D">Politics</option>
+                                <option value="7A59686D784545443476733D">Tennis</option>
+                                <option value="656A6973414C6B4C5551633D">Soccer</option>
+                                <option value="4D4E3764617254514747493D">Boxing</option>
+                                <option value="322B7874685A316C564B6F3D">Ice Hockey</option>
+                                <option value="74436251495938684D59513D">Basketball</option>
+                                <option value="6E6663526A596E625754633D">Baseball</option>
+                                <option value="7A7262374251465A4B67733D">Virtual Cricket</option>
+                                <option value="63474679364B2F715031493D">Horse Racing</option>
+                                <option value="2B5A37724674644F7A4D6B3D">Mixed Martial Arts</option>
+                                <option value="7473545A6F6643505053673D">Esports</option>
+                                <option value="58434B6F393251624551383D">Motor Sport</option>
+                                <option value="654A5452613842397537553D">Greyhound Racing</option>
+                                <option value="67585558757567594B4E4D3D">Rugby League</option>
+                                <option value="70447731326854447944413D">Darts</option>
+                                <option value="704836532B6C2B725257413D">Snooker</option>
+                                <option value="6C41584339336C32352B6F3D">Volleyball</option>
+                                <option value="4F71796F735479507A53673D">Netball</option>
+                                <option value="6A305A656C3467723174383D">Handball</option>
+                                <option value="4D6549446448626B4D77773D">Rugby Union</option>
+                                <option value="4D43587A556761543768413D">Backup</option>
+                                <option value="5A4B6F4E6A43653069624D3D">Kabaddi</option>
+                                <option value="2B416E2B52616D326330513D">Site</option>
+                                <option value="324C73394146622B6A4A4D3D">Hockey</option>
+                                <option value="4837663479644C712B33383D">Kabaddi</option>
+                                <option value="694C5646675A7A6D3436413D">Australian Rules</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <div class="input-group">
+                            <select id="ddlTournament" class="form-control" ename="Tournament">
+                                <option value="">Tournament Limit</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="accordionQs">
+                    <div class="accordion" id="accordionExample">
+                        <div class="accordion-item card mb-0">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                    Market Limit Settings
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                                data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <div class="Portletcard-body">
+                                        <div class="row isCheckBoxTrue">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <h4 class="form-check-label mb-2">
+                                                            Select All <input type="checkbox" value="">
+                                                        </h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Fresh Delay<span
+                                                            class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange"
+                                                                required="">
+                                                        </div>
+                                                        <span class="notefont">[ Second ]</span>
+                                                        <span class="notefont">R: 6 to 2147483</span>
+                                                    </div>
+
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Fresh Delay.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Cancel Delay<span
+                                                            class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text" ename="Cancel Delay"
+                                                                class="form-control AllowDecimal checkrange" min="0"
+                                                                max="2147483">
+                                                        </div>
+                                                        <span class="notefont">[ Second ]</span>
+                                                        <span class="notefont"
+                                                            id="spnCancelDelay_727A6B43615364784D50413D">R: 0 to
+                                                            2147483</span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Cancel Delay.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Min Stake<span
+                                                            class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange">
+                                                            <span class="input-group-text hidden-sm">PTS</span>
+                                                        </div>
+                                                        <span class="notefont">R: 100 to 200000</span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Min Stake.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Max Stake<span
+                                                            class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange">
+                                                            <span class="input-group-text hidden-sm">PTS</span>
+                                                        </div>
+                                                        <span class="notefont">[ Note: Point ( if No Limit then Enter -1
+                                                            ) ]</span>
+                                                        <span class="notefont">R: -1 to 200000</span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Max Stake.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Max Profit<span
+                                                            class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange">
+                                                            <span class="input-group-text hidden-sm">PTS</span>
+                                                        </div>
+                                                        <span class="notefont">[ Note: Point ( if No Limit then Enter -1
+                                                            ) ]</span>
+                                                        <span class="notefont">R: -1 to 1200000</span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Max Profit.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Max Loss<span
+                                                            class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange">
+                                                            <span class="input-group-text hidden-sm">PTS</span>
+                                                        </div>
+                                                        <span class="notefont">[ Note: Point ( if No Limit then Enter -1
+                                                            ) ]</span>
+                                                        <span class="notefont"></span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Max Loss.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Before In-Play<span
+                                                            class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange">
+                                                            <span class="input-group-text hidden-sm">PTS</span>
+                                                        </div>
+                                                        <span class="notefont">[ Note: Point ( if No Limit then Enter -1
+                                                            ) ]</span>
+                                                        <span class="notefont">R: -1 to 0</span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Before In-Play.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Bet Rate Limit<span
+                                                            class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange">
+                                                            <span class="input-group-text">RATE</span>
+                                                        </div>
+                                                        <span class="notefont">[ Note: Point ( if No Limit then Enter -1
+                                                            ) ]</span>
+                                                        <span class="notefont">R: -1 to 100</span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Bet Rate Limit.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Bet Rate Limit
+                                                        PL<span class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange">
+                                                            <span class="input-group-text hidden-sm">PTS</span>
+                                                        </div>
+                                                        <span class="notefont">[ Note: Point ( if No Limit then Enter -1
+                                                            ) ]</span>
+                                                        <span class="notefont">R: -1 to 20000</span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Bet Rate Limit PL.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-12 col-form-label">Allow
+                                                        Unmatch</label>
+                                                    <div class="col-md-6 col-xs-12">
+                                                        <span class="custom-control custom-switch col-form-label">
+                                                            <input type="checkbox"
+                                                                class="custom-control-input chkallowunmatch">
+                                                            <label class="custom-control-label"></label>
+                                                        </span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" name="isCheckBoxTrue"
+                                                            class="select isCheckBoxTrue">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-12 col-form-label">Change Back
+                                                        Rate</label>
+                                                    <div class="col-md-6 col-xs-12">
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                role="switch" id="flexSwitchCheckDefault">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-12 col-form-label">Change Lay
+                                                        Rate</label>
+                                                    <div class="col-md-6 col-xs-12">
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                role="switch" id="flexSwitchCheckDefault">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Back Place Rate
+                                                        Diff<span class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange">
+                                                        </div>
+                                                        <span class="notefont">[ Note: Point ( if No Limit then Enter -1
+                                                            ) ]</span>
+                                                        <span class="notefont"></span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Back Place Rate Diff.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Lay Place Rate
+                                                        Diff<span class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange">
+                                                        </div>
+                                                        <span class="notefont">[ Note: Point ( if No Limit then Enter -1
+                                                            ) ]</span>
+                                                        <span class="notefont"></span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Lay Place Rate Diff.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-12 col-form-label">Allow Place
+                                                        Bet</label>
+                                                    <div class="col-md-6 col-xs-12">
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                role="switch" id="flexSwitchCheckDefault">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Low Volume
+                                                        Limit<span class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange">
+                                                            <span class="input-group-text hidden-sm">PTS</span>
+                                                        </div>
+                                                        <span class="notefont">[ Note: Point ( if No Limit then Enter -1
+                                                            ) ]</span>
+                                                        <span class="notefont">R: -1 to 3000</span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Low Volume Limit.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-12 col-form-label">Accept Any
+                                                        Odds</label>
+                                                    <div class="col-md-6 col-xs-12">
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                role="switch" id="flexSwitchCheckDefault">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item card mb-0">
+                            <h2 class="accordion-header" id="headingTwo">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    AdvanceSession Limit Settings
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                                data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <div class="Portletcard-body">
+                                        <div class="row isCheckBoxTrue">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <h4 class="form-check-label mb-2">
+                                                            Select All <input type="checkbox" value="">
+                                                        </h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Fresh Delay<span
+                                                            class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange"
+                                                                required="">
+                                                        </div>
+                                                        <span class="notefont">[ Second ]</span>
+                                                        <span class="notefont">R: 6 to 2147483</span>
+                                                    </div>
+
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Fresh Delay.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Cancel Delay<span
+                                                            class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text" ename="Cancel Delay"
+                                                                class="form-control AllowDecimal checkrange" min="0"
+                                                                max="2147483">
+                                                        </div>
+                                                        <span class="notefont">[ Second ]</span>
+                                                        <span class="notefont"
+                                                            id="spnCancelDelay_727A6B43615364784D50413D">R: 0 to
+                                                            2147483</span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Cancel Delay.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Min Stake<span
+                                                            class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange">
+                                                            <span class="input-group-text hidden-sm">PTS</span>
+                                                        </div>
+                                                        <span class="notefont">R: 100 to 200000</span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Min Stake.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Max Stake<span
+                                                            class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange">
+                                                            <span class="input-group-text hidden-sm">PTS</span>
+                                                        </div>
+                                                        <span class="notefont">[ Note: Point ( if No Limit then Enter -1
+                                                            ) ]</span>
+                                                        <span class="notefont">R: -1 to 200000</span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Max Stake.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Max Profit<span
+                                                            class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange">
+                                                            <span class="input-group-text hidden-sm">PTS</span>
+                                                        </div>
+                                                        <span class="notefont">[ Note: Point ( if No Limit then Enter -1
+                                                            ) ]</span>
+                                                        <span class="notefont">R: -1 to 1200000</span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Max Profit.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Max Loss<span
+                                                            class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange">
+                                                            <span class="input-group-text hidden-sm">PTS</span>
+                                                        </div>
+                                                        <span class="notefont">[ Note: Point ( if No Limit then Enter -1
+                                                            ) ]</span>
+                                                        <span class="notefont"></span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Max Loss.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Before In-Play<span
+                                                            class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange">
+                                                            <span class="input-group-text hidden-sm">PTS</span>
+                                                        </div>
+                                                        <span class="notefont">[ Note: Point ( if No Limit then Enter -1
+                                                            ) ]</span>
+                                                        <span class="notefont">R: -1 to 0</span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Before In-Play.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Bet Rate Limit<span
+                                                            class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange">
+                                                            <span class="input-group-text">RATE</span>
+                                                        </div>
+                                                        <span class="notefont">[ Note: Point ( if No Limit then Enter -1
+                                                            ) ]</span>
+                                                        <span class="notefont">R: -1 to 100</span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Bet Rate Limit.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Bet Rate Limit
+                                                        PL<span class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange">
+                                                            <span class="input-group-text hidden-sm">PTS</span>
+                                                        </div>
+                                                        <span class="notefont">[ Note: Point ( if No Limit then Enter -1
+                                                            ) ]</span>
+                                                        <span class="notefont">R: -1 to 20000</span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Bet Rate Limit PL.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-12 col-form-label">Allow
+                                                        Unmatch</label>
+                                                    <div class="col-md-6 col-xs-12">
+                                                        <span class="custom-control custom-switch col-form-label">
+                                                            <input type="checkbox"
+                                                                class="custom-control-input chkallowunmatch">
+                                                            <label class="custom-control-label"></label>
+                                                        </span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" name="isCheckBoxTrue"
+                                                            class="select isCheckBoxTrue">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-12 col-form-label">Change Back
+                                                        Rate</label>
+                                                    <div class="col-md-6 col-xs-12">
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                role="switch" id="flexSwitchCheckDefault">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-12 col-form-label">Change Lay
+                                                        Rate</label>
+                                                    <div class="col-md-6 col-xs-12">
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                role="switch" id="flexSwitchCheckDefault">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Back Place Rate
+                                                        Diff<span class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange">
+                                                        </div>
+                                                        <span class="notefont">[ Note: Point ( if No Limit then Enter -1
+                                                            ) ]</span>
+                                                        <span class="notefont"></span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Back Place Rate Diff.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Lay Place Rate
+                                                        Diff<span class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange">
+                                                        </div>
+                                                        <span class="notefont">[ Note: Point ( if No Limit then Enter -1
+                                                            ) ]</span>
+                                                        <span class="notefont"></span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Lay Place Rate Diff.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-12 col-form-label">Allow Place
+                                                        Bet</label>
+                                                    <div class="col-md-6 col-xs-12">
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                role="switch" id="flexSwitchCheckDefault">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Low Volume
+                                                        Limit<span class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange">
+                                                            <span class="input-group-text hidden-sm">PTS</span>
+                                                        </div>
+                                                        <span class="notefont">[ Note: Point ( if No Limit then Enter -1
+                                                            ) ]</span>
+                                                        <span class="notefont">R: -1 to 3000</span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Low Volume Limit.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-12 col-form-label">Accept Any
+                                                        Odds</label>
+                                                    <div class="col-md-6 col-xs-12">
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                role="switch" id="flexSwitchCheckDefault">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item card mb-0">
+                            <h2 class="accordion-header" id="headingThree">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    Bookmakers Limit Settings
+                                </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+                                data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <div class="Portletcard-body">
+                                        <div class="row isCheckBoxTrue">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <h4 class="form-check-label mb-2">
+                                                            Select All <input type="checkbox" value="">
+                                                        </h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Fresh Delay<span
+                                                            class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange"
+                                                                required="">
+                                                        </div>
+                                                        <span class="notefont">[ Second ]</span>
+                                                        <span class="notefont">R: 6 to 2147483</span>
+                                                    </div>
+
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Fresh Delay.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Cancel Delay<span
+                                                            class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text" ename="Cancel Delay"
+                                                                class="form-control AllowDecimal checkrange" min="0"
+                                                                max="2147483">
+                                                        </div>
+                                                        <span class="notefont">[ Second ]</span>
+                                                        <span class="notefont"
+                                                            id="spnCancelDelay_727A6B43615364784D50413D">R: 0 to
+                                                            2147483</span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Cancel Delay.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Min Stake<span
+                                                            class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange">
+                                                            <span class="input-group-text hidden-sm">PTS</span>
+                                                        </div>
+                                                        <span class="notefont">R: 100 to 200000</span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Min Stake.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Max Stake<span
+                                                            class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange">
+                                                            <span class="input-group-text hidden-sm">PTS</span>
+                                                        </div>
+                                                        <span class="notefont">[ Note: Point ( if No Limit then Enter -1
+                                                            ) ]</span>
+                                                        <span class="notefont">R: -1 to 200000</span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Max Stake.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Max Profit<span
+                                                            class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange">
+                                                            <span class="input-group-text hidden-sm">PTS</span>
+                                                        </div>
+                                                        <span class="notefont">[ Note: Point ( if No Limit then Enter -1
+                                                            ) ]</span>
+                                                        <span class="notefont">R: -1 to 1200000</span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Max Profit.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Max Loss<span
+                                                            class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange">
+                                                            <span class="input-group-text hidden-sm">PTS</span>
+                                                        </div>
+                                                        <span class="notefont">[ Note: Point ( if No Limit then Enter -1
+                                                            ) ]</span>
+                                                        <span class="notefont"></span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Max Loss.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Before In-Play<span
+                                                            class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange">
+                                                            <span class="input-group-text hidden-sm">PTS</span>
+                                                        </div>
+                                                        <span class="notefont">[ Note: Point ( if No Limit then Enter -1
+                                                            ) ]</span>
+                                                        <span class="notefont">R: -1 to 0</span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Before In-Play.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Bet Rate Limit<span
+                                                            class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange">
+                                                            <span class="input-group-text">RATE</span>
+                                                        </div>
+                                                        <span class="notefont">[ Note: Point ( if No Limit then Enter -1
+                                                            ) ]</span>
+                                                        <span class="notefont">R: -1 to 100</span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Bet Rate Limit.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Bet Rate Limit
+                                                        PL<span class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange">
+                                                            <span class="input-group-text hidden-sm">PTS</span>
+                                                        </div>
+                                                        <span class="notefont">[ Note: Point ( if No Limit then Enter -1
+                                                            ) ]</span>
+                                                        <span class="notefont">R: -1 to 20000</span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Bet Rate Limit PL.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-12 col-form-label">Allow
+                                                        Unmatch</label>
+                                                    <div class="col-md-6 col-xs-12">
+                                                        <span class="custom-control custom-switch col-form-label">
+                                                            <input type="checkbox"
+                                                                class="custom-control-input chkallowunmatch">
+                                                            <label class="custom-control-label"></label>
+                                                        </span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" name="isCheckBoxTrue"
+                                                            class="select isCheckBoxTrue">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-12 col-form-label">Change Back
+                                                        Rate</label>
+                                                    <div class="col-md-6 col-xs-12">
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                role="switch" id="flexSwitchCheckDefault">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-12 col-form-label">Change Lay
+                                                        Rate</label>
+                                                    <div class="col-md-6 col-xs-12">
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                role="switch" id="flexSwitchCheckDefault">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Back Place Rate
+                                                        Diff<span class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange">
+                                                        </div>
+                                                        <span class="notefont">[ Note: Point ( if No Limit then Enter -1
+                                                            ) ]</span>
+                                                        <span class="notefont"></span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Back Place Rate Diff.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Lay Place Rate
+                                                        Diff<span class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange">
+                                                        </div>
+                                                        <span class="notefont">[ Note: Point ( if No Limit then Enter -1
+                                                            ) ]</span>
+                                                        <span class="notefont"></span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Lay Place Rate Diff.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-12 col-form-label">Allow Place
+                                                        Bet</label>
+                                                    <div class="col-md-6 col-xs-12">
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                role="switch" id="flexSwitchCheckDefault">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-6 col-form-label">Low Volume
+                                                        Limit<span class="text-danger">*</span></label>
+                                                    <div class="col-md-6 col-xs-6">
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                class="form-control AllowDecimal checkrange">
+                                                            <span class="input-group-text hidden-sm">PTS</span>
+                                                        </div>
+                                                        <span class="notefont">[ Note: Point ( if No Limit then Enter -1
+                                                            ) ]</span>
+                                                        <span class="notefont">R: -1 to 3000</span>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                    <div class="offset-4 col-md-8">
+                                                        <div class="invalid-feedback">
+                                                            Please enter Low Volume Limit.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group row">
+                                                    <label class="col-md-4 col-xs-12 col-form-label">Accept Any
+                                                        Odds</label>
+                                                    <div class="col-md-6 col-xs-12">
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                role="switch" id="flexSwitchCheckDefault">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2  col-xs-12 mt-2">
+                                                        <input type="checkbox" class="select isCheckBoxTrue">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-md-4 mt-2">
+                            <span class="text-danger"><i>Note: Please set limit as user point wise.</i></span>
+                        </div>
+                        <div class="col-md-8 ">
+                            <div class="form-inline d-flex align-items-center">
+                                <input type="hidden">
+                                <select class="form-control" name="apply">
+                                    <option value="">Select Apply Type</option>
+                                    <option value="Save">Save</option>
+                                    <option value="SaveToAll">Save &amp; Save to all</option>
+                                    <option value="SaveToChild">Save &amp; Save to child</option>
+                                    <option value="SaveToAllAgent">Save &amp; Save to all agent</option>
+                                    <option value="SaveToAllClient">Save &amp; Save to all client</option>
+                                    <option value="SaveToChildAgent">Save &amp; Save to child agent</option>
+                                    <option value="SaveToChildClient">Save &amp; Save to child client</option>
+                                </select>
+                                <input class="form-control mx-2" type="password" placeholder="Enter Password" autocomplete="new-password" >
+                                <button class="btn btn-success" type="button" id="btnUpdateUserLimit">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!--Update Users Shares Modal -->
+<div class="modal fade custoModal" id="userShares" tabindex="-1" aria-labelledby="userSharesLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title" id="userSharesLabel">Update Users Shares : ak80 [ak80]</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="gamesTabs">
+                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="pills-SportGame-tab" data-bs-toggle="pill"
+                                data-bs-target="#pills-SportGame" type="button" role="tab"
+                                aria-controls="pills-SportGame" aria-selected="true">Sport Game</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="pills-OtherCasino-tab" data-bs-toggle="pill"
+                                data-bs-target="#pills-OtherCasino" type="button" role="tab"
+                                aria-controls="pills-OtherCasino" aria-selected="false">Other Casino</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="pills-OurCasino-tab" data-bs-toggle="pill"
+                                data-bs-target="#pills-OurCasino" type="button" role="tab"
+                                aria-controls="pills-OurCasino" aria-selected="false">Our Casino</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade show active" id="pills-SportGame" role="tabpanel"
+                            aria-labelledby="pills-SportGame-tab">
+                            <div class="table-responsive border">
+                                <p style="padding:10px 0px 0px 5px; color:red;">This Sharing will use for <span>Cricket,
+                                        Tennis, Football and Other Sport
+                                        Games</span></p>
+                                <table class="table  table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Agent Name</th>
+                                            <th style="min-width: 130px;" class="text-right">Share</th>
+                                            <th style="min-width: 130px;" class="text-right">Point</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody_SportGame">
+                                        <tr class="shareTr" style="word-wrap:break-word;">
+                                            <td>ParentShare[]</td>
+                                            <td class="text-right"><label value="20"
+                                                    class="d-inline-block share_SportGame">20</label></td>
+                                            <td class="text-right"><label class="d-inline-block Point_1"> 100</label>
+                                            </td>
+                                        </tr>
+                                        <tr class="shareTr" style="word-wrap:break-word;">
+                                            <td>gv80[gou80]</td>
+                                            <td class="text-right"><label value="20"
+                                                    class="d-inline-block share_SportGame">20</label></td>
+                                            <td class="text-right"><label class="d-inline-block Point_1"> 100</label>
+                                            </td>
+                                        </tr>
+                                        <tr class="shareTr" style="word-wrap:break-word;">
+                                            <td>ak80[ak80]</td>
+                                            <td class="text-right"><label value="60"
+                                                    class="d-inline-block share_SportGame">60</label></td>
+                                            <td class="text-right"><label class="d-inline-block Point_1"> 100</label>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td>Total Share</td>
+                                            <td class="text-right">100</td>
+                                            <td></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="pills-OtherCasino" role="tabpanel"
+                            aria-labelledby="pills-OtherCasino-tab">
+                            <div class="table-responsive border">
+                                <p style="padding:10px 0px 0px 5px; color:red;">This Sharing will use for <span>Cricket,
+                                        Tennis, Football and Other Sport
+                                        Games</span></p>
+                                <table class="table  table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Agent Name</th>
+                                            <th style="min-width: 130px;" class="text-right">Share</th>
+                                            <th style="min-width: 130px;" class="text-right">Point</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody_SportGame">
+                                        <tr class="shareTr" style="word-wrap:break-word;">
+                                            <td>ParentShare[]</td>
+                                            <td class="text-right"><label value="20"
+                                                    class="d-inline-block share_SportGame">20</label></td>
+                                            <td class="text-right"><label class="d-inline-block Point_1"> 100</label>
+                                            </td>
+                                        </tr>
+                                        <tr class="shareTr" style="word-wrap:break-word;">
+                                            <td>gv80[gou80]</td>
+                                            <td class="text-right"><label value="20"
+                                                    class="d-inline-block share_SportGame">20</label></td>
+                                            <td class="text-right"><label class="d-inline-block Point_1"> 100</label>
+                                            </td>
+                                        </tr>
+                                        <tr class="shareTr" style="word-wrap:break-word;">
+                                            <td>ak80[ak80]</td>
+                                            <td class="text-right"><label value="60"
+                                                    class="d-inline-block share_SportGame">60</label></td>
+                                            <td class="text-right"><label class="d-inline-block Point_1"> 100</label>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td>Total Share</td>
+                                            <td class="text-right">100</td>
+                                            <td></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="pills-OurCasino" role="tabpanel"
+                            aria-labelledby="pills-OurCasino-tab">
+                            <div class="table-responsive border">
+                                <p style="padding:10px 0px 0px 5px; color:red;">This Sharing will use for <span>Cricket,
+                                        Tennis, Football and Other Sport
+                                        Games</span></p>
+                                <table class="table  table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Agent Name</th>
+                                            <th style="min-width: 130px;" class="text-right">Share</th>
+                                            <th style="min-width: 130px;" class="text-right">Point</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody_SportGame">
+                                        <tr class="shareTr" style="word-wrap:break-word;">
+                                            <td>ParentShare[]</td>
+                                            <td class="text-right"><label value="20"
+                                                    class="d-inline-block share_SportGame">20</label></td>
+                                            <td class="text-right"><label class="d-inline-block Point_1"> 100</label>
+                                            </td>
+                                        </tr>
+                                        <tr class="shareTr" style="word-wrap:break-word;">
+                                            <td>gv80[gou80]</td>
+                                            <td class="text-right"><label value="20"
+                                                    class="d-inline-block share_SportGame">20</label></td>
+                                            <td class="text-right"><label class="d-inline-block Point_1"> 100</label>
+                                            </td>
+                                        </tr>
+                                        <tr class="shareTr" style="word-wrap:break-word;">
+                                            <td>ak80[ak80]</td>
+                                            <td class="text-right"><label value="60"
+                                                    class="d-inline-block share_SportGame">60</label></td>
+                                            <td class="text-right"><label class="d-inline-block Point_1"> 100</label>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td>Total Share</td>
+                                            <td class="text-right">100</td>
+                                            <td></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

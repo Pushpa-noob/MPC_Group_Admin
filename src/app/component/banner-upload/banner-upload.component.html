@@ -1,0 +1,136 @@
+<div class="page-title-box mb-3 mb-ms-4">
+    <h4 class="page-title">Banner Upload</h4>
+</div>
+<div class="row subPages">
+    <div class="col-md-12">
+        <div class="card">
+            <form [formGroup]="bannerForm" (ngSubmit)="addBanner()">
+                <div class="row">
+                    <div class="col-md-3 mb-3 mb-md-0">
+                        <label>Choose File</label>
+                        <div class="upload-container d-flex flex-column">
+                            <div class="custom-file mb-0">
+                                <input type="file" (change)="onFileSelected($event)">
+                                <label class="custom-file-label text-center" for="customFile">
+                                    <i class="fa-regular fa-file-image me-1"></i>
+                                    Choose Banner
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button class="btn btn-primary" type="submit" [disabled]="bannerForm.invalid">Submit</button>
+                    </div>
+                </div>
+                <div class="bannerImg mt-4  mb-2" *ngIf="previewUrl">
+                    <h6 class="mb-0">Banner Preview </h6>
+                    <img [src]="previewUrl" alt="img" class="img-fluid">
+                </div>
+            </form>
+            <div class=" mt-4 " *ngIf="banners?.length>0">
+                <h6 class="mb-3">Uploaded Banner List </h6>
+                <div class="row">
+                    <div *ngFor="let banner of banners"
+                        class="position-relative mainUploadedBanner col-lg-6 px-2 mb-2 mb-md-3">
+
+                        <div class="bannerItems"><img [src]="banner.imagePath" alt="img" class="img-fluid tableImg">
+                        </div>
+                        <div class="actionBtn">
+                            <div class="act_btn d-flex">
+                                <button type="button" class="btn btn-info me-1 px-2 py-1" data-bs-toggle="modal"
+                                    data-bs-target="#editBannerTableModal" (click)="getModelValues(banner)">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                                <!-- <button type="button" class="btn btn-danger px-2 py-1">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="row">
+                <div class="col-12 mb-2">
+                    <div class="uploadedBanners">
+                        <div class="mb-3">
+                            <img src="./assets/img/signinbgbkp.jpg" alt="img" class="img-fluid">
+                            <button class="btn btn-warning "><i class="fas fa-trash text-dark"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 mb-2">
+                    <div class="uploadedBanners">
+                        <div class="mb-3">
+                            <img src="./assets/img/signinbgbkp.jpg" alt="img" class="img-fluid">
+                            <button class="btn btn-warning "><i class="fas fa-trash text-dark"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade custoModal" id="editBannerTableModal" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="editBannerTableModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="editBannerTableModalLabel">Delete Banner</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="clsmdl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+                    <div class="bankingForm">
+                        <div class="card-body p-4">
+                            <div class="swalIcon">
+                                <span class="swa-icon-text">!</span>
+                            </div>
+                            <div class="text-center px-md-4">
+                                <h4>Are you sure?</h4>
+                                <p>You want to delete this banner.!</p>
+                            </div>
+                            <div class="modal-footer border-0 justify-content-center order-0 p-0 mt-3">
+                                <button type="button" class="btn btn-success" (click)="deleteBanner()">Yes, delete it.!</button>
+                                <button type="button" id="clsCnfrmPass" class="btn btn-danger" data-bs-dismiss="modal">No, cancel.!</button>
+                            </div>
+                        </div>
+                        <!-- <form [formGroup]="bannerForm" (ngSubmit)="updateBanner()">
+                            <div class="row basicSettingRow">
+                                <div class="col-md-12 mb-3">
+                                    <div class="form-field">
+                                        <div class="upload-container d-flex flex-column">
+                                            <img alt="icon" class="img-fluid paymtImg cursor-pointer" *ngIf="previewUrl"
+                                                [src]="previewUrl">
+                                            <div class="custom-file mx-auto">
+                                                <input type="file" (change)="onFileSelected($event)">
+                                                <label class="custom-file-label text-center" for="customFile">
+                                                    <i class="fa-regular fa-file-image me-1"></i>
+                                                    Choose banner
+                                                </label>
+                                            </div>
+                                            <div *ngIf="fileError" class="text-danger mb-3">
+                                                {{ fileError }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer mt-4 pb-0">
+                                <button class="btn btn-primary mx-auto" type="submit" [disabled]="bannerForm.invalid">
+                                    <i class="fas fa-upload me-2"></i> Upload Image
+                                </button>
+                            </div>
+                        </form> -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

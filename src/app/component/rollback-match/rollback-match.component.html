@@ -1,0 +1,111 @@
+<div class="page-title-box mb-3 mb-ms-4">
+    <h4 class="page-title">Result Market History</h4>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="row">
+                <div class="col-lg-3 col-md-5 col-sm-6 mt-3 mt-lg-0">
+                    <div class="form-field">
+                        <label for="">Select Sports</label>
+                        <select class="form-control" (change)="selectSport($event)">
+                            <option [value]="4" selected>Cricket</option>
+                            <option [value]="1">Football</option>
+                            <option [value]="2">Tennis</option>
+                          </select>
+                    </div>
+                </div>
+                <div *ngIf="sportsId==4" class="col-lg-3 col-md-5 col-sm-6 mt-3 mt-lg-0">
+                    <div class="form-field">
+                        <label for="">Select Market</label>
+                        <select class="form-control" (change)="selectMarket($event)">
+                          <option [value]="'To Win the Toss'" selected>To Win the Toss</option>
+                          <option [value]="'Book Maker'">Book Maker</option>
+                          <option [value]="'Match Odds'">Match Odds</option>
+                        </select>
+                      </div>
+                      
+                </div>
+                <div class="col-lg-3 col-md-5 col-sm-6 mt-3 mt-lg-0">
+                    <div class="form-field">
+                        <label for="">Market Search</label>
+                        <input type="text" id="search" class="form-control" (keyup)="searchEvent()" name="searchKey" [(ngModel)]="searchKey">
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-5 col-sm-6 mt-3 mt-lg-0 d-flex align-items-end">
+                    <div class="form-field">
+                        <select class="form-control w-auto mr-2 " id="" (change)="updateRecValue($event)">
+                            <option value="takeRecords" selected>{{takeRecords}}</option>
+                            <option value="10" *ngIf="takeRecords!=10">10</option>
+                            <option value="20" *ngIf="takeRecords!=20">20</option>
+                            <option value="30" *ngIf="takeRecords!=30">30</option>
+                            <option value="40" *ngIf="takeRecords!=40">40</option>
+                            <option value="50" *ngIf="takeRecords!=50">50</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="table-responsive mb-3">
+                <table class="table  mb-0">
+                    <thead>
+                        <tr>
+                            <th>Sr No.</th>
+                            <th>Match Name</th>
+                            <th>Result</th>
+                            <th>Settlement Time</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr  *ngFor="let data of marketList | paginate: { itemsPerPage:takeRecords, currentPage:pageNum,totalItems: count };let i=index">
+                            <td>{{i+1}}</td>
+                            <td>{{data.eventName  }}</td>
+                            <td>{{data.result}}</td>
+                            <td>{{data.updatedOn | date:'short'}}</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <button (click)="setModel(data)" type="button" title="Delete" data-bs-toggle="modal" data-bs-target="#resultRollback" title="rollback result"
+                                        class="btn btn-success icon_btn mx-1">
+                                        <i class="fa-regular fa-circle-check"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="col-sm-6 d-flex justify-content-end">
+                    <pagination-controls class="pagination" [maxSize]="5" *ngIf="marketList?.length>0"
+                        (pageChange)="pageChanged($event)">
+                    </pagination-controls>
+                </div>
+            </div>
+            <div *ngIf="marketList?.length==0" class="load-more"><span>No Data Available.</span></div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- rollback declear result modal -->
+<div id="resultRollback" data-bs-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="resultRollbackLabel"
+    class="modal fade custoModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="resultRollbackLabel" class="modal-title"><b>{{runnerName}}({{marketName}})</b></h5>
+            </div>
+            <div class="modal-body">
+                <h6 class="text-center" style="font-weight: normal;">RollBack Market Result</h6>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" (click)="rollbackMatchResult()">Yes</button>
+                <button type="button" id="closeBtnmarketAbnd" data-bs-dismiss="modal" class="btn btn-danger">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,147 @@
+<div class="page-title-box mb-3 mb-ms-4">
+    <h4 class="page-title">Pending Deposit</h4>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table  mb-0">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Name</th>
+                            <th>ParentName</th>
+                            <th>Amount</th>
+                            <th>BankDetails</th>
+                            <th>UTR Number</th>
+                            <th>Proof</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            *ngFor="let requests of depositRequests | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage,totalItems: totalItems}">
+                            <td>{{requests?.createdOn | date:'dd/MM/yyyy h:mm:ss a'}}</td>
+                            <td>{{requests?.clientLoginId}}</td>
+                            <td>{{requests?.parentLoginId}}</td>
+                            <td>{{requests?.amount | number:'1.2-2'}}</td>
+                            <td>
+                                <p class="mb-0 bankDet">Account Holder Name :-
+                                    <span>{{requests?.bankingMethodDetail.accountHolderName}}</span>
+                                </p>
+                                <p class="mb-0 bankDet">Bank Name :-
+                                    <span>{{requests?.bankingMethodDetail.bankName}}</span>
+                                </p>
+                                <p class="mb-0 bankDet">Account No :-
+                                    <span>{{requests?.bankingMethodDetail.accountNumber}}</span>
+                                </p>
+                                <p class="mb-0 bankDet">IFSC Code :-
+                                    <span>{{requests?.bankingMethodDetail.ifscCode}}</span>
+                                </p>
+                            </td>
+                            <td>
+                                <div class="reqSt">
+                                    <span class="reqStatus btn btn-success accept">
+                                        {{requests?.utrNumber}}
+                                    </span>
+                                </div>
+                            </td>
+                            <td><a class="d-flex justify-content-center text-decoration-none"
+                                    href="{{requests?.imagePath}}" target="_blank"><span
+                                        class="btn btn-info btnProof"><i class="fa-solid fa-business-time"></i>
+                                        Proof</span></a></td>
+                            <!-- <td><a href="{{requests?.imagePath}}" target="_blank">{{requests?.imagePath}}</a></td> -->
+                            <td>
+                                <div class="d-flex flex-column reqSt">
+                                    <span class="reqStatus btn btn-warning pending">Pending</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center " style="gap:10px">
+                                    <button type="button" class="bg-transparent text-primary border-0 p-0"
+                                        data-bs-toggle="modal" data-bs-target="#blockConfirm"><i
+                                            title="View deposit request" class="fa-solid fa-eye"
+                                            (click)="getModelValues(requests)"></i></button>
+                                    <!-- <button type="button" class="bg-transparent text-info border-0 p-0"
+                                        data-bs-toggle="modal" data-bs-target="#viewTransDetail">
+                                        <i class="fa-solid fa-circle-info"></i>
+                                    </button> -->
+                                    <!-- <button type="button" class="bg-transparent text-success border-0 p-0" data-bs-toggle="modal" data-bs-target="#acceptModal"><i class="fa-solid fa-circle-check"></i></button> -->
+                                </div>
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+                </table>
+                <div class="text-center" *ngIf="totalItems==0">No record found</div>
+               
+            </div>
+            <pagination-controls class="pagination" (pageChange)="pageChange($event)" [maxSize]="5" *ngIf="totalItems>0"></pagination-controls>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- view modal -->
+<div class="modal fade custoModal" id="blockConfirm" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="blockConfirmLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="blockConfirmLabel">View Deposit Request</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="clsdpstmdl"><i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6 px-sm-2">
+                            <div class="screenShot">
+                                <img alt="img" class="img-fluid" [src]="screenShotLink">
+                            </div>
+                        </div>
+                        <div class="col-sm-6 mt-3 mt-sm-0 px-sm-2">
+                            <form class="depoDetail" [formGroup]="depositForm" (ngSubmit)="updateRequest(1)">
+                                <div class="form-field mb-2">
+                                    <label>Username:</label>
+                                    <input type="text" placeholder="" class="form-control disabled"
+                                        formControlName="FullName">
+                                </div>
+                                <div class="form-field mb-2">
+                                    <label>Amount:</label>
+                                    <input type="number" placeholder="" class="form-control disabled"
+                                        formControlName="Amount">
+
+                                </div>
+                                <div class="form-field refInput mb-2">
+                                    <label>Please Enter UTR Number Here:</label>
+                                    <input type="text" placeholder="" name="processedAmount" class="form-control"
+                                        formControlName="UtrNumber">
+                                </div>
+                                <div class="form-field refInput mb-2">
+                                    <label>Remarks:</label>
+                                    <input type="text" class="form-control" formControlName="Remarks">
+                                    <div *ngIf="depositForm.get('Remarks')?.errors?.['required'] && (depositForm.get('Remarks')?.dirty || depositForm.get('Remarks')?.touched)"
+                                        class="text-danger">
+                                        Remarks field is required.
+                                    </div>
+                                </div>
+                                <div class="mt-2">
+                                    <button type="button" class="btn btn-danger border me-2"
+                                        [disabled]="depositForm.invalid" (click)="updateRequest(2)">Reject</button>
+                                    <button type="submit" class="btn btn-success border"
+                                        [disabled]="depositForm.invalid">Accept</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

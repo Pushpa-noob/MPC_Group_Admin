@@ -1,0 +1,247 @@
+button.acceptBtn {
+    background-color: var(--primaryColor);
+    border-radius: .25rem;
+    padding: .175rem .55rem;
+    border: 0;
+    font-size: 14px;
+    color: var(--blackTextColorSec);
+}
+
+.cstomUploadBtn {
+    background-color: var(--primaryColor);
+    border-radius: 6px;
+    padding: 2px 6px;
+    font-size: 13px;
+    white-space: nowrap;
+    box-shadow: none;
+    color: var(--blackTextColorSec);
+    border: 0;
+}
+
+.cstomUploadBtn {
+    position: relative;
+
+    .custom-file {
+        opacity: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        cursor: pointer;
+        height: 100%;
+
+        input {
+            width: 100%;
+            cursor: pointer;
+        }
+
+        label {
+            margin: 0;
+            height: 100%;
+            cursor: pointer;
+
+            &:after {
+                bottom: 0;
+                z-index: 3;
+                display: block;
+                height: calc(1.5em + .75rem);
+                content: "Browse";
+                background-color: #e9ecef;
+                border-left: inherit;
+                border-radius: 0 .25rem .25rem 0;
+            }
+        }
+    }
+
+    .UploadCol {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        background-color: var(--primaryColor);
+        border: 1px solid var(--primaryColor);
+        border-radius: 6px;
+        padding: 2px 4px;
+        gap: 6px;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+}
+
+button.rejectedBtn {
+    background-color: #ff2121;
+    color: #fff;
+    border-radius: .25rem;
+    padding: .175rem .55rem;
+    font-size: 14px;
+}
+
+// .modal-content {
+//     border-radius: 10px;
+//     overflow: hidden;
+// }
+
+// .modal-header {
+//     border-bottom: none;
+//     padding: 1rem 1.5rem;
+// }
+
+// .modal-title {
+//     font-weight: bold;
+//     font-size: 1.25rem;
+// }
+
+.btn-close {
+    background: transparent;
+    border: none;
+    font-size: 1.25rem;
+}
+
+.img-thumbnail {
+    max-width: 100%;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+}
+
+.custom-file {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    height: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.custom-file-input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.custom-file-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    padding: 0.5rem 1rem;
+    overflow: hidden;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    pointer-events: none;
+}
+
+.custom-file-label::after {
+    content: "Browse";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 3;
+    display: block;
+    height: 100%;
+    padding: 0.5rem 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #e9ecef;
+    border-left: inherit;
+    border-radius: 0 0.25rem 0.25rem 0;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+
+
+
+.upload-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+//   .paymtImg{
+//     height: 80px !important;
+//   }
+  .custom-file {
+    position: relative;
+    display: inline-block;
+    width: 170px;
+    margin: 0 auto;
+    overflow: hidden;
+    height: 2.5rem;
+  }
+  
+  .custom-file-input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    opacity: 0;
+    cursor: pointer;
+  }
+  
+  .custom-file-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    padding: 0.5rem 1rem;
+    overflow: hidden;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    border: 2px dashed #ced4da;
+    border-radius: 0.25rem;
+    pointer-events: none;
+  }
+  
+  .custom-file-label::after {
+    // content: "Browse";
+    content: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 3;
+    display: block;
+    height: 100%;
+    padding: 0.5rem 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #e9ecef;
+    border-left: inherit;
+    border-radius: 0 0.25rem 0.25rem 0;
+  }
+  
+  .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: #fff;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+  }
+  
+  .img-fluid {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+  

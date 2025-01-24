@@ -1,0 +1,824 @@
+<div class="runningMarketMain">
+    <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-marketList" role="tabpanel"
+            aria-labelledby="pills-marketList-tab" tabindex="0">
+            <div class="row">
+                <div class="col-md-12 leftMarket">
+                    <div class="card mb-0 p-1 mt-0">
+                        <div class="row m-0 py-1 align-items-center">
+
+                            <div class="col-4 px-0 px-md-2">
+                                <div class=" m-0">
+                                    <div class=" text-center d-flex">
+                                        <div class="switchCommon fullSharingBtn ">
+                                            <label class="switchBtnCommon">
+                                                <input type="checkbox" [(ngModel)]="fullSharing"
+                                                    (change)="sharingToggle(fullSharing)">
+                                                <div class="slider round">
+                                                    <span class="on">100%</span>
+                                                    <span class="off">Sharing</span>
+
+
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="matchdiv card">
+                        <div class="matchCardCol mb-1" [class.scoreCardShow]="isAddClass">
+                            <div class="col-lg-12">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div class="d-flex align-items-center mtchNmSc">
+                                        <div class="spanMatchname">
+                                            {{eventDetail?.eventName}}
+                                        </div>
+                                        <span class="matchDate ms-1">{{eventDetail?.eventTime | date:'yyyy-MM-dd
+                                            hh:mm:ss':'Asia/Kolkata'}}</span>
+                                        <span class="remtime"></span>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <button type="button" class="liveTv border-0 p-0 bg-transparent"
+                                            (click)="toggleTab('liveTv')" (click)="liveTV()">
+                                            <img src="./assets/img/live.png" class="img-fluid" alt="tv icon">
+                                        </button>
+                                        <!-- <button type="button" class="tvBtns scoreChartLine" (click)="toggleElement()"
+                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Score Board"><i
+                                                class="fas fa-chart-line"></i></button> -->
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="py-2 mb-1 mt-1 col-lg-12 col-md-12 col-sm-12 col-xs-12 mb-4"
+                                [ngClass]="{ 'd-none': isHidden }">
+                                <div class="tab-content" id="pills-tabContent">
+                                    <div class="tab-pane fade showtvCol" [ngClass]="{'show': activeTab === 'liveTv'}">
+                                        <div class="livetvFrme">
+                                            <iframe [src]="iframeTvUrl" width="100%" height="500px" frameborder="0"
+                                                allowfullscreen></iframe>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade showtvCol livescoreColl show " id="liveScoreCollapse"
+                                        role="tabpanel" aria-labelledby="pills-livescore-tab"
+                                        [ngClass]="{'showfull': isShown}" *ngIf="live">
+                                        <div class="livetvFrme">
+                                            <iframe [src]="iframeScoreCardUrl" width="100%" height="500px"
+                                                frameborder="0" allowfullscreen></iframe>
+                                        </div>
+                                        <button type="button" (click)="toggleLiveScore()" class="toplose"><i
+                                                [ngClass]="isShown ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down'"></i></button>
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="marketdivcontent mb-2 col-lg-12 col-md-12 col-sm-12 col-xs-12 "
+                            *ngFor="let market of eventDetail?.markets;let m=index">
+                            <div class="marketheader row card-header p-0 py-2 align-items-center m-0"
+                                *ngIf="market.marketName!='Fancy'">
+                                <div class="col-10 no-mpeAvgPopupMarketName">
+                                    <div class="row m-0">
+                                        <div class="col-md-7 col-sm-12 ">
+                                            <span class="allowbet"><i class="fas fa-dot-circle"></i></span>
+                                            <span class="spanmarketname">{{market?.marketName}} </span>
+                                            <span class="imgInplay" *ngIf="eventDetail?.inPlay"><i
+                                                    class="fa-regular fa-square-check me-1"></i>
+                                                In-Play</span>
+                                            <!-- <button type="button" (click)="refreshClick()" class="refreshBtn ms-3"  [ngClass]="{'refresh': isHighlighted}" ><i class="fa-solid fa-arrows-rotate"></i></button> -->
+                                        </div>
+                                        <div class="col-md-5 col-sm-12">
+                                            <div class="blwall">
+                                                <p class="rbtnBacktype bCol"
+                                                    (click)="getFilteredBets(market?.marketName,'Back')"
+                                                    data-bs-toggle="modal" data-bs-target="#viewBet">B :
+                                                    {{getBetsCount(market?.marketName,'Back')}}</p>
+                                                <p class="rbtnBacktype lCol"
+                                                    (click)="getFilteredBets(market?.marketName,'Lay')"
+                                                    data-bs-toggle="modal" data-bs-target="#viewBet">L :
+                                                    {{getBetsCount(market?.marketName,'Lay')}}</p>
+                                                <p class="rbtnBacktype allCol"
+                                                    (click)="getFilteredBets(market?.marketName,'All')"
+                                                    data-bs-toggle="modal" data-bs-target="#viewBet">All :
+                                                    {{getBetsCount(market?.marketName,'All')}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-2 fl text-end ">
+                                    <div class="dropdown filterDropdown">
+                                        <button
+                                            class="btn btn-secondary dropdown-toggle p-0 btnCstomTilter downloadTableBtn text-dark afterNone ms-auto"
+                                            type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                            <i class="fas fa-filter"></i>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                            <li (click)="getCurrentPosition(market?.marketName, 0)"><a
+                                                    class="dropdown-item cursor-pointer" data-bs-toggle="modal"
+                                                    data-bs-target="#bookBet"><i
+                                                        class="fa fa-calendar-check me-2"></i>Book</a>
+                                            </li>
+                                            <li (click)="getFilteredBets(market?.marketName,'All')"><a
+                                                    class="dropdown-item cursor-pointer" data-bs-toggle="modal"
+                                                    data-bs-target="#viewBet"><i class="fa fa-eye me-2"></i>View Bet</a>
+                                            </li>
+                                            <li (click)="getDeleteBets(market?.marketName)"><a
+                                                    class="dropdown-item cursor-pointer" data-bs-toggle="modal"
+                                                    data-bs-target="#deleteBetsModal"><i
+                                                        class="fas fa-trash-alt me-2 text-danger"></i>Deleted
+                                                    Bets</a></li>
+
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-lg-10 col-md-10 col-xs-10 sessionmarketsub d-none">
+                                    <span class="marketdate"> {{eventDetail.eventTime | date:'yyyy-MM-dd
+                                        hh:mm:ss':'Asia/Kolkata'}}</span>
+                                </div>
+                            </div>
+                            <div class="marketbody" *ngIf="market.marketName!='Fancy'">
+                                <div class="table-responsive">
+
+                                    <div class="table  custom-head mb-0 divtable">
+                                        <!-- Table Header -->
+                                        <div class="table-row d-none">
+                                            <div
+                                                class="table-cell col-xs-6 text-left bettitle runnertitle no-border-right-table">
+                                                <button class="btn btn-danger btn-xs py-1 me-2">Book</button>
+                                                <button class="btn btn-success btn-xs py-1">View Bet</button>
+                                            </div>
+                                            <div class="table-cell col-xs-1 no-padding hidden-xs"></div>
+                                            <div class="table-cell col-xs-1 no-padding hidden-xs"></div>
+                                            <div class="table-cell col-xs-1 no-padding backBtn">Back</div>
+                                            <div class="table-cell col-xs-1 no-padding layBtn">Lay</div>
+                                            <div class="table-cell col-xs-1 no-padding hidden-xs"></div>
+                                            <div class="table-cell col-xs-1 no-padding hidden-xs"></div>
+                                        </div>
+
+                                        <!-- Table Body -->
+                                        <div class="table-row desmobTr">
+                                            <div class="table-cell title text-left col-sm-6">
+                                                <p class="innerNews">
+                                                    <marquee *ngIf="market?.marketName=='Match Odds'">
+                                                        {{notifications[0]?.notification}}
+                                                    </marquee>
+                                                    <marquee *ngIf="market?.marketName=='Book Maker'">
+                                                        {{notifications[1]?.notification}}
+                                                    </marquee>
+                                                </p>
+                                            </div>
+                                            <div
+                                                class="table-cell col-xs-1 no-padding rate bg-transparent hidden-xs cstmBl">
+                                            </div>
+                                            <div
+                                                class="table-cell col-xs-1 no-padding rate bg-transparent hidden-xs cstmBl">
+                                            </div>
+                                            <div class="table-cell col-xs-1 no-padding rate back cstmBl">
+                                                <a class="cursor-pointer">
+                                                    <div class="price">Back</div>
+                                                </a>
+                                            </div>
+                                            <div class="table-cell col-xs-1 no-padding rate lay cstmBl">
+                                                <a class="cursor-pointer">
+                                                    <div class="price">Lay</div>
+                                                </a>
+                                            </div>
+                                            <div
+                                                class="table-cell col-xs-1 no-padding rate bg-transparent hidden-xs cstmBl">
+                                            </div>
+                                            <div
+                                                class="table-cell col-xs-1 no-padding rate bg-transparent hidden-xs cstmBl">
+                                            </div>
+                                        </div>
+
+                                        <!-- Repeated Rows -->
+                                        <div class="table-row-wrapper position-relative">
+                                            <div *ngFor="let runner of market.runners" class="table-row"
+                                                [class.suspended]="isSuspended(runner, market)">
+                                                <div class="table-cell title text-left col-sm-6">
+                                                    <p>{{runner.runnerName}}</p>
+                                                    <span class="titlePoint" *ngIf="runner.book!=0"
+                                                        [ngClass]="{'text-success': runner.book >= 0, 'red': runner.book < 0}">
+                                                        ({{runner.book % 1 !== 0 ? (runner.book | number:'1.2-2') :
+                                                        runner.book}})
+                                                    </span>
+                                                </div>
+                                                <div class="table-cell col-xs-1 no-padding rate hidden-xs"></div>
+                                                <div class="table-cell col-xs-1 no-padding rate hidden-xs"></div>
+
+                                                <!-- Back rate with blink effect -->
+                                                <div class="table-cell col-xs-1 no-padding rate back"
+                                                    [ngClass]="{'blink': runner.backChanged}">
+                                                    <a class="cursor-pointer">
+                                                        <div class="price">{{runner?.rates?.back?.Rate}}</div>
+                                                        <span
+                                                            class="Rupees">{{runner?.rates?.back?.Price.toString().replace('.','').slice(0,
+                                                            3)}}</span>
+                                                    </a>
+                                                </div>
+
+                                                <!-- Lay rate with blink effect -->
+                                                <div class="table-cell col-xs-1 no-padding rate lay"
+                                                    [ngClass]="{'blink': runner.layChanged}">
+                                                    <a class="cursor-pointer">
+                                                        <div class="price">{{runner?.rates?.lay?.Rate}}</div>
+                                                        <span
+                                                            class="Rupees">{{runner?.rates?.lay?.Price.toString().replace('.','').slice(0,
+                                                            3)}}</span>
+                                                    </a>
+                                                </div>
+
+                                                <div class="table-cell col-xs-1 no-padding rate hidden-xs"></div>
+                                                <div class="table-cell col-xs-1 no-padding rate hidden-xs"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="accordion accordion-flush accordion-table" id="accordionFlushExample">
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header "
+                                            (click)="getCurrentPosition(market?.marketName, 0)"
+                                            [id]="'flush-headingOne-' + m">
+                                            <!-- <button class="accordion-button collapsed" type="button" id="clsBook"
+                                                (click)="getCurrentPosition(market?.marketName,0)"
+                                                data-bs-toggle="collapse" [attr.href]="'#flush-collapseOne' + m"
+                                                aria-expanded="false" aria-controls="flush-collapseOne">
+                                                Book View
+                                            </button> -->
+                                            <button class="accordion-button collapsed" type="button"
+                                                [ngClass]="{'collapsed': activeIndex !== m}"
+                                                (click)="toggleAccordion(m)" data-bs-toggle="collapse"
+                                                [attr.href]="'#flush-collapseOne-' + m"
+                                                aria-expanded="activeIndex === m"
+                                                [attr.aria-controls]="'flush-collapseOne-' + m">
+                                                Book View
+                                            </button>
+                                            <button type="button" (click)="refreshClick(market?.marketName, m)"
+                                                class="refreshBtn ms-3 border-0 bg-transparent p-0"
+                                                [ngClass]="{'refresh': highlightedButtons [m]}"><i
+                                                    class="fa-solid fa-arrows-rotate"></i>
+                                            </button>
+                                        </h2>
+                                        <div [id]="'flush-collapseOne' + m" class="accordion-collapse collapse"
+                                            [class.show]="activeIndex === m"
+                                            [attr.aria-labelledby]="'flush-headingOne-' + m"
+                                            data-bs-parent="#accordionFlushExample">
+                                            <div class="bookViewTable BookplView BookplView position-relative">
+                                                <div class="table-responsive">
+                                                    <table class="table  custom-head mb-0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>User</th>
+                                                                <th *ngFor="let runner of market.runners">
+                                                                    {{runner.runnerName}}</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr *ngFor="let userPl of currentPosition">
+                                                                <td
+                                                                    (click)="getCurrentPosition(market?.marketName,userPl[0].userId)">
+                                                                    <div class="nowrap">
+                                                                        <span>{{userPl[0].role!='Client'?'A':'C'}}</span>
+                                                                        | {{userPl[0].userName.split('[')[0]}}
+                                                                    </div>
+                                                                </td>
+                                                                <td *ngFor="let pl of userPl">
+                                                                    <div
+                                                                        [ngClass]="{'green':pl.profitLoss>=0,'red':pl.profitLoss<0}">
+                                                                        {{pl.profitLoss | number:'1.2-2'}}</div>
+                                                                </td>
+
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="tableLoader" *ngIf="loader">
+                                                    <div class="spinner-grow" style="color: #74c1a8;" role="status">
+                                                        <span class="sr-only">Loading...</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="marketdivcontent mb-2 col-lg-12 col-md-12 col-sm-12 col-xs-12 mt-2 position-relative"
+                            *ngFor="let session of sessionObj;let s=index">
+                            <div class="marketheader row card-header p-0 py-2 align-items-center m-0">
+                                <div class="col-10 no-mpeAvgPopupMarketName">
+                                    <div class="row m-0">
+                                        <div class="col-md-7 col-sm-12 ">
+                                            <span class="allowbet"><i class="fas fa-dot-circle"></i></span>
+                                            <span class="spanmarketname">{{session.RunnerName}}</span>
+                                            <span class="imgInplay ms-1">In-Play</span>
+
+                                        </div>
+                                        <div class="col-md-5 col-sm-12">
+                                            <div class="blwall">
+                                                <p class="rbtnBacktype bCol" data-bs-toggle="modal"
+                                                    data-bs-target="#viewBet"
+                                                    (click)="getFilteredBets('Fancy','Yes',session.RunnerName)">Y :
+                                                    {{getFancyBetsCount('Fancy','Yes',session.RunnerName)}}</p>
+                                                <p class="rbtnBacktype lCol" data-bs-toggle="modal"
+                                                    data-bs-target="#viewBet"
+                                                    (click)="getFilteredBets('Fancy','No',session.RunnerName)">N :
+                                                    {{getFancyBetsCount('Fancy','No',session.RunnerName)}}</p>
+                                                <p class="rbtnBacktype allCol" data-bs-toggle="modal"
+                                                    data-bs-target="#viewBet"
+                                                    (click)="getFilteredBets('Fancy','All',session.RunnerName)">All :
+                                                    {{getFancyBetsCount('Fancy','All',session.RunnerName)}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="marketbody fancyBx">
+                                <div class="table-responsive">
+
+                                    <div class="table divtable  custom-head mb-0">
+                                        <!-- Table Body -->
+                                        <div class="table-row desmobTr">
+                                            <div class="table-cell title text-left col-sm-6"></div>
+                                            <div
+                                                class="table-cell col-xs-1 no-padding rate bg-transparent hidden-xs cstmBl">
+                                            </div>
+                                            <div
+                                                class="table-cell col-xs-1 no-padding rate bg-transparent hidden-xs cstmBl">
+                                            </div>
+                                            <div class="table-cell col-xs-1 no-padding rate back cstmBl">
+                                                <a class="cursor-pointer">
+                                                    <div class="price">Yes</div>
+                                                </a>
+                                            </div>
+                                            <div class="table-cell col-xs-1 no-padding rate lay cstmBl">
+                                                <a class="cursor-pointer">
+                                                    <div class="price">No</div>
+                                                </a>
+                                            </div>
+                                            <div
+                                                class="table-cell col-xs-1 no-padding rate bg-transparent hidden-xs cstmBl">
+                                            </div>
+                                            <div
+                                                class="table-cell col-xs-1 no-padding rate bg-transparent hidden-xs cstmBl">
+                                            </div>
+                                        </div>
+                                        <div class="table-row-wrapper position-relative">
+                                            <div [class.suspended]="isSessionSuspended(session)" class="table-row">
+                                                <div class="table-cell title text-left col-sm-6 border-0 no-padding">
+                                                    <div class="betLibility"
+                                                        *ngIf="getSessionPl(session?.RunnerName, session?.Lay?.Rate) != 0">
+                                                        L.= <span
+                                                            [ngClass]="{'text-danger ms-2 mb-0': getSessionPl(session?.RunnerName, session?.Lay?.Rate) < 0,
+                                                            'text-success ms-2 mb-0': getSessionPl(session?.RunnerName, session?.Lay?.Rate) > 0}">
+                                                            {{getSessionPl(session?.RunnerName, session?.Lay?.Rate)}}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div
+                                                    class="table-cell col-sm-1 no-padding border-0 text-center hidden-xs">
+                                                </div>
+                                                <div
+                                                    class="table-cell col-sm-1 no-padding border-0 text-center hidden-xs">
+                                                </div>
+                                                <div class="table-cell col-sm-1 no-padding border-0 rate back">
+                                                    <a class="current-pointer">
+                                                        <div class="price">{{session?.Lay?.Rate}}</div>
+                                                    </a>
+                                                </div>
+                                                <div class="table-cell col-sm-1 no-padding rate lay">
+                                                    <a class="current-pointer">
+                                                        <div class="price">{{session?.Back?.Rate}}</div>
+                                                    </a>
+                                                </div>
+                                                <div
+                                                    class="table-cell col-sm-1 no-padding border-0 text-center hidden-xs">
+                                                </div>
+                                                <div
+                                                    class="table-cell col-sm-1 no-padding border-0 text-center hidden-xs">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="ballRuningCell py-1"
+                                        *ngIf="fancyBook(session.RunnerName,session?.Lay?.Rate)?.length>0">
+                                        <div class="ballByBall">
+                                            <ul class="list-unstyled d-flex">
+                                                <li
+                                                    *ngFor="let ssn of fancyBook(session.RunnerName,session?.Lay?.Rate)">
+                                                    <p>{{ssn.RunValue}}</p>
+                                                    <p [ngClass]="{'red':ssn.Pl<0,'green':ssn.Pl>=0}">{{ssn.Pl | number
+                                                        : '1.2-2'}}</p>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade " id="pills-betList" role="tabpanel" aria-labelledby="pills-betList-tab" tabindex="0">
+            <div class="card ">
+                <div class="row py-1 align-items-center">
+                    <div class="col-lg-5 col-md-8">
+                        <div class="input-group marginb5 div-datepicker">
+                            <input type="datetime-local" class="form-control datepicker" name="startDate"
+                                [(ngModel)]="startDate">
+                            <span class="col-form-label">to</span>
+                            <input type="datetime-local" class="form-control datepicker" name="endDate"
+                                [(ngModel)]="endDate">
+                        </div>
+                    </div>
+                    <div class="col-lg-5 col-md-4 mt-2 mt-md-0">
+                        <button type="button" class="btn btn-success waves-effect waves-light "
+                            (click)="filterBetsByDateRange()">Load</button>
+                        <button type="button" class="btn btn-primary waves-effect waves-light ms-2"
+                            (click)="resetDates()">Reset</button>
+                        <button type="button" class="btn btn-danger waves-effect waves-light ms-2"
+                            (click)="deleteBets()">Delete</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="d-flex align-items-center justify-content-between">
+                    <label>Bet List</label>
+
+                </div>
+                <hr class="my-2">
+                <div class="form-check d-flex align-items-center flex-wrap ps-0">
+                    <label class="radio radio-info me-4 my-1 position-relative pe-3">
+                        <input type="radio" id="All" name="option" value="All" checked (change)="filterBets('All')">
+                        <label for="All" class="bold">All</label>
+                        <span class="countTot">{{getMarketBetsCount('All')}}</span>
+                    </label>
+                    <label class="radio radio-info me-4 my-1 position-relative pe-3">
+                        <input type="radio" id="Back" name="option" value="Match Odds"
+                            (change)="filterBets('Match Odds')">
+                        <label for="Back" class="bold">Match Odds</label>
+                        <span class="countTot">{{getMarketBetsCount('Match Odds')}}</span>
+                    </label>
+                    <label class="radio radio-info me-4 my-1 position-relative pe-3">
+                        <input type="radio" id="Lay" name="option" value="BookMaker" (change)="filterBets('BookMaker')">
+                        <label for="Lay" class="bold">BookMaker</label>
+                        <span class="countTot">{{getMarketBetsCount('BookMaker')}}</span>
+                    </label>
+                    <label class="radio radio-info me-4 my-1 position-relative pe-3">
+                        <input type="radio" id="Match" name="option" value="Fancy" (change)="filterBets('Fancy')">
+                        <label for="Match" class="bold">Fancy</label>
+                        <span class="countTot">{{getMarketBetsCount('Fancy')}}</span>
+                    </label>
+                    <label class="radio radio-info me-4 my-1 position-relative pe-3">
+                        <input type="radio" id="Unmatch" name="option" value="Toss"
+                            (change)="filterBets('To Win The Toss')">
+                        <label for="Unmatch" class="bold">Toss</label>
+                        <span class="countTot">{{getMarketBetsCount('To Win The Toss')}}</span>
+                    </label>
+                </div>
+
+                <div class="form-check d-flex align-items-center flex-wrap ps-0" *ngIf="marketName=='All'">
+
+                    <label class="radio radio-info me-4 my-1 position-relative pe-3">
+                        <input type="radio" id="Back" name="option" value="Back" (change)="filterSelectionBets('Back')">
+                        <label for="Back" class="bold">Back</label>
+                        <span class="countTot back">{{getCount('Back')}}</span>
+                    </label>
+                    <label class="radio radio-info me-4 my-1 position-relative pe-3">
+                        <input type="radio" id="Lay" name="option" value="Lay" (change)="filterSelectionBets('Lay')">
+                        <label for="Lay" class="bold">Lay</label>
+                        <span class="countTot lay">{{getCount('Lay')}}</span>
+                    </label>
+                    <label class="radio radio-info me-4 my-1 position-relative pe-3">
+                        <input type="radio" id="Match" name="option" value="Yes" (change)="filterSelectionBets('Yes')">
+                        <label for="Match" class="bold">Yes</label>
+                        <span class="countTot back">{{getCount('Yes')}}</span>
+                    </label>
+                    <label class="radio radio-info me-4 my-1 position-relative pe-3">
+                        <input type="radio" id="Unmatch" name="option" value="No" (change)="filterSelectionBets('No')">
+                        <label for="Unmatch" class="bold">No</label>
+                        <span class="countTot lay">{{getCount('No')}}</span>
+                    </label>
+                </div>
+
+                <div class="form-check d-flex align-items-center flex-wrap ps-0"
+                    *ngIf="marketName!='Fancy' && marketName!='All'">
+
+                    <label class="radio radio-info me-4 my-1 position-relative">
+                        <input type="radio" id="Back" name="option" value="Back" (change)="filterSelectionBets('Back')">
+                        <label for="Back" class="bold">Back</label>
+                        <span class="countTot back">{{getCount('Back')}}</span>
+                    </label>
+                    <label class="radio radio-info me-4 my-1 position-relative">
+                        <input type="radio" id="Lay" name="option" value="Lay" (change)="filterSelectionBets('Lay')">
+                        <label for="Lay" class="bold">Lay</label>
+                        <span class="countTot lay">{{getCount('Lay')}}</span>
+                    </label>
+                </div>
+                <div class="form-check d-flex align-items-center flex-wrap ps-0" *ngIf="marketName=='Fancy'">
+
+                    <label class="radio radio-info me-4 my-1 position-relative">
+                        <input type="radio" id="Match" name="option" value="Yes" (change)="filterSelectionBets('Yes')">
+                        <label for="Match" class="bold">Yes</label>
+                        <span class="countTot back">{{getCount('Yes')}}</span>
+                    </label>
+                    <label class="radio radio-info me-4 my-1 position-relative">
+                        <input type="radio" id="Unmatch" name="option" value="No" (change)="filterSelectionBets('No')">
+                        <label for="Unmatch" class="bold">No</label>
+                        <span class="countTot lay">{{getCount('No')}}</span>
+                    </label>
+                </div>
+
+
+                <div class="table-responsive tableCstm mh-100 mt-2">
+                    <table class="datatable table  ">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>
+                                    <div class="d-flex align-items-center">
+                                        <input type="checkbox" name="check" [(ngModel)]="selectAll"
+                                            (change)="toggleAllCheckboxes()">
+                                    </div>
+                                </th>
+                                <th><small>Name</small></th>
+                                <th><small>Selection</small></th>
+                                <th><small>Rate</small></th>
+                                <th><small>Stake</small></th>
+                                <th><small>P\L</small></th>
+                                <th><small>Placed Time</small></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let bet of bets;let i=index">
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <input type="checkbox" name="check" [(ngModel)]="bet.checked"
+                                            (change)="onCheckboxChange(bet)">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-column">
+                                        <span>{{bet.userName}}</span>
+                                        <span>{{bet.parentName}}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-column">
+                                        <span>{{bet.runnerName}}</span>
+                                        <span>{{bet.marketName}}</span>
+                                        <span><small>{{bet.eventName}}</small></span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-column">
+                                        <div class="d-flex">{{bet.odds}}<span
+                                                *ngIf="bet.marketName=='Fancy'">/{{bet.price}}</span></div>
+                                        <span
+                                            [ngClass]="{'back': bet.selection === 'Back' || bet.selection === 'Yes', 'lay': bet.selection === 'Lay' || bet.selection === 'No'}">{{bet.selection}}</span>
+                                    </div>
+                                </td>
+                                <td>{{bet.stake % 1 !== 0 ? (bet.stake | number:'1.2-2'):bet.stake}}</td>
+                                <td
+                                    [ngClass]="bet.selection === 'Back' || bet.selection === 'Yes' ? 'text-success' : 'text-danger'">
+                                    {{ (bet.selection === 'Back' || bet.selection === 'Yes') ?
+                                    (bet.profit % 1 !==0? (bet.profit | number:'1.2-2'):bet.profit) : (bet.exposure % 1
+                                    !==0 ? (bet.exposure | number:'1.2-2'):bet.exposure) }}</td>
+                                <td>
+                                    <div class="d-flex flex-column">
+                                        <span>P: {{ bet.betTime | date:'dd/MM/yyyy hh:mm:ss a' }}</span>
+                                        <span>M: {{ bet.createdOn | date:'dd/MM/yyyy hh:mm:ss a' }}</span>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="navFoot" id="pills-tab" role="tablist">
+    <a class="cursor-pointer lnkCurrentMarket active  col-lg-6 col-md-6 col-sm-6 col-xs-6" id="pills-marketList-tab"
+        data-bs-toggle="pill" data-bs-target="#pills-marketList" type="button" role="tab"
+        aria-controls="pills-marketList" aria-selected="true">
+        <i class="fa-brands fa-buffer"></i>
+        Market List
+    </a>
+    <a class="cursor-pointer lnkCurrentMarket  col-lg-6 col-md-6 col-sm-6 col-xs-6" id="pills-betList-tab"
+        data-bs-toggle="pill" data-bs-target="#pills-betList" type="button" role="tab" aria-controls="pills-betList"
+        aria-selected="false" (click)="getAllBets()">
+        <i class="fa-solid fa-table-cells-large"></i>
+        Bet List
+    </a>
+</div>
+
+
+
+
+
+<!--booked Bet Modal -->
+<div class="modal fade custoModal settlementMod perssionModal bookMoad custoModal " id="bookBet"
+    data-bs-backdrop="static" tabindex="-1" aria-labelledby="bookBetLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="bookBetLabel">View Book</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="mt-2">
+                    <div class="bookViewTable BookplView position-relative ">
+                        <div class="table-responsive tableCstm">
+                            <table class="table  custom-head mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>User</th>
+                                        <th *ngFor="let runner of runners">
+                                            {{runner.runnerName}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let userPl of currentPosition">
+                                        <td (click)="getCurrentPosition(marketName,userPl[0].userId)">
+                                            <div class=""><span>{{userPl[0].role!='Client'?'A':'C'}}</span> |
+                                                {{userPl[0].userName.split('[')[0]}}</div>
+                                        </td>
+                                        <td *ngFor="let pl of userPl">
+                                            <div
+                                                [ngClass]="{'text-success':pl.profitLoss>=0,'text-danger':pl.profitLoss<0}">
+                                                {{pl.profitLoss | number:'1.2-2'}}</div>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tableLoader" *ngIf="loader">
+                            <div class="spinner-grow" style="color: #74c1a8;" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--View Bet Modal -->
+<div class="modal fade custoModal settlementMod perssionModal bookMoad" id="viewBet" data-bs-backdrop="static"
+    tabindex="-1" aria-labelledby="viewBetLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="viewBetLabel">{{marketName}}</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="mt-2">
+                    <div class="table-responsive tableCstm tbHoverCol mt-2">
+                        <table class="datatable table  mb-0">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Selection</th>
+                                    <th>Rate</th>
+                                    <th>Stake</th>
+                                    <th>P\L</th>
+                                    <th>Placed Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let bet of bets;let i=index"
+                                    [ngClass]="{'back': bet.selection === 'Back' || bet.selection === 'Yes', 'lay': bet.selection === 'Lay' || bet.selection === 'No'}">
+
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <span>{{bet.userName}}</span>
+                                            <span>{{bet.parentName}}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <span>{{bet.runnerName}}</span>
+                                            <span
+                                                [ngClass]="{'back': bet.selection === 'Back' || bet.selection === 'Yes', 'lay': bet.selection === 'Lay' || bet.selection === 'No'}">{{bet.selection}}</span>
+                                            <!-- <span>{{bet.marketName}}</span> -->
+                                            <span><small>{{bet.eventName}}</small></span>
+                                        </div>
+                                    </td>
+                                    <td>{{bet.odds}}<span *ngIf="bet.marketName=='Fancy'">/{{bet.price}}</span></td>
+                                    <td>{{bet.stake % 1 !== 0 ? (bet.stake | number:'1.2-2'):bet.stake}}</td>
+                                    <td
+                                        [ngClass]="bet.selection === 'Back' || bet.selection === 'Yes' ? 'text-success' : 'text-danger'">
+                                        {{ (bet.selection === 'Back' || bet.selection === 'Yes') ?
+                                        (bet.profit % 1 !==0? (bet.profit | number:'1.2-2'):bet.profit) : (bet.exposure
+                                        % 1 !==0 ? (bet.exposure | number:'1.2-2'):bet.exposure) }}</td>
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <span>P: {{ bet.betTime | date:'dd/MM/yyyy hh:mm:ss a' }}</span>
+                                            <span>M: {{ bet.createdOn | date:'dd/MM/yyyy hh:mm:ss a' }}</span>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- delete bet modal-->
+<div class="modal fade custoModal actdeactiveModal" id="deleteBetsModal" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="deleteBetsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="viewBetLabel">Match Bets</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="mt-2">
+                    <div class="table-responsive tableCstm mt-2">
+                        <table class="datatable table  mb-0">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Selection</th>
+                                    <th>Odds\Price</th>
+                                    <th>Stake</th>
+                                    <th>P\L</th>
+                                    <th>Placed Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let bet of deletedBets;let i=index">
+
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <span>{{bet.userName}}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <span>{{bet.runnerName}}</span>
+                                            <span
+                                                [ngClass]="{'back': bet.selection === 'Back' || bet.selection === 'Yes', 'lay': bet.selection === 'Lay' || bet.selection === 'No'}">{{bet.selection}}</span>
+                                            <span>{{bet.marketName}}</span>
+                                            <span><small>{{bet.eventName}}</small></span>
+                                        </div>
+                                    </td>
+                                    <td>{{bet.odds}}<span *ngIf="bet.marketName=='Fancy'">/{{bet.price}}</span></td>
+                                    <td>{{bet.stake % 1 !== 0 ? (bet.stake | number:'1.2-2'):bet.stake}}</td>
+                                    <td
+                                        [ngClass]="bet.selection === 'Back' || bet.selection === 'Yes' ? 'text-success' : 'text-danger'">
+                                        {{ (bet.selection === 'Back' || bet.selection === 'Yes') ?
+                                        (bet.profit % 1 !==0? (bet.profit | number:'1.2-2'):bet.profit) : (bet.exposure
+                                        % 1 !==0 ? (bet.exposure | number:'1.2-2'):bet.exposure) }}</td>
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <span>P: {{ bet.betTime | date:'dd/MM/yyyy hh:mm:ss a' }}</span>
+                                            <span>M: {{ bet.createdOn | date:'dd/MM/yyyy hh:mm:ss a' }}</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

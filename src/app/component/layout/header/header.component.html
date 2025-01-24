@@ -1,0 +1,589 @@
+<ngx-spinner class="loader">
+  <img src="./assets/img/loader.svg">
+
+  <!-- <div id="preloader">
+      <div class="loaderViewPort">
+          <div class="loader">
+              <div class="side front">
+                  <div class="dot"></div>
+              </div>
+              <div class="side back">
+                  <div class="dotContainer">
+                      <div class="dot"></div>
+                      <div class="dot"></div>
+                      <div class="dot"></div>
+                  </div>
+              </div>
+              <div class="side left">
+                  <div class="dotContainer">
+                      <div class="dot"></div>
+                      <div class="dot"></div>
+                  </div>
+              </div>
+              <div class="side right">
+                  <div class="dotContainer">
+                      <div class="subDotContainer">
+                          <div class="dot"></div>
+                          <div class="dot"></div>
+                      </div>
+                      <div class="subDotContainer">
+                          <div class="dot"></div>
+                          <div class="dot"></div>
+                      </div>
+                  </div>
+              </div>
+              <div class="side top">
+                  <div class="dotContainer">
+                      <div class="subDotContainer">
+                          <div class="dot"></div>
+                          <div class="dot"></div>
+                      </div>
+                      <div class="subDotContainer">
+                          <div class="dot"></div>
+                      </div>
+                      <div class="subDotContainer">
+                          <div class="dot"></div>
+                          <div class="dot"></div>
+                      </div>
+                  </div>
+              </div>
+              <div class="side bottom">
+                  <div class="dotContainer">
+                      <div class="subDotContainer">
+                          <div class="dot"></div>
+                          <div class="dot"></div>
+                      </div>
+                      <div class="subDotContainer">
+                          <div class="dot"></div>
+                          <div class="dot"></div>
+                      </div>
+                      <div class="subDotContainer">
+                          <div class="dot"></div>
+                          <div class="dot"></div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div> -->
+</ngx-spinner>
+<header>
+  <div class="headerMain">
+    <div class="container-fluid">
+      <nav class="">
+        <div class="top_header">
+          <a routerLink="/dashboard" class="logo">
+            <img [src]="walletDetails.logoPath" class="img-fluid" alt="logo">
+            <!-- <img src="./assets/img/logo_img.png" alt="logo" class="img-fluid"> -->
+          </a>
+          <button class="p-0 bg-transparent border-0 button-menu-mobile" (click)="toggleBodyClass()">
+            <!-- <i class="fs-5 fa-solid fa-bars"></i> -->
+            <i class="fs-5 fa-solid fa-bars-staggered"></i>
+          </button>
+          <ul class="ms-auto d-flex list-unstyled mb-0 ">
+            <!-- <li>
+              <div class="d-flex align-items-center justify-content-end depwid" *ngIf="websiteMode=='b2c'">
+                <div class="depCount">
+                  D <span class="count">{{walletDetails.depositCount}}</span>
+                </div>
+                <div class="depCount wedCount">
+                  W <span class="count">{{walletDetails.withdrawalCount}}</span>
+                </div>
+              </div>
+            </li> -->
+            <li *ngIf="roleId==1">
+              <a data-bs-toggle="modal" data-bs-target="#walletModal">
+                <i class="fa-solid fa-wallet"></i>
+              </a>
+            </li>
+            <li *ngIf="role!='Banker'">
+              <div class="dropdown" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                <a class="dropdown-toggle" id="dropdownMenuLink" data-bs-toggle="dropdown" role="button"
+                  aria-expanded="false">
+                  <!-- <i class="fa-solid fa-futbol fs-18"></i> -->
+                  <i class="fa-regular fa-file-lines"></i>
+                </a>
+                <ul class="dropdown-menu balance-dropdown" aria-labelledby="dropdownMenuLink"
+                  (click)="preventClose($event)">
+
+                  <li class="ps-3 py-1 fs-14">Child Level : {{walletDetails.childLevel - 1}}</li>
+                  <li class="ps-3 py-1 fs-14">Exposure : {{walletDetails.exposure}}</li>
+                  <li class="ps-3 py-1 fs-14">Balance : {{walletDetails.balance}}</li>
+                </ul>
+              </div>
+            </li>
+
+            <div class="dropdown profileCol ms-2 ms-sm-3">
+              <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <img src="assets/img/user.png" class="img-fluid me-lg-2" alt="logo">
+                <span class="d-none d-lg-inline-block">{{returnObj?.userName}} <i
+                    class="fa-solid fa-chevron-down ms-1"></i></span>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#profileModal"><i
+                      class="fa-solid fa-user-tie"></i> {{returnObj?.userName}}</a></li>
+
+                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#passwordModal"><i
+                      class="fa-solid fa-lock"></i> Change Password</a></li>
+                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#termsconditionModal"><i
+                      class="fa-solid fa-circle-info"></i> Terms Condition</a></li>
+                <li (click)="logOut()"><a class="dropdown-item"><i class="fa-solid fa-right-from-bracket"></i>
+                    Logout</a></li>
+              </ul>
+            </div>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </div>
+  <div class="pt-1 pb-1 pt-md-1 newsBottom" *ngIf="returnObj?.news?.length>0">
+    <marquee behavior="scroll" direction="left" id="topnews" onmouseover="this.stop();" onmouseout="this.start();"
+      class="vertical-align-middle">
+      <div class="topNews">
+        <div style="display:inline" class="" *ngFor="let news of returnObj?.news"><i
+            class="fa-solid fa-receipt me-1"></i>*{{news.notification}} &nbsp;&nbsp;&nbsp;&nbsp; </div>
+      </div>
+    </marquee>
+  </div>
+</header>
+
+<!-- Wallet Modal -->
+<div class="modal fade custoModal " id="walletModal" tabindex="-1" aria-labelledby="walletModalLabel" aria-hidden="true"
+  data-bs-backdrop="static">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="walletModalLabel" style="font-size: 16px !important;">Wallet</h1>
+        <button (click)="resetAmount()" type="button" id="clsWallet" class="btn-close" data-bs-dismiss="modal"
+          aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="form-group ">
+              <label>Enter Amount</label>
+              <input type="text" class="form-control" placeholder="Enter Amount" name="amount" [(ngModel)]="amount">
+            </div>
+            <button type="button" class="btn btn-primary" (click)="addOwnBalance()">Submit</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Profile Modal -->
+<div class="modal fade custoModal" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title " id="profileModalLabel"><label style="font-size: 13px;font-weight: 400;">User Profile ::
+            {{walletDetails?.name}}</label></h1>
+        <button type="button" id="clsBtn" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+            class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-xl-12 col-lg-12">
+            <div class="row">
+              <label class="col-sm-4 col-xs-6 col-form-label">User Name:</label>
+              <label class="col-sm-8 col-xs-6 col-form-label" id="lblUserName">{{walletDetails?.userName}}</label>
+            </div>
+            <div class="row">
+              <label class="col-sm-4 col-xs-6 col-form-label">Full Name:</label>
+              <label class="col-sm-8 col-xs-6 col-form-label" id="lblFullName">{{walletDetails?.fullName}}</label>
+            </div>
+            <div class="row">
+              <label class="col-sm-4 col-xs-6 col-form-label">Referral Url:</label>
+              <label class="col-sm-6 col-xs-6 col-form-label ">{{referalLink}} <i
+                  class="fas fa-copy mt-2 cursor-pointer ps-2 " id="copyRefrralUrl"
+                  (click)="copyToClipboard(referalLink)"></i></label>
+            </div>
+            <div class="row">
+              <label class="col-sm-4 col-xs-6 col-form-label">Referral Code:</label>
+              <label class="col-sm-6 col-xs-6 col-form-label "
+                id="lblReferralCode">{{walletDetails?.referalCode}}</label>
+            </div>
+            <div class="row">
+              <div class="col-6 col-xs-6 d-flex align-items-center gx-5">
+                <label class=" col-form-label">Every Refil Bonus:</label>
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" id="everyrefillbonus" name="isEveryRefilBonus" [(ngModel)]="walletDetails.isEveryRefilBonus">
+                </div>
+              </div>
+              <div class="col-6 col-xs-6 d-flex align-items-center gx-5">
+                <label class=" col-form-label">First Refil Bonus:</label>
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" id="firstrefillbonus" name="isFirstRefilBonus" [(ngModel)]="walletDetails.isFirstRefilBonus">
+                </div>
+              </div>
+            </div>
+            <div class="row mt-2">
+              <div class="col-6 col-xs-6 d-flex align-items-center gx-5">
+                <label class=" col-form-label">Bonus:</label>
+                <div class="form-check cstmnumbfield ps-0">
+                  <input type="number" name="bonus" class="form-control" name="isEveryRefilBonus" [(ngModel)]="walletDetails.everyRefilBonus">
+                </div>
+              </div>
+              <div class="col-6 col-xs-6 d-flex align-items-center gx-5">
+                <label class=" col-form-label">Bonus:</label>
+                <div class="form-check cstmnumbfield ps-0">
+                  <input type="number" name="bonus" class="form-control" name="firstRefilBonus" [(ngModel)]="walletDetails.firstRefilBonus">
+                </div>
+              </div>
+            </div>
+            <div class="text-end mt-3">
+              <button type="button" class="btn btn-primary" (click)="updateBonus()">Submit</button>
+            </div>
+            <!-- <div class="row">
+              <label class="col-sm-4 col-xs-6 col-form-label">Share On:</label>
+              <div class="col-sm-6 col-xs-6 col-form-label d-flex">
+                <a class="cursor-pointer text-success me-2 fs-3 " target="_blank" id="lblwhatsapp">
+                  <i class="fab fa-whatsapp-square clsSocial" id="whatsapp"></i>
+                </a>
+                <a class="cursor-pointer text-info me-2 fs-3 " target="_blank">
+                  <i class="fab fa-telegram clsSocial" id="telegram"></i>
+                </a>
+              </div>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Password Modal -->
+<div class="modal fade custoModal " id="passwordModal" tabindex="-1" aria-labelledby="passwordModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="passwordModalLabel"><label style="font-size: 13px;font-weight: 400;">Change
+            Password</label></h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+            class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="changePasswordForm" (ngSubmit)="changepass()">
+          <div class="row">
+            <div class="col-12">
+              <div class="row">
+                <div class="col-lg-8">
+                  <div class="form-group row">
+                    <label class="col-sm-4 col-xs-12 col-form-label">Old Password <span
+                        class="text-danger">*</span></label>
+                    <div class="col-sm-8 col-xs-12">
+                      <input type="password" class="form-control" formControlName="currentPassword"
+                        placeholder="Enter old password" autocomplete="currentPassword">
+                      <div
+                        *ngIf="changePasswordForm.get('currentPassword')?.touched && changePasswordForm.get('currentPassword')?.invalid"
+                        class="text-danger">
+                        Please enter old password.
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label class="col-sm-4 col-xs-12 col-form-label">New Password <span
+                        class="text-danger">*</span></label>
+                    <div class="col-sm-8 col-xs-12">
+                      <input type="password" class="form-control" formControlName="newPassword"
+                        placeholder="Enter new password" autocomplete="newPassword">
+                      <div
+                        *ngIf="changePasswordForm.get('newPassword')?.touched && changePasswordForm.get('newPassword')?.invalid"
+                        class="text-danger">
+                        <div class="text-danger" *ngIf="changePasswordForm.get('newPassword')?.errors?.['required']">
+                          Please enter new password.
+                        </div>
+                        <div class="text-danger" *ngIf="changePasswordForm.get('newPassword')?.errors?.['minlength']">
+                          Password must be at least 8 characters long.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label class="col-sm-4 col-xs-12 col-form-label">Confirm Password <span
+                        class="text-danger">*</span></label>
+                    <div class="col-sm-8 col-xs-12">
+                      <input type="password" class="form-control" formControlName="confirmPassword"
+                        placeholder="Enter confirm password" autocomplete="confirmPassword">
+                      <div
+                        *ngIf="changePasswordForm.get('confirmPassword')?.touched && changePasswordForm.get('newPassword')?.invalid"
+                        class="text-danger">
+                        Please enter confirm password.
+                      </div>
+                      <div *ngIf="passwordMismatchError" class="text-danger">
+                        New password and confirm password do not match.
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label class="col-sm-4 col-xs-12 col-form-label"></label>
+                    <div class="col-sm-8 col-xs-12">
+                      <button type="submit" class="btn w-sm btn-success">
+                        <i class="fa-solid fa-floppy-disk"></i>&nbsp;Save
+                      </button>
+                      <button type="button" class="btn w-sm btn-danger ms-3" (click)="cancel()">
+                        <i class="fa-solid fa-xmark"></i>&nbsp;Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- terms and condition Modal -->
+<div class="modal fade termcondModal custoModal " id="termsconditionModal" tabindex="-1"
+  aria-labelledby="termsconditionModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title " id="termsconditionModalLabel">Terms and Condition</h1>
+        <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button> -->
+      </div>
+      <div class="modal-body">
+        <div class="termCondition">
+          <p class="mb-0">AAJ SE TIED MATCH</p>
+          <p class="mb-0">ME FANCY KA LEN</p>
+          <p class="">DEN KARNGE.</p>
+          <p>1.If you not accept this agreement do not place any bet.</p>
+          <p>2.Cheating bets deleted automatically or manual. No Claim.</p>
+          <p>3.Admin decision is final and no claim on it.</p>
+          <p>4. Batsman Runs (In-Play) Over/Under (back/lay) runs bets will stand after batsman has faced one ball or is
+            given out before first ball is faced. Score counts if batsman is Not-Out including if innings is declared.
+            In case of rain, match abandoned etc. settled bets will be valid.</p>
+          <p>5.Current/Next Innings Runs Odd/Even Extras and Penalty runs will be included for settlement purposes.</p>
+          <p>6.Runs at Fall of 1st Wicket At least one delivery must be bowled, if no wickets fall bets will be void
+            unless settlement is already determined.</p>
+          <p>7.Runs at Fall of Next Wicket The total innings runs scored by a team before the fall of the specified
+            wicket determines the result of the market. If a team declares or reaches their target then the total
+            amassed will be the result of the market. Bets will be void should no more play take place following the
+            intervention of rain, or any other delay, as the ability to reach previous quotes offered will have been
+            removed . In case of rain, match abandoned etc. settled bets will be valid.</p>
+          <p>8.We do not accept manual bet.</p>
+          <p>9.In case of anyone found using two different IDs logged in same IP address his winning in both account
+            will be cancelled.</p>
+          <p>Members are not permitted to hold multiple accounts. This includes holding an account with any associated
+            site operating on the same platform as this site. Where maximum bet or maximum market limits are imposed,
+            the Site reserves the right to void bets from accounts found to be exceeding these limits by using multiple
+            accounts across this and any other associated sites.</p>
+          <p>10.In case of cheating and betting in unfair rates we will cancel the bet even after settling.</p>
+          <p>11.Local fancy are based on Haar - Jeet.</p>
+          <p>12.Incomplete session will be cancelled but complete session will be settled.</p>
+          <p>13.In case of match abandoned, cancelled, no result etc. completed sessions will be settled.</p>
+          <p>14.Lambi Paari : In 20-20 match entire twenty overs should be bowled, in case of rain or any delay if even
+            one over is deducted the bets will be cancelled. In One Day match entire 50 overs should be bowled, in case
+            of rain or any delay if even one over is deducted the bets will be cancelled.</p>
+          <p>15.Advance Session,Lambi 1`st Inning Valid Only</p>
+          <p>16.Total Match Four ,Total Match Siixes,Total Match Runs,Total Match Wides,Total Match Wicket. If Over Gets
+            Less Then All BET Will Cancel This Rule For Limited Over Matches Like 20 Overs And 50 Overs Game</p>
+          <p>17.1st Over Total Runs Prices will be offered for the total runs scored during the 1st over of the match.
+            Extras and penalty runs will be included. The over must be completed for bets to stand unless settlement is
+            already determined.</p>
+          <p>18.Limited Overs Matches - Individual Batsmen Runs or Partnerships In a limited overs match where an
+            individual batsman or partnership runs are traded in-play and the innings is curtailed or subject to any
+            reduction in overs, then these markets will be settled at the midpoint of the last available quote before
+            the overs were reduced. If the innings resumes at a later time, a new market may be formed. If a client
+            wants a position in the new market they are required to place a new trade. If there are any subsequent
+            reductions in overs, exactly the same rules will continue to apply i.e. the market is settled at the
+            midpoint of the last available quote before the overs were reduced and a new market may be formed.</p>
+          <p>19.Test Matches - Individual Batsmen Runs / Partnerships All bets, open or closed, on an individual batsman
+            or partnership runs shall be void if 50 full overs are not bowled unless one team has won, is dismissed or
+            declares prior to that point. Bets on partnership totals make up when the next wicket falls. If a batsman in
+            the relevant partnership retires hurt, the partnership is treated as continuing between the remaining
+            batsman and the batsman who comes to the wicket. A partnership is also treated as being ended by the end of
+            an innings.</p>
+          <p>20.Due to any technical issue software not work properly at that time we are not responsible for any loss.
+          </p>
+          <p>21.KINDLY AVOID JIO INTERNET IN MOBILE WHEN YOU PLACE BET.</p>
+        </div>
+      </div>
+      <div class=" modal-footer border-0">
+        <button class="btn btn-danger" data-bs-dismiss="modal" type="button">Close</button>
+        <!-- <button class="btn btn-success ms-2" type="button">Accept</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!--Update Users Shares Modal -->
+<div class="modal fade custoModal" id="filter" tabindex="-1" aria-labelledby="filterLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="filterLabel">Search</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+            class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <label class=" d-none d-md-block d-lg-block fw-medium">Select Condition Type</label>
+        </div>
+        <div class="row mt-2 cstmradioBtns">
+          <label class="radio radio-info w-auto d-flex align-items-center" style="gap: 5px;">
+            <input type="radio" id="chkCommonFilterAND" name="chkCommonFilterAND" value="true" checked="checked">
+            <label class="bold" for="chkCommonFilterAND">AND</label>
+          </label>
+          <label class="radio radio-info w-auto d-flex align-items-center" style="gap: 5px;">
+            <input type="radio" id="chkCommonFilterOR" name="chkCommonFilterAND" value="true">
+            <label class="bold" for="chkCommonFilterOR">OR</label>
+          </label>
+        </div>
+        <br>
+        <table class="datatable table dt-responsive nowrap">
+          <thead>
+            <tr>
+              <th class="text-left">Field<span class="text-danger">*</span></th>
+              <th class="text-left">Condition<span class="text-danger">*</span></th>
+              <th class="text-left">Value</th>
+              <th class="text-right"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <select class="form-control">
+                  <option value="-1">Select Field</option>
+                  <option class="filter-option date" data-datatype="date" value="appDateFilter">Date
+                  </option>
+                  <option class="filter-option text" data-datatype="text" value="appBetName">Market
+                    Name</option>
+                </select>
+              </td>
+              <td>
+                <select class="form-control">
+                  <option value="0">Select Conditions</option>
+                  <option value="==null">Blank</option>
+                  <option value="!=null">Not blank</option>
+                  <option value="==">Equals</option>
+                  <option value="!=">Not equal</option>
+                </select>
+              </td>
+              <td>
+                <input type="text" class="form-control" placeholder="Value">
+              </td>
+              <td class="text-center">
+                <button class="p-0 bg-transparent border-0"><i
+                    class="fas fa-plus-circle text-success cursor-pointer mt-1 fs-4"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success">Search</button>
+        <button type="button" class="btn btn-danger">Reset</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--first time change password model-->
+<div class="modal fade custoModal " id="changePasswordModal" tabindex="-1" aria-labelledby="passwordModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="passwordModalLabel"><label style="font-size: 13px;font-weight: 400;">Change
+            Password</label></h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="logOut()"><i
+            class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="changePasswordForm" (ngSubmit)="changepass()">
+          <div class="row">
+            <div class="col-12">
+              <div class="row">
+                <div class="col-lg-8">
+                  <div class="form-group row">
+                    <label class="col-sm-4 col-xs-12 col-form-label">Old Password <span
+                        class="text-danger">*</span></label>
+                    <div class="col-sm-8 col-xs-12">
+                      <input type="password" class="form-control" formControlName="currentPassword"
+                        placeholder="Enter old password" autocomplete="currentPassword">
+                      <div
+                        *ngIf="changePasswordForm.get('currentPassword')?.touched && changePasswordForm.get('currentPassword')?.invalid"
+                        class="text-danger">
+                        Please enter old password.
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label class="col-sm-4 col-xs-12 col-form-label">New Password <span
+                        class="text-danger">*</span></label>
+                    <div class="col-sm-8 col-xs-12">
+                      <input type="password" class="form-control" formControlName="newPassword"
+                        placeholder="Enter new password" autocomplete="newPassword">
+                      <div
+                        *ngIf="changePasswordForm.get('newPassword')?.touched && changePasswordForm.get('newPassword')?.invalid"
+                        class="text-danger">
+                        <div class="text-danger" *ngIf="changePasswordForm.get('newPassword')?.errors?.['required']">
+                          Please enter new password.
+                        </div>
+                        <div class="text-danger" *ngIf="changePasswordForm.get('newPassword')?.errors?.['minlength']">
+                          Password must be at least 8 characters long.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label class="col-sm-4 col-xs-12 col-form-label">Confirm Password <span
+                        class="text-danger">*</span></label>
+                    <div class="col-sm-8 col-xs-12">
+                      <input type="password" class="form-control" formControlName="confirmPassword"
+                        placeholder="Enter confirm password" autocomplete="confirmPassword">
+                      <div
+                        *ngIf="changePasswordForm.get('confirmPassword')?.touched && changePasswordForm.get('newPassword')?.invalid"
+                        class="text-danger">
+                        Please enter confirm password.
+                      </div>
+                      <div *ngIf="passwordMismatchError" class="text-danger">
+                        New password and confirm password do not match.
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label class="col-sm-4 col-xs-12 col-form-label"></label>
+                    <div class="col-sm-8 col-xs-12">
+                      <button type="submit" class="btn w-sm btn-success">
+                        <i class="fa-solid fa-floppy-disk"></i>&nbsp;Save
+                      </button>
+                      <button type="button" class="btn w-sm btn-danger ms-3" (click)="logOut()" data-bs-dismiss="modal"
+                        aria-label="Close">
+                        <i class="fa-solid fa-xmark"></i>&nbsp;Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<button class="btn btn-primary mt-2" id="changePasswordModal" data-bs-toggle="modal" data-target="#changePasswordModal"
+  type="button" style="display: none;">Change
+  Password</button>

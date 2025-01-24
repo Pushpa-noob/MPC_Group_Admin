@@ -1,0 +1,86 @@
+.bankingForm {
+    label {
+        margin-bottom: 2px;
+    }
+
+    select[_ngcontent-psi-c85] {
+        background-color: #fff;
+        border-radius: 4px;
+    }
+
+    .custom-file {
+        position: relative;
+        width: 100%;
+        height: calc(1.5em + .75rem + 2px);
+
+        input {
+            background-color: #fff;
+            border-radius: 4px;
+        }
+    }
+
+    .imgViewer {
+        display: flex;
+        justify-content: center;
+
+        img {
+            width: 200px;
+            height: 130px;
+            object-fit: contain;
+        }
+    }
+}
+
+img.paymtImg {
+    width: 50px;
+    height: 34px;
+    object-fit: contain;
+}
+
+button.acceptBtn,
+button.rejectedBtn {
+    border-radius: .25rem;
+    padding: .175rem .55rem;
+    border: 0;
+    font-size: 14px;
+}
+
+button.acceptBtn {
+    background-color: #cdffef;
+    color: #077701;
+    
+}
+
+button.rejectedBtn {
+    background-color: #ffd9d9;
+    color: #b30000;
+}
+
+.deleteddBtn {
+    background-color: #ffd9d9;
+    width: 30px;
+    padding: 0;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #b30000;
+}
+
+.red {
+    color: red;
+}
+
+.green {
+    color: green;
+}
+
+.modal-body {
+    h5 {
+        font-weight: 400;
+
+        span {
+            font-size: 16px;
+        }
+    }
+}

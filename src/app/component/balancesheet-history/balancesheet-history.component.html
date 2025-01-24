@@ -1,0 +1,429 @@
+<div class="page-title-box mb-3 mb-ms-4">
+    <h4 class="page-title">Balance Sheet</h4>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="row">
+                <div class="col-12 text-end">
+                    <a class="link" data-bs-toggle="collapse" href="#advanceearch" role="button" aria-expanded="false"
+                        aria-controls="advanceearch">
+                        Advance Search <i class="ms-1 fa-solid fa-chevron-right"></i>
+                    </a>
+                    <div class="collapse" id="advanceearch">
+                        <hr>
+                        <div class="row mb-4">
+                            <div class="col-lg-5 col-md-8 col-sm-12 col-xs-12">
+                                <div class="notification-list text-start">
+                                    <label class="checkbox checkbox-info mb-2 d-flex align-items-center">
+                                        <input type="checkbox" id="chkIsDate" value="true">
+                                        <label for="chkIsDate" class="ms-1">Date Wise</label>
+                                    </label>
+                                </div>
+                                <div class="input-group marginb5 div-datepicker">
+                                    <input type="date" class="form-control datepicker" name="ReportStartDate">
+                                    <span class="col-form-label">to</span>
+                                    <input type="date" class="form-control datepicker" name="ReportEndDate">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2 col-md-3 mb-2 mb-md-0">
+                    <label>Backup Data</label>
+                    <select class="form-control">
+                        <option value="10">29/08/2023 - 18/02/2024</option>
+                    </select>
+                </div>
+                <div class="col-lg-10 col-md-9 d-flex align-items-end">
+                    <button class="btn btn-outline-success me-2"><span>Excel</span></button>
+                    <button class="btn btn-outline-danger me-2"><span>PDF</span></button>
+                    <button class="btn btn-outline-info me-2"><span>CSV</span></button>
+                    <div class="ms-2 switchCommon">
+                        <div class="switchCommon newOldBtn">
+                            <label class="switchBtnCommon">
+                                <input type="checkbox" checked id="togBtn">
+                                <div class="slider round">
+                                    <span class="on">PTS</span>
+                                    <span class="off">INR</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+        <div class="card pb-5">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12 mb-1 ms-auto">
+                            <input type="text" class="form-control" placeholder="Search Min. 2 characters">
+                        </div>
+                        <div class="table-responsive border">
+                            <table class="table table-hover table-striped  table-UserList mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>UserName[FullName]</th>
+                                        <th>Balance</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <span data-bs-toggle="tooltip" data-bs-placement="top"
+                                                class="frstLet btn btn-danger" data-bs-original-title="Agent">A</span>
+                                            ak80[ak80]
+                                        </td>
+                                        <td>487.68</td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a class="btn btn-info grid-button waves-effect waves-light popup text-white"
+                                                    data-bs-toggle="modal" data-bs-target="#clearConfirm">Clear</a>
+                                                <a class="btn btn-warning grid-button waves-effect waves-light popup"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#settelmentConfirm">Settlement</a>
+                                                <a class="btn btn-primary grid-button waves-effect waves-light"
+                                                    data-bs-toggle="modal" data-bs-target="#historyModal">History</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="frstLet btn btn-info text-white">Market Commission</span>
+                                        </td>
+                                        <td>3.16</td>
+                                        <td> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="frstLet btn btn-warning text-white">Settlement (Parent)</span>
+                                        </td>
+                                        <td>3.16</td>
+                                        <td> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="frstLet btn btn-success text-white">Cash (Parent)</span>
+                                        </td>
+                                        <td>3.16</td>
+                                        <td> </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td>Total</td>
+                                        <td class="text-right clsPts"> <span class="PlusAmountTotalPts">490.84</span>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12 mb-1 ms-auto">
+                            <input type="text" class="form-control" placeholder="Search Min. 2 characters">
+                        </div>
+                        <div class="table-responsive border">
+                            <table class="table table-hover table-striped  table-UserList table-UserList2 mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>UserName[FullName]</th>
+                                        <th>Balance</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <span data-bs-toggle="tooltip" data-bs-placement="top"
+                                                class="frstLet btn btn-primary" data-bs-original-title="Agent">Market
+                                                PL</span>
+                                        </td>
+                                        <td>-243.00</td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a class="btn btn-info grid-button waves-effect waves-light popup text-white"
+                                                    data-bs-toggle="modal" data-bs-target="#clearConfirm">Clear</a>
+                                                <a class="btn btn-warning grid-button waves-effect waves-light popup"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#settelmentConfirm">Settlement</a>
+                                                <a class="btn btn-primary grid-button waves-effect waves-light"
+                                                    data-bs-toggle="modal" data-bs-target="#historyModal">History</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="frstLet btn btn-warning">Market Commission</span>
+                                        </td>
+                                        <td>3.16</td>
+                                        <td>
+
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td>Total</td>
+                                        <td class="text-right clsPts"> <span class="PlusAmountTotalPts">490.84</span>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- clear modal -->
+<div class="modal fade custoModal actdeactiveModal" id="clearConfirm" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="clearConfirmLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content">
+            <div class="card-body p-4">
+                <div class="swalIcon">
+                    <span class="swa-icon-text">!</span>
+                </div>
+                <div class="text-center px-md-4">
+                    <h4>Are you sure?</h4>
+                    <p>Are you sure to clear Settlement ?</p>
+                </div>
+                <div class="modal-footer border-0 justify-content-center order-0 p-0 mt-3">
+                    <button type="button" class="btn btn-success">Yes, Update it.!</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No, cancel.!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Settlement Modal -->
+<div class="modal fade custoModal settlementMod" id="settelmentConfirm" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="settleMentLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md-custom">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title" id="settleMentLabel">ak80[ak80] : Withdraw Cash</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="settlementBody">
+                    <form>
+                        <table class="datatable table dt-responsive nowrap">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <label class="col-form-label">Profit/Loss: </label>
+                                    </td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="text" autocomplete="off" class=" form-control">
+                                            <span class="input-group-text hidden-sm">PTS</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="col-form-label">Cash: </label></td>
+                                    <td><input type="text" class="form-control"></td>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <td>
+                                        <div class="d-flex align-items-center justify-content-evenly">
+                                            <a class="cursor-pointer clsGetFullAmount badge-soft-success">Full
+                                                Amount</a>
+                                            <a
+                                                class="cursor-pointer clsClearFullAmount badge badge-soft-danger ">Clear</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="col-form-label">Remain Cash:</label></td>
+                                    <td><input type="text" class="form-control">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="col-form-label">Remarks :</label></td>
+                                    <td><textarea class="form-control textarea" cols="20" id="txtRemarkAgentDW"
+                                            name="txtRemarkAgentDW" rows="2">Deposit Credit</textarea></td>
+                                </tr>
+                                <tr class="b2bDWPassword">
+                                    <td><label class="col-form-label">Password :</label></td>
+                                    <td><input class="form-control AllowDecimal" name="txtPassword" id="txtPassword"
+                                            placeholder="password" required="" type="password"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary">Cash Settlement</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--History Modal -->
+<div class="modal fade custoModal" id="historyModal" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="historyLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="historyLabel">Balance Sheet History <span class="fs-14">(ak80[ak80])</span>
+                </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="card cardFilter">
+                    <div class="text-end">
+                        <a class="link" data-bs-toggle="collapse" href="#advanceearch" role="button"
+                            aria-expanded="false" aria-controls="advanceearch">
+                            Advance Search <i class="ms-1 fa-solid fa-chevron-right"></i>
+                        </a>
+                        <div class="collapse" id="advanceearch">
+                            <hr>
+                            <div class="row mb-4">
+                                <div class="col-lg-5 col-md-8 col-sm-12 col-xs-12">
+                                    <div class="notification-list text-start">
+                                        <label class="checkbox checkbox-info mb-2 d-flex align-items-center">
+                                            <input type="checkbox" id="chkIsDate" value="true">
+                                            <label for="chkIsDate" class="ms-1">Date Wise</label>
+                                        </label>
+                                    </div>
+                                    <div class="input-group marginb5 div-datepicker">
+                                        <input type="datetime-local" class="form-control">
+                                        <span class="col-form-label">to</span>
+                                        <input type="datetime-local" class="form-control">
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-8 col-sm-12 col-xs-12">
+                            <div class="d-flex align-items-center flex-wrap">
+                                <label class="radio radio-info">
+                                    <input type="radio" id="chkShowAll1" name="chkSAAcoount" value="true"
+                                        checked="checked">
+                                    <label class="bold" for="chkShowAll1">All</label>
+                                    &nbsp;
+                                </label>
+                                <label class="radio radio-info">
+                                    <input type="radio" id="chkShowCash" name="chkSAAcoount" value="false">
+                                    <label class="bold" for="chkShowCash">Show Cash Entry</label>
+                                    &nbsp;
+                                </label>
+                                <label class="radio radio-info">
+                                    <input type="radio" id="chkShowPnl" name="chkSAAcoount" value="false">
+                                    <label class="bold" for="chkShowPnl">Show Market Profit &amp; Loss</label>
+                                    &nbsp;
+                                </label>
+                                <button type="button" class="btn btn-success" style="margin-left:10px;" id="btnSearch">
+                                    <i class="fa fa-search"></i> Search
+                                </button>
+
+                                <div class="ms-2 switchCommon">
+                                    <div class="switchCommon newOldBtn">
+                                        <label class="switchBtnCommon">
+                                            <input type="checkbox" id="togBtn">
+                                            <div class="slider round">
+                                                <span class="on">PTS</span>
+                                                <span class="off">INR</span>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="row mt-4 mb-2 d-flex align-items-center flex-row-reverse tableTopRow">
+                        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 ps-md-0">
+                            <input type="text" class="form-control" placeholder="Search Min. 2 characters">
+                        </div>
+                        <div class="dt-buttons flex-wrap ol-lg-3 col-md-3 col-sm-12 col-xs-12 text-end">
+                            <button class="btn downloadTableBtn me-2" type="button"><i
+                                    class="fas fa-file-csv"></i></button>
+                            <button class="btn downloadTableBtn me-2" type="button"><i
+                                    class="far fa-file-excel"></i></button>
+                            <button class="btn downloadTableBtn" type="button"><i class="far fa-file-pdf"></i></button>
+                        </div>
+                        <div class="col-md-7 col-sm-12 ">
+                            <p class="tableP mb-0">Showing 1 of 1 entries</p>
+                        </div>
+                    </div>
+                    <div class="table-responsive border">
+                        <table class="table dataNowrap mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                    <th>Cr (Deposit)</th>
+                                    <th>Dr (Withdraw)</th>
+                                    <th>Balance</th>
+                                    <th>From/To</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        04-08-2023 18:41:34
+                                    </td>
+                                    <td>
+                                        <label class="btn btn-warning grid-button" style="cursor:text;">Session
+                                            Commission</label>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <p class="mb-0">GLOUCESTERSHIRE INNINGS RUNS-Gloucestershire v
+                                                Northamptonshire-Metro Bank One Day Cup-Cricket</p>
+                                            <p class="mb-0">Result : <b>278</b></p>
+                                        </div>
+                                    </td>
+                                    <td>4.00</td>
+                                    <td>4.00</td>
+                                    <td>4.00</td>
+                                    <td>4.00</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        04-08-2023 18:41:34
+                                    </td>
+                                    <td>
+                                        <label class="btn btn-success grid-button" style="cursor:text;">Session
+                                            Commission</label>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <p class="mb-0">GLOUCESTERSHIRE INNINGS RUNS-Gloucestershire v
+                                                Northamptonshire-Metro Bank One Day Cup-Cricket</p>
+                                            <p class="mb-0">Result : <b>278</b></p>
+                                        </div>
+                                    </td>
+                                    <td>4.00</td>
+                                    <td>4.00</td>
+                                    <td>4.00</td>
+                                    <td>4.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

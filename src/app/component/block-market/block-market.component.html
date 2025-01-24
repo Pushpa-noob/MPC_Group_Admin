@@ -1,0 +1,83 @@
+<div class="page-title-box mb-3 mb-ms-4">
+    <h4 class="page-title">Block Markets</h4>
+</div>
+<div class="row subPages">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <hr>
+                <div class="col-xs-12 col-sm-12 SportListMarket">
+                    <ul class="list-unstyled matchList" id="myUL">
+                        <li *ngFor="let sport of sportsList">
+                            <span class="caret" (click)="toggleNested('sport', sport.sports_id)">
+                              <span (click)="chkTournamentStatus(sport.sports_id)">{{sport.sports_name}}</span>
+                              <i *ngIf="!sport.is_locked" class="fa fa-check-circle fa-lg ms-2" (click)="setValues('sport', sport)" data-bs-toggle="modal" data-bs-target="#blockmarketModal"></i>
+                              <i *ngIf="sport.is_locked" class="fa fa-ban fa-lg ms-2 text-danger"></i>
+                            </span>
+                            <ul class="list-unstyled nested" [class.active]="isActive('sport', sport.sports_id)">
+                              <li *ngFor="let series of seriesList">
+                                <span class="caret" (click)="toggleNested('series', series.series_id)">
+                                  <span (click)="chkEventStatus(series.series_id)">{{series.series_name}}</span>
+                                  <i *ngIf="!series.is_locked" class="fa fa-check-circle fa-lg ms-2" (click)="setValues('series', series)" data-bs-toggle="modal" data-bs-target="#blockmarketModal"></i>
+                                  <i *ngIf="series.is_locked" class="fa fa-ban fa-lg ms-2 text-danger" ></i>
+                                </span>
+                                <ul class="list-unstyled nested" [class.active]="isActive('series', series.series_id)">
+                                  <li *ngFor="let event of eventList">
+                                    <span class="caret" (click)="toggleNested('event', event.event_id)">
+                                      <span (click)="chkMarketStatus(event.event_id)">{{event.event_name}}</span>
+                                      <i *ngIf="!event.is_locked" class="fa fa-check-circle fa-lg ms-2" (click)="setValues('event', event)" data-bs-toggle="modal" data-bs-target="#blockmarketModal"></i>
+                                      <i *ngIf="event.is_locked" class="fa fa-ban fa-lg ms-2 text-danger" ></i>
+                                    </span>
+                                    <ul class="list-unstyled nested" [class.active]="isActive('event', event.event_id)">
+                                      <li *ngFor="let market of marketList">
+                                        <span class="caret">
+                                          <span>{{market.market_name}}</span>
+                                          <i *ngIf="!market.is_locked" class="fa fa-check-circle fa-lg ms-2" (click)="setValues('market', market)" data-bs-toggle="modal" data-bs-target="#blockmarketModal"></i>
+                                          <i *ngIf="market.is_locked" class="fa fa-ban fa-lg ms-2 text-danger"></i>
+                                        </span>
+                                      </li>
+                                    </ul>
+                                  </li>
+                                </ul>
+                              </li>
+                            </ul>
+                          </li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- block market modal -->
+<div class="modal fade custoModal" id="blockmarketModal" data-bs-backdrop="static" tabindex="-1"
+   aria-labelledby="blockmarketModalLabel" aria-hidden="true">
+   <div class="modal-dialog modal-md">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h4 class="modal-title" id="blockmarketModalLabel">Market</h4>
+            <button type="button" (click)="resetPassword()" id="clsPassModel" class="btn-close" data-bs-dismiss="modal"
+               aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+         </div>
+         <div class="modal-body">
+            <div class="card-body">
+               <div class="text-center">
+                  <h4>Are you sure to Block Market ?</h4>
+                  <input type="password" class="form-control" placeholder="password" name="password"
+                  [(ngModel)]="password">
+                  <div *ngIf="password.length==0"  class="text-danger text-start">
+                     *Password is required.
+                  </div>
+               </div>
+               <div class="modal-footer border-0 p-2">
+                  <button type="button" class="btn btn-primary" (click)="blockUnblockType()">Ok</button>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>

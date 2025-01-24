@@ -1,0 +1,68 @@
+.overAllBx {
+    background-image: url('../../../assets/img/customcardimg.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-bottom: 3px solid #2f2f2f;
+
+    h5 {
+        position: relative;
+        padding-bottom: 6px;
+        margin-bottom: .8rem;
+        font-size: 1.05rem;
+
+        &:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            height: 1px;
+            background-color: #000;
+        }
+    }
+}
+
+.overallPlModal {
+    .btn-close {
+        opacity: 1;
+        color: #fff;
+        padding: 0;
+        font-size: 18px;
+        line-height: normal;
+    }
+
+    .table {
+
+        th,
+        td {
+            border-right: 1px solid #cecece;
+
+            &:last-child {
+                border-right: 0;
+            }
+        }
+    }
+
+    .breadcrumb {
+        a {
+            text-decoration: none;
+        }
+    }
+}
+.table-body{
+    tfoot{
+        tr{
+            td{
+                background:#5d230b !important;
+                color: #fff !important;
+                &.text-success{
+                    color: #1fdb84 !important;
+                }
+                &.text-danger{
+                    color: #ff6f7d !important;
+                }
+            }
+        }
+        
+    }
+}

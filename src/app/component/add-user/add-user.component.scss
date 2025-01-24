@@ -1,0 +1,75 @@
+.accordionQs {
+    .accordion {
+        .accordion-item {
+            .accordion-button {
+                background-color: var(--BgCardBoxColor);
+                color: var(--blackTextColor);
+                border-radius: 0.7rem;
+                font-size: 13px;
+                box-shadow: none;
+
+                &:focus {
+                    box-shadow: none;
+                }
+
+                &:after {
+                    background-size: 16px;
+                    width: 16px;
+                    height: 16px;
+                }
+
+            }
+        }
+
+        .accordion-body {
+            .Portletcard-body {
+                h4 {
+                    font-size: 1.125rem;
+                    font-weight: 400;
+
+                    input {
+                        margin-left: 6px;
+                    }
+                }
+
+                .form-group {
+                    margin-bottom: 1rem;
+
+                    // .col-form-label{
+                    //     @media(min-width:576px){
+                    //         text-align: right;
+                    //     }
+                    // }
+                    .notefont {
+                        font-size: 9px;
+                    }
+
+                    .form-switch {
+                        .form-check-input {
+                            width: 2.75rem;
+                            height: 1.5rem;
+
+                            &:focus {
+                                box-shadow: none;
+                                // border-color:initial;
+                                // background-image:none;
+                            }
+
+                            &:checked {
+                                background-color: rgb(27, 185, 154);
+                                border-color: rgb(27, 185, 154);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.labeWid {
+    width: 120px;
+    @media(min-width:575px) {
+        width: auto;
+    }
+}

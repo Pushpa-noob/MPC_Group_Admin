@@ -1,0 +1,87 @@
+<div class="page-title-box mb-3 mb-ms-4">
+    <div class="row align-items-center">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <h4 class="page-title mb-0">Open Bets</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="row mt-2 mb-2 d-flex align-items-center flex-row-reverse tableTopRow ">
+                <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12 ps-md-0">
+                    <input type="text" class="form-control" placeholder="Search Min. 2 characters"
+                        [(ngModel)]="username" name="username" (ngModelChange)="onUsernameChange($event)">
+                </div>
+
+                <div class="dt-buttons flex-wrap mt-2 mt-md-0 col-lg-7 col-md-6 col-sm-12 col-xs-12 text-end">
+                   
+                    <button class="btn downloadTableBtn me-2" type="button" (click)="downloadCSV()"><i class="fas fa-file-csv"></i> CSV</button>
+                    <button class="btn downloadTableBtn me-2" type="button" (click)="downloadExcel()"><i class="far fa-file-excel"></i> Excel</button>
+                    <button class="btn downloadTableBtn" type="button" (click)="downloadPDF()"><i class="far fa-file-pdf"></i> Pdf</button>
+                </div>
+                <div *ngIf="betList?.length>0" class="col-lg-3 col-md-3 col-sm-12 mt-2 mt-md-0">
+                    <p class="tableP mb-0">Showing {{betList?.length}} of {{count}} entries
+                </div>
+            </div>
+            <div class="table-responsive border">
+                <table class="datatable table nowrapTable">
+                    <thead>
+                        <tr>
+                            <th>Client</th>
+                            <th>Selection</th>
+                           <th>Odds\Price</th>
+                            <th>Stake</th>
+                            <th>Bet Type</th>
+                            <th>PL</th>
+                            <th>Result</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody  *ngIf="betList?.length>0">
+                        <tr *ngFor="let data of betList | paginate: { itemsPerPage:takeRecords, currentPage:pageNum,totalItems: count };">
+                            <td>{{data.userName}}</td>
+                           
+                            <td>{{data.runnerName}}</td>
+                           
+                            <td>{{data.odds}}<span *ngIf="data.marketName=='Fancy'">/{{data.price}}</span></td>
+                            <td>{{data.stake | number:'1.2-2'}}</td>
+                            <td><span class="py-0 px-1 line-height-normal" [ngClass]="{'back': data.selection === 'Back' || data.selection === 'Yes', 'lay': data.selection === 'Lay' || data.selection === 'No'}">{{data.selection}}</span></td>
+                            <td>{{data.profit | number:'1.2-2'}}</td>
+                            <td>{{data.result}}</td>
+                            <th *ngIf="data.betStatus == 1">
+                                <span class="py-0 px-1 line-height-normal" [ngClass]="{'btn btn-success': data.betStatus == 1}">W</span>
+                            </th>
+                            <th *ngIf="data.betStatus == 2">
+                                <span class="py-0 px-1 line-height-normal" [ngClass]="{'btn btn-danger': data.betStatus == 2}">L</span>
+                            </th>
+                            <td>{{data.betTime | date:'dd/MM/yyyy h:mm:ss a'}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div *ngIf="betList?.length>0" class="pagination_filter justify-content-between pt-3 d-flex  row">
+                <div class="col-sm-6 mb- mb-sm-0">
+                    <select class="form-control w-auto mr-2 " id="" (change)="updateRecValue($event)">
+                        <option value="takeRecords" selected>{{takeRecords}}</option>
+                        <option value="10" *ngIf="takeRecords!=10">10</option>
+                        <option value="20" *ngIf="takeRecords!=20">20</option>
+                        <option value="30" *ngIf="takeRecords!=30">30</option>
+                        <option value="40" *ngIf="takeRecords!=40">40</option>
+                        <option value="50" *ngIf="takeRecords!=50">50</option>
+                        <option value="100" *ngIf="takeRecords!=100">100</option>
+                        <option value="200" *ngIf="takeRecords!=200">200</option>
+                    </select>
+                </div>
+                <div class="col-sm-6 d-flex justify-content-end">
+                    <pagination-controls class="pagination" [maxSize]="5" *ngIf="betList?.length>0"
+                        (pageChange)="pageChanged($event)">
+                    </pagination-controls>
+                </div>
+            </div>
+            <div *ngIf="betList?.length==0" class="load-more"><span>No Data Available.</span></div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,99 @@
+<div class="page-title-box mb-3 mb-ms-4">
+    <h4 class="page-title">Fancy Result </h4>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="row">
+                <div class="col-lg-3 col-md-5 col-sm-6 mt-3 mt-lg-0">
+                    <div class="form-field">
+                        <label>Select Match</label>
+                        <select class="form-control" (click)="getFancyEvents()" (change)="onEventChange($event)">
+                            <option [value]="">select</option>
+                            <option *ngFor="let data of eventList" [value]="data.eventId">{{ data.eventName }}</option>
+                        </select>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        <div class="card">
+            <div class="table-responsive mb-3">
+                <table class="table  mb-0">
+                    <thead>
+                        <tr>
+                            <th>Sr No.</th>
+                            <th>Match Name</th>
+                            <th>Session Name</th>
+                            <th>Run</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let list of fancyList; let i=index">
+                            <td>{{i+1}}</td>
+                            <td>{{list.eventName}}</td>
+                            <td>{{list.runnerName}}</td>
+                            <td><input type="text" placeholder="Runvalue" 
+                                    class="form-control run_field" [(ngModel)]="resultRun[i]"></td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <button type="button" data-bs-toggle="modal" data-bs-target="#confirmModal"
+                                        class="btn btn-success mx-2 icon_btn " (click)="setValues(list,i)">
+                                        <i class="fa-regular fa-circle-check"></i>
+                                    </button>
+
+                                    <button type="button" data-bs-toggle="modal" data-bs-target="#abbandon"
+                                        class="btn btn-danger mx-1 icon_btn" (click)="abndnMdl(list)">
+                                        <i class="fa-solid fa-ban"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- declear result modal -->
+<div id="confirmModal" data-bs-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="confirmModalLabel"
+    class="modal fade custoModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="confirmModalLabel" class="modal-title text-white"><b>{{runnerName}}</b></h5>
+            </div>
+            <div class="modal-body">
+                <h6 class="text-center">Declare <b>{{runValue}}</b> as a Result</h6>
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn btn-success" (click)="declare()">Yes</button>
+                <button type="button" id="clsMdlDec" data-bs-dismiss="modal" class="btn btn-danger" (click)="reset()">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- abonded result moadal -->
+<div id="abbandon" tabindex="-1" aria-labelledby="abbandonLabel" data-bs-backdrop="static"
+    data-keyboard="false" aria-hidden="true" class="modal fade custoModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="abbandonLabel" class="modal-title text-white"><b>{{runnerName}}</b></h5>
+            </div>
+            <div class="modal-body">
+                <h6 class="text-center"><b>Abandoned Fancy</b> </h6>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success"  (click)="abandoned()">Yes</button>
+                <button type="button" id="clsAbnFancy" data-bs-dismiss="modal" class="btn btn-danger">No</button>
+            </div>
+        </div>
+    </div>
+</div>

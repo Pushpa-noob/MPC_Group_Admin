@@ -1,0 +1,263 @@
+<div class="page-title-box mb-3 mb-ms-4">
+  <h4 class="page-title">Pending Withdraw</h4>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="table-responsive">
+        <table class="table  mb-0">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Name</th>
+              <th>ParentName</th>
+              <th>MobileNumber</th>
+              <th>AvailBalance</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let request of withdrawalRequests | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }">
+              <td>{{request.createdOn | date:'dd/MM/yyyy h:mm:ss a'}}</td>
+              <td>{{request.clientLoginId}}</td>
+              <td>{{request.parentLoginId}}</td>
+              <td>{{request.mobile}}</td>
+              <td>{{request.actualBalance | number:'1.2-2'}}</td>
+              <td>{{request.amount | number:'1.2-2'}}</td>
+              <td>
+                <div class="d-flex flex-column reqSt">
+                  <span class="reqStatus btn btn-warning pending">Pending</span>
+                </div>
+              </td>
+              <td>
+                <div class="d-flex align-items-center">
+                  <button type="button" data-bs-toggle="modal" data-bs-target="#acceptReq"
+                    class="viewBtn p-0 bg-transparent border-0 mx-1 text-success fs-6"
+                    (click)="getModelValues(request)">
+                    <i title="Accept request" class="fas fa-check-circle"></i>
+                  </button>
+                  <button type="button" data-bs-toggle="modal" data-bs-target="#rejectReq"
+                    class="viewBtn p-0 bg-transparent border-0 mx-1 text-danger fs-6" (click)="getModelValues(request)">
+                    <i title="Reject request" class="fas fa-ban"></i>
+                  </button>
+
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="text-center" *ngIf="totalItems == 0">No record found</div>
+        
+      </div>
+      <pagination-controls class="pagination" (pageChange)="pageChange($event)" [maxSize]="5" *ngIf="totalItems > 0"></pagination-controls>
+    </div>
+  </div>
+</div>
+
+<!-- Accept request modal -->
+<div id="acceptReq" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="acceptReqLabel"
+  aria-hidden="true" class="modal withReq fade custoModal">
+  <div role="document" class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 id="acceptReqLabel" class="modal-title">Pending Withdraw</h5>
+        <button type="button" id="clsmodels" data-bs-dismiss="modal" aria-label="Close" class="btn-close">
+          <i class="fa-solid fa-xmark" id="clswidtmdl"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="payment-details">
+          <h6 class="title text-center">Make your payment on the details below</h6>
+          <div class="phpayDetails payBoxCommon">
+            <table class="table bankDetailTable mb-0">
+              <tbody>
+                <tr>
+                  <td class="payTitle">Account Holder Name</td>
+                  <td class="sub-title text-right">{{bankDetails?.accountHolderName}}</td>
+                </tr>
+                <tr>
+                  <td class="payTitle">Bank Name</td>
+                  <td class="sub-title text-right">{{bankDetails?.bankName}}</td>
+                </tr>
+                <tr>
+                  <td class="payTitle">Account Number</td>
+                  <td class="sub-title text-right">{{bankDetails?.accountNumber}}</td>
+                </tr>
+                <tr>
+                  <td class="payTitle">IFSC Code</td>
+                  <td class="sub-title text-right">{{bankDetails?.ifscCode}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <h5 class="text-center py-1 border-top pt-2">Withdraw Request Of
+          <span class="d-block text-success mt-1">{{withdrawalForm.get('Amount')?.value | number:'1.2-2'}}</span>
+        </h5>
+        <form [formGroup]="withdrawalForm" (ngSubmit)="updateRequest(1)">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="recipient-name" class="col-form-label">Please Enter Remark Here:</label>
+              <input type="text" class="form-control" formControlName="Remarks" />
+              <div
+                *ngIf="withdrawalForm.get('Remarks')?.errors?.['required'] && (withdrawalForm.get('Remarks')?.dirty || withdrawalForm.get('Remarks')?.touched)"
+                class="text-danger">
+                Remarks field is required.
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="recipient-name" class="col-form-label">Please Enter UTR Number Here:</label>
+              <input type="text" class="form-control" formControlName="UtrNumber" />
+              <div
+                *ngIf="withdrawalForm.get('UtrNumber')?.errors?.['required'] && (withdrawalForm.get('UtrNumber')?.dirty || withdrawalForm.get('UtrNumber')?.touched)"
+                class="text-danger">
+                UtrNumber field is required.
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" data-bs-dismiss="modal" class="btn btn-danger">Not Now</button>
+            <button type="submit" class="btn btn-primary">Accept</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Reject request modal -->
+<div id="rejectReq" data-bs-backdrop="static" tabindex="-1" aria-labelledby="rejectReqLabel" class="modal withReq fade"
+  style="display: none;" aria-hidden="true">
+  <div role="document" class="modal-dialog custoModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 id="rejectReqLabel" class="modal-title">Pending Withdraw</h5>
+        <button type="button" id="clsmodelss" data-bs-dismiss="modal" aria-label="Close" class="btn-close">
+          <i class="fa-solid fa-xmark" id="clsrjtmdl"></i>
+        </button>
+      </div>
+      <form [formGroup]="withdrawalForm" (ngSubmit)="updateRequest(2)">
+        <div class="modal-body">
+          <h6 class="text-center py-1">Are you sure, You want to reject withdrawal request</h6>
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Please Enter Remark Here:</label>
+            <input type="text" class="form-control" formControlName="Remarks" />
+            <div
+              *ngIf="withdrawalForm.get('Remarks')?.errors?.['required'] && (withdrawalForm.get('Remarks')?.dirty || withdrawalForm.get('Remarks')?.touched)"
+              class="text-danger">
+              Remarks field is required.
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Reject</button>
+          <button type="button" data-bs-dismiss="modal" class="btn btn-danger">Not Now</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade custoModal" id="viewTransDetail" data-bs-backdrop="static" tabindex="-1"
+  aria-labelledby="viewTransDetailLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="viewTransDetailLabel">View Deposit Details</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="clsdpstmdl"><i
+            class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="card-body">
+          <div class="row mb-2">
+            <div class="col-6">
+              <p class="m-0">Transaction Status</p>
+            </div>
+            <div class="col-6">
+              <p class="m-0 text-end">Pending</p>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-6">
+              <p class="m-0">Amount</p>
+            </div>
+            <div class="col-6">
+              <p class="m-0 text-end">1000 INR</p>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-6">
+              <p class="m-0">Bank Name</p>
+            </div>
+            <div class="col-6">
+              <p class="m-0 text-end">Kotak Mahindra Bank <i class="fa-regular fa-copy ms-2"></i></p>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-6">
+              <p class="m-0">Amount Number</p>
+            </div>
+            <div class="col-6">
+              <p class="m-0 text-end">3445841512 <i class="fa-regular fa-copy ms-2"></i></p>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-6">
+              <p class="m-0">IFSC</p>
+            </div>
+            <div class="col-6">
+              <p class="m-0 text-end">KKBK00485 <i class="fa-regular fa-copy ms-2"></i></p>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-6">
+              <p class="m-0">Account Holder Name</p>
+            </div>
+            <div class="col-6">
+              <p class="m-0 text-end">Goswami Uday <i class="fa-regular fa-copy ms-2"></i></p>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-6">
+              <p class="m-0">Created At</p>
+            </div>
+            <div class="col-6">
+              <p class="m-0 text-end">19th Nov 2024, 08:39pm</p>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-6">
+              <p class="m-0">Updated At</p>
+            </div>
+            <div class="col-6">
+              <p class="m-0 text-end">19th Nov 2024, 08:39pm</p>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-6">
+              <p class="m-0">Remark</p>
+            </div>
+            <div class="col-6">
+              <p class="m-0 text-end">--</p>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-6">
+              <p class="m-0">Transfer Reference ID</p>
+            </div>
+            <div class="col-6">
+              <p class="m-0 text-end">bsdfsasd-1cccc-sdf4-as457</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-info rounded-5">Copy Account Detail</button>
+      </div>
+    </div>
+  </div>
+</div>

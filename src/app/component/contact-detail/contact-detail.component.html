@@ -1,0 +1,118 @@
+<div class="page-title-box d-flex align-items-center mb-3 mb-ms-4">
+    <h4 class="page-title mb-0 me-4">Contact Details</h4> <button type="button" class="btn btn-primary"
+        data-bs-toggle="modal" data-bs-target="#addNewContactModal">Add New</button>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table  mb-0">
+                    <thead>
+                        <tr>
+                            <th>Instagram</th>
+                            <th>Telegram</th>
+                            <th>WhatsApp</th>
+                            <th>Email</th>
+                            <th>Enquiry Number</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="text" class="form-control" defaultValue="https://www.instagram.com/">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" defaultValue="https://www.instagram.com/">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" defaultValue="https://www.instagram.com/">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" defaultValue="https://www.instagram.com/">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" defaultValue="https://www.instagram.com/">
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <button type="button" class="btn btn-success mx-1 py-1 px-2 text-white">
+                                        <!-- <i class="fa-solid fa-circle-check fs-6"></i> -->
+                                        <i class="fa-solid fa-edit fs-6"></i>
+                                    </button>
+                                    <button type="button" data-bs-toggle="modal" data-bs-target="#dltinputModal"
+                                        class="btn btn-danger mx-1 py-1 px-2">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Modal -->
+<div class="modal fade custoModal" id="addNewContactModal" tabindex="-1" data-bs-backdrop="static"
+    aria-labelledby="addNewContactModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addNewContactModalLabel">Add Contact Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="bankingForm">
+
+                    <div class="form-field mb-2">
+                        <label>Add Instagram Details :</label>
+                        <input name="Instagram" placeholder="Enter Instagram Details" class="form-control">
+                    </div>
+                    <div class="form-field mb-2"><label>Add Telegram Details :</label>
+                        <input name="Telegram" placeholder="Enter Telegram Details" class="form-control">
+                    </div>
+                    <div class="form-field mb-2">
+                        <label>Add WhatsApp Details :</label>
+                        <input name="WhatsApp" placeholder="Enter WhatsApp Details" class="form-control">
+                    </div>
+                    <div class="form-field mb-2">
+                        <label>Add Email Details :</label>
+                        <input name="Email" placeholder="Enter Email Details" class="form-control">
+                    </div>
+                    <div class="form-field">
+                        <label>Add Enquiry Phone Number :</label>
+                        <input name="EnquiryNumber" placeholder="Enter Enquiry Phone Number" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- delete modal -->
+<div class="modal fade custoModal" id="dltinputModal" data-bs-backdrop="static" data-keyboard="false" tabindex="-1"
+    aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="confirmModalLabel" class="modal-title">Delete Contact Detail</h5>
+            </div>
+            <div class="modal-body">
+                <h6 class="text-center">Are you sure want to delete this contact detail</h6>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Yes</button>
+                <button type="button" data-bs-dismiss="modal" class="btn btn-danger">No</button>
+            </div>
+        </div>
+    </div>
+</div>

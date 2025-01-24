@@ -1,0 +1,35 @@
+<div class="page-title-box mb-3 mb-ms-4">
+    <h4 class="page-title">Match List</h4>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table  mb-0">
+                    <thead>
+                        <tr>
+                            <th>S.No</th>
+                            <th>EventId</th>
+                            <th>Event Name</th>
+                            <th>Event Time</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let event of eventList; let i = index">
+                            <td>{{ i + 1 }}</td>
+                            <td>{{ event.event.id }}</td>
+                            <td>{{ event.event.name }}</td>
+                            <td>{{ event.event.openDate | date: 'yyyy-MM-dd HH:mm:ss' }}</td>
+                            <td>
+                              <button type="button" class="btn btn-info mx-1 py-1 px-2 bg-success text-white">
+                                <i class="fas fa-check-circle" (click)="addEvent(event)"></i>
+                              </button>
+                            </td>
+                          </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,540 @@
+<div class="page-title-box mb-3 mb-ms-4">
+    <h4 class="page-title">Balance Sheet</h4>
+</div>
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="card pb-5">
+            <div class="card-body">
+                <div class="me-2 ps-2 mt-2 mb-3 d-flex align-items-center">
+                    <button class="btn btn-outline-success me-2"><span>Excel</span></button>
+                    <button class="btn btn-outline-danger me-2"><span>PDF</span></button>
+                    <button class="btn btn-outline-info me-2"><span>CSV</span></button>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <!-- <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12 mb-1 me-auto">
+                            <input type="text" class="form-control" placeholder="Search Min. 2 characters">
+                        </div> -->
+                        <div class="breadcrumb" *ngIf="isHomeClicked">
+                            <span *ngFor="let breadcrumb of breadcrumbs; let i = index; let last = last">
+                                <a class="me-2" href="javascript:void(0)" (click)="navigateToUser(breadcrumb.userId)"
+                                    *ngIf="i === 0">
+                                    <i class="fa-solid fa-house-chimney"></i>
+                                </a>
+
+                                <a href="javascript:void(0)" (click)="navigateToUser(breadcrumb.userId)"
+                                    *ngIf="i > 0 && !last">
+                                    {{ breadcrumb.userName }}
+                                </a>
+                                <!-- / -->
+                                <span *ngIf="last">{{ breadcrumb.userName }}</span>
+                                <span class="mx-1" *ngIf="!last && i !== 0"> / </span>
+                            </span>
+                        </div>
+                        <div class="table-responsive border">
+                            <table class="table table-hover table-striped  table-UserList mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>UserName[FullName]</th>
+                                        <th>Balance</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of plusData">
+                                        <td [class.pointer]="item.role != 'Client'"
+                                            (click)="item.role != 'Client' && getBalanceSheet(item.userId)">
+                                            <div class="d-flex">
+                                                <span data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    class="frstLet btn btn-danger" data-bs-original-title="Agent"
+                                                    *ngIf="item.roleId>0 && item.role!='Client'">A</span>
+                                                <span data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    class="frstLet btn btn-warning" data-bs-original-title="Agent"
+                                                    *ngIf="item.roleId>0 && item.role=='Client'">C</span>
+                                                <span class="frstLet btn"
+                                                    [ngClass]="{'btn-warning text-white':(item.userName=='Settlement (Parent)' || item.userName=='Session Commission'),'btn-info text-white':item.userName=='Market Commission','btn-success text-white':(item.userName=='Cash(Parent)' || item.userName=='Cash'),'btn-primary text-white':item.userName=='Market P/L'}">{{item.userName}}</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-success">{{item.settlement | number:'1.2-2'}}</td>
+                                        <td *ngIf="item.payment==1">
+                                            <div class="btn-group">
+                                                <!-- <a class="btn btn-info grid-button waves-effect waves-light popup text-white"
+                                                    data-bs-toggle="modal" data-bs-target="#clearConfirm"
+                                                    (click)="getSettlement(item,'Clear')">Clear</a> -->
+                                                <a class="btn btn-warning grid-button waves-effect waves-light popup"
+                                                    data-bs-toggle="modal" data-bs-target="#settelmentConfirm"
+                                                    (click)="getSettlement(item,'Plus')">Settlement</a>
+                                                <a class="btn btn-primary grid-button waves-effect waves-light"
+                                                    data-bs-toggle="modal" data-bs-target="#historyModal"
+                                                    (click)="getUser(item)">History</a>
+                                                <!-- <a class="btn btn-danger grid-button waves-effect waves-light"
+                                                    data-bs-toggle="modal" data-bs-target="#historyModal"
+                                                    (click)="getUser(item)">Detail</a> -->
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td>Total</td>
+                                        <td class="text-right clsPts"> <span class="PlusAmountTotalPts">{{total |
+                                                number:'1.2-2'}}</span>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <!-- <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12 mb-1 mt-2 mt-md-0 ms-auto">
+                            <input type="text" class="form-control" placeholder="Search Min. 2 characters">
+                        </div> -->
+                        <div class="table-responsive border">
+                            <table class="table table-hover table-striped  table-UserList table-UserList2 mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>UserName[FullName]</th>
+                                        <th>Balance</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of minusData">
+                                        <td [class.pointer]="item.role != 'Client'"
+                                            (click)="item.role != 'Client' && getBalanceSheet(item.userId)">
+                                            <div class="d-flex">
+                                                <span data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    class="frstLet btn btn-danger" data-bs-original-title="Agent"
+                                                    *ngIf="item.roleId>0 && item.role!='Client'">A</span>
+                                                <span data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    class="frstLet btn btn-warning" data-bs-original-title="Agent"
+                                                    *ngIf="item.roleId>0 && item.role=='Client'">C</span>
+                                                <span class="frstLet btn"
+                                                    [ngClass]="{'btn-warning text-white':(item.userName=='Settlement (Parent)' || item.userName=='Session Commission'),'btn-info text-white':item.userName=='Market Commission','btn-success text-white':(item.userName=='Cash(Parent)' || item.userName=='Cash'),'btn-primary text-white':item.userName=='Market P/L'}">{{item.userName}}</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-danger">{{item.settlement | number:'1.2-2'}}</td>
+                                        <td *ngIf="item.payment==1">
+                                            <div class="btn-group">
+                                                <a class="btn btn-info grid-button waves-effect waves-light popup text-white"
+                                                    data-bs-toggle="modal" data-bs-target="#clearConfirm"
+                                                    (click)="getSettlement(item,'Clear')">Clear</a>
+                                                <a class="btn btn-warning grid-button waves-effect waves-light popup"
+                                                    data-bs-toggle="modal" data-bs-target="#settelmentConfirm"
+                                                    (click)="getSettlement(item,'Minus')">Settlement</a>
+                                                <a class="btn btn-primary grid-button waves-effect waves-light"
+                                                    data-bs-toggle="modal" data-bs-target="#historyModal"
+                                                    (click)="getUser(item)">History</a>
+                                                <!-- <a class="btn btn-danger grid-button waves-effect waves-light"
+                                                    data-bs-toggle="modal" data-bs-target="#detailsModal"
+                                                    (click)="getUser(item)">Detail</a> -->
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td>Total</td>
+                                        <td class="text-right clsPts"> <span class="PlusAmountTotalPts">{{total |
+                                                number:'1.2-2'}}</span>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- clear modal -->
+<div class="modal fade custoModal actdeactiveModal" id="clearConfirm" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="clearConfirmLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content">
+            <div class="card-body p-4">
+                <div class="swalIcon">
+                    <span class="swa-icon-text">!</span>
+                </div>
+                <div class="text-center px-md-4">
+                    <h4>Are you sure?</h4>
+                    <p>Are you sure to clear Settlement ?</p>
+                </div>
+                <div class="b2bDWPassword">
+                    <label class="col-form-label">Password :</label>
+                    <input class="form-control AllowDecimal" [(ngModel)]="password" name="txtPassword" id="txtPassword"
+                        placeholder="password" required="" type="password" autocomplete="txtPassword">
+
+                </div>
+                <div class="modal-footer border-0 justify-content-center order-0 p-0 mt-3">
+                    <button type="button" class="btn btn-success" (click)="settlement()">Yes, Update it.!</button>
+                    <button type="button" id="clsClearMdl" class="btn btn-danger" data-bs-dismiss="modal">No,
+                        cancel.!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Settlement Modal -->
+<div class="modal fade custoModal settlementMod" id="settelmentConfirm" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="settleMentLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md-custom">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title" id="settleMentLabel">{{backUpSettlement.userName}} : {{remark}}</h1>
+                <button type="button" id="clsStlmntMdl" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="settlementBody">
+                    <form>
+                        <table class="datatable table dt-responsive nowrap">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <label class="col-form-label">Profit/Loss: </label>
+                                    </td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input disabled type="text" autocomplete="off" class=" form-control"
+                                                name="settlementAmount" [(ngModel)]="settlementAmount">
+                                            <span class="input-group-text hidden-sm">{{Currency}}</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="col-form-label">Cash: </label></td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="text" (keyup)="remainingAmount()" class="form-control"
+                                                name="amount" [(ngModel)]="amount">
+                                            <span class="input-group-text hidden-sm">{{Currency}}</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <td>
+                                        <div class="d-flex align-items-center justify-content-evenly">
+                                            <a class="cursor-pointer clsGetFullAmount badge-soft-success"
+                                                (click)="fullAmount()">Full
+                                                Amount</a>
+                                            <a class="cursor-pointer clsClearFullAmount badge badge-soft-danger"
+                                                (click)=clearAmount()>Clear</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="col-form-label">Remain Cash:</label></td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="text" disabled class="form-control" name="pendingSettlement"
+                                                [(ngModel)]="pendingSettlement">
+                                            <span class="input-group-text hidden-sm">{{Currency}}</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="col-form-label">Remarks :</label></td>
+                                    <td><textarea class="form-control textarea" cols="20" id="txtRemarkAgentDW"
+                                            name="txtRemarkAgentDW" [(ngModel)]="remark" rows="2"></textarea></td>
+                                </tr>
+                                <tr class="b2bDWPassword">
+                                    <td><label class="col-form-label">Password :</label></td>
+                                    <td><input class="form-control AllowDecimal" [(ngModel)]="password"
+                                            name="txtPassword" id="txtPassword" placeholder="password" required=""
+                                            type="password" autocomplete="txtPassword"></td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary" (click)="settlement()" *ngIf="type=='Plus'">Cash
+                            Settlement</button>
+                        <button type="submit" class="btn btn-primary" (click)="settlement()"
+                            *ngIf="type=='Minus' && selectedUserRole!='Client'">Cash Settlement</button>
+                        <button type="submit" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#settelmentSure" *ngIf="type=='Minus' && selectedUserRole=='Client'">Cash
+                            Settlement</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--History Modal -->
+<div class="modal fade custoModal" id="historyModal" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="historyLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="historyLabel">Balance Sheet History <span
+                        class="fs-14">{{selectedUser}}</span>
+                </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="content text-left ms-2 mt-2" style="color: red;">*Showing data of last one 7 days by default
+                </div>
+                <div class="card cardFilter">
+                    <div class="text-end">
+                        <a class="link" data-bs-toggle="collapse" href="#advanceearch" role="button"
+                            aria-expanded="false" aria-controls="advanceearch">
+                            Advance Search <i class="ms-1 fa-solid fa-chevron-right"></i>
+                        </a>
+                        <div class="collapse" id="advanceearch">
+                            <hr>
+                            <div class="row mb-4">
+                                <div class="col-lg-4 col-md-8 col-sm-12 col-xs-12 mb-2">
+                                    <div class="input-group marginb5 div-datepicker">
+                                        <input type="datetime-local" class="form-control" name="startTime"
+                                            [(ngModel)]="startTime">
+                                        <span class="col-form-label">to</span>
+                                        <input type="datetime-local" class="form-control" name="endTime"
+                                            [(ngModel)]="endTime">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-8 col-sm-12 col-xs-12">
+                            <div class="d-flex align-items-center flex-wrap">
+                                <label class="radio radio-info">
+                                    <input type="radio" (click)="getHistoryData('All')" id="chkShowAll1"
+                                        name="chkSAAcoount1" [(ngModel)]="valueType" value="All">
+                                    <label class="bold" for="chkShowAll1">All</label>
+                                    &nbsp;
+                                </label>
+                                <label class="radio radio-info">
+                                    <input (click)="getHistoryData('Cash')" type="radio" id="chkShowCash"
+                                        name="chkSAAcoount1" [(ngModel)]="valueType" value="Cash">
+                                    <label class="bold" for="chkShowCash">Show Cash Entry</label>
+                                    &nbsp;
+                                </label>
+                                <label class="radio radio-info">
+                                    <input type="radio" (click)="getHistoryData('ProfitLoss')" id="chkShowPnl"
+                                        name="chkSAAcoount1" [(ngModel)]="valueType" value="ProfitLoss">
+                                    <label class="bold" for="chkShowPnl">Show Market Profit & Loss</label>
+                                    &nbsp;
+                                </label>
+                                <button type="button" (click)="getTransationHistory()" class="btn btn-success"
+                                    style="margin-left:10px;">
+                                    <i class="fa fa-search"></i> Search
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="card">
+                    <div class="row mt-4 mb-2 d-flex align-items-center flex-row-reverse tableTopRow">
+                        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 ps-md-0">
+                            <input type="text" class="form-control" placeholder="Search Min. 2 characters">
+                        </div>
+                        <div class="dt-buttons flex-wrap ol-lg-3 col-md-3 col-sm-12 col-xs-12 text-end">
+                            <button class="btn downloadTableBtn me-2" type="button"><i
+                                    class="fas fa-file-csv"></i></button>
+                            <button class="btn downloadTableBtn me-2" type="button"><i
+                                    class="far fa-file-excel"></i></button>
+                            <button class="btn downloadTableBtn" type="button"><i class="far fa-file-pdf"></i></button>
+                        </div>
+                        <div *ngIf="returnObj.length>0" class="col-md-7 col-sm-12 ">
+                            <p class="tableP mb-0">Showing {{returnObj.length}} of {{Count}} entries</p>
+                        </div>
+                    </div>
+                    <div *ngIf="returnObj?.length>0" class="table-responsive border">
+                        <table class="table dataNowrap mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>type</th>
+                                    <th>Description</th>
+                                    <th>Cr (Deposit)</th>
+                                    <th>Dr (Withdraw)</th>
+                                    <th>Balance</th>
+                                    <!-- <th>From/To</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr
+                                    *ngFor="let data of returnObj  | paginate: { itemsPerPage:takeRecords, currentPage:pageNum,totalItems: Count };">
+                                    <td>
+                                        {{data.createdOn | date:'short'}}
+                                    </td>
+                                    <td>
+                                        <label class="btn grid-button"
+                                            [ngClass]="{'btn-warning': data?.sportsName === 'Banking', 'btn-primary': data?.sportsName !== 'Banking'}"
+                                            style="cursor:text;">
+                                            {{ data?.sportsName === 'Banking' ? 'D|W Cash' : 'P|L Market' }}
+                                        </label>
+                                    </td>
+                                    <td *ngIf="data.sportsId != 0">
+                                        <div class="d-flex flex-column">
+                                            <a>
+                                                <p class="mb-0">
+                                                    {{data.sportsName}}/{{data.eventName}}/{{data.marketName}}
+                                                    <span
+                                                        *ngIf="data.marketName === 'Fancy' || data.marketName==='Session Commision'">/{{data.runnerId}}</span>
+                                                </p>
+                                            </a>
+                                            <p *ngIf="data.sportsId != 5" class="mb-0">Result: <b
+                                                    class="text-success">{{data?.tournamentName}}</b></p>
+                                        </div>
+                                    </td>
+                                    <td *ngIf="data.sportsId == 0">
+                                        <div class="d-flex flex-column">
+                                            <p class="mb-0">
+                                                {{data.eventName}}
+                                            </p>
+                                        </div>
+                                    </td>
+                                    <td><span [ngClass]="{'btn btn-success grid-button':data.amount>0}">{{ data.type ===
+                                            'Credit'
+                                            ? (data.amount | number:'1.2-2') : '0' }}</span></td>
+                                    <td><span [ngClass]="{'btn btn-danger grid-button':data.amount<0}">{{ data.type ===
+                                            'Debit' ?
+                                            (data.amount | number:'1.2-2') : '0' }}</span></td>
+                                    <td>{{data.balance | number:'1.2-2'}}</td>
+                                    <!-- <td>{{ data.type === 'Debit' ? (data.name + ' >> ' + data.parentName) :
+                                        (data.parentName + '
+                                        >> ' + data.name) }}</td> -->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div *ngIf="returnObj?.length>0" class="pagination_filter justify-content-between pt-3 d-flex  row">
+                        <div class="col-sm-6 mb- mb-sm-0">
+                            <select class="form-control w-auto mr-2 " id="" (change)="updateRecValue($event)">
+                                <option value="takeRecords" selected>{{takeRecords}}</option>
+                                <option value="10" *ngIf="takeRecords!=10">10</option>
+                                <option value="20" *ngIf="takeRecords!=20">20</option>
+                                <option value="30" *ngIf="takeRecords!=30">30</option>
+                                <option value="40" *ngIf="takeRecords!=40">40</option>
+                                <option value="50" *ngIf="takeRecords!=50">50</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6 d-flex justify-content-end">
+                            <pagination-controls class="pagination" [maxSize]="5" *ngIf="returnObj?.length>0"
+                                (pageChange)="pageChanged($event)">
+                            </pagination-controls>
+                        </div>
+                    </div>
+                    <div *ngIf="returnObj?.length==0" class="load-more"><span>No Data Available.</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Detail Modal -->
+<div class="modal fade custoModal" id="detailsModal" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="detailsLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="detailsLabel">Overall Profit & Loss Detail</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="detailData">
+                    <div class="mainCard">
+                        <h5 class="mb-2">Username</h5>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card ">
+                                    <div class="card-body mb-0">
+                                        <h4 class="header-title">Client Total Profit&Loss</h4>
+                                        <p class="text-success mb-0">0.00 </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card ">
+                                    <div class="card-body mb-0">
+                                        <h4 class="header-title">Parent Sports Profit&Loss <span>(70)</span></h4>
+                                        <p class="text-success mb-0">0.00 </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card ">
+                                    <div class="card-body mb-0">
+                                        <h4 class="header-title">Parent Casino Profit&Loss <span>(70)</span></h4>
+                                        <p class="text-success mb-0">0.00 </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card ">
+                                    <div class="card-body mb-0">
+                                        <h4 class="header-title">Parent Total Profit&Loss</h4>
+                                        <p class="text-success mb-0">0.00 </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card ">
+                                    <div class="card-body mb-0">
+                                        <h4 class="header-title">Own Sports Profit&Loss <span>(70)</span></h4>
+                                        <p class="text-success mb-0">0.00 </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card ">
+                                    <div class="card-body mb-0">
+                                        <h4 class="header-title">Own Casino Profit&Loss <span>(70)</span></h4>
+                                        <p class="text-danger mb-0">0.00 </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card ">
+                                    <div class="card-body mb-0">
+                                        <h4 class="header-title">Own Total Profit&Loss</h4>
+                                        <p class="text-danger mb-0">0.00 </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade custoModal" id="settelmentSure" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="settelmentSureLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="settelmentSureLabel">Deposit Confirm</h4>
+                <button type="button" id="clsPassModel" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+                    <div class="text-center">
+                        <h4>Are you sure you want to deposit chips?</h4>
+                    </div>
+                    <div class="modal-footer border-0 p-2">
+                        <button type="button" class="btn btn-primary" (click)="settlement()">Yes</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                            (click)="clearSettlement()">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

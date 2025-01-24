@@ -1,0 +1,285 @@
+<div class="page-title-box mb-3 mb-ms-4">
+    <h4 class="page-title d-flex align-items-center flex-wrap gap-both"><span class="me-3">Manage Banking (Type)</span> 
+      
+    </h4>
+</div>
+<div class="manage-btn mb-2">
+    <button type="button" data-bs-toggle="modal"
+    data-bs-target="#addNewMethod" class="btn btn-primary m-0">Add
+    New</button>
+    <button type="button" class="btn btn-danger m-0 ms-3" (click)="reset()">Reset</button>
+</div>
+<div class="cstmRadioBtn d-inline-flex flex-wrap">
+    <div class="form-check my-1" *ngFor="let method of bankingMethods">
+        <input class="form-check-input" type="radio" name="flexRadioDefault" (click)="getFilterBankingDetails(method.name)">
+        <label class="form-check-label whitespace-nowrap">
+          <img [src]="method.imagePath" alt="">  {{method.name}} 
+        </label>
+    </div>
+    
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="table-responsive mb-3">
+                <table class="table  mb-0">
+                    <thead>
+                        <tr>
+                            <th>S.No</th>
+                            <th>Banking Method</th>
+                            <th>Bank Holder Name</th>
+                            <th>Bank Name</th>
+                            <th>QR Code</th>
+                            <th>IFSC Code</th>
+                            <th>Branch Name</th>
+                            <th>Account No</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let bankDetail of bankingDetails;let i=index">
+                            <td>{{i+1}}</td>
+                            <td><img alt="icon" class="img-fluid paymtImg" [src]="bankDetail.bankingMethodImage"></td>
+                            <td>{{bankDetail.accountHolderName}}</td>
+                            <td>{{bankDetail.bankName}}</td>
+                            <td><a href="{{bankDetail.qrImagePath}}" target="_blank"
+                                    style="text-decoration:none;" class="manegebank_link">{{bankDetail.qrImagePath}}</a> </td>
+                            <td>{{bankDetail.ifscCode}}</td>
+                            <td>{{bankDetail.branchName}}</td>
+                            <td>{{bankDetail.accountNumber}}</td>
+
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <button type="button" class="btn acceptBtn me-1" *ngIf="!bankDetail.isLocked"
+                                        data-bs-toggle="modal" data-bs-target="#areyouSure"
+                                        (click)="getModelValues(bankDetail,'Status')">Active</button>
+                                    <button type="button" class="btn acceptBtn rejectedBtn" *ngIf="bankDetail.isLocked"
+                                        data-bs-toggle="modal" data-bs-target="#areyouSure"
+                                        (click)="getModelValues(bankDetail,'Status')">Deactive</button>
+                                </div>
+                            </td>
+                            <td (click)="getModelValues(bankDetail,'Edit')">
+                                <button type="button" data-bs-toggle="modal" data-bs-target="#editNewMethod"
+                                    class="btn btn-info editbtn"><i class="fas fa-edit"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- add banking modal -->
+<div class="modal fade custoModal" id="addNewMethod" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="addNewMethodLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="addNewMethodLabel">Add Banking Method</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="clsmdl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+                    <div class="bankingForm">
+                        <form [formGroup]="bankDetailForm" (ngSubmit)="addBankDetail()">
+                            <div class="form-field mb-3">
+                                <label>Add Banking Details:</label>
+                                <div class="custom-select-container">
+                                    <div class="custom-select" (click)="toggleDropdown()">
+                                        <ng-container *ngIf="selectedMethod.name; else placeholder">
+                                            <img [src]="selectedMethod.imagePath" alt="{{ selectedMethod.name }}"
+                                                class="selected-image">
+                                            <span>{{ selectedMethod.name }}</span>
+                                        </ng-container>
+                                        <ng-template #placeholder>
+                                            <span>Select Method</span>
+                                        </ng-template>
+                                        <div class="dropdown-arrow"></div>
+                                    </div>
+                                    <div class="custom-options" [class.show]="dropdownOpen">
+                                        <div class="custom-option" *ngFor="let bankingMethod of bankingMethods"
+                                            (click)="selectBankingMethod(bankingMethod)">
+                                            <img [src]="bankingMethod.imagePath" alt="{{ bankingMethod.name }}"
+                                                class="option-image">
+                                            <span>{{ bankingMethod.name }}</span>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" formControlName="BankingMethodId" [value]="selectedMethod.id">
+                                </div>
+
+                                <div *ngIf="bankDetailForm.get('BankingMethodId')?.errors?.['required'] && (bankDetailForm.get('BankingMethodId')?.dirty || bankDetailForm.get('BankingMethodId')?.touched)"
+                                    class="text-danger">
+                                    Please select banking method.
+                                </div>
+                            </div>
+                            <div class="form-field mb-3">
+                                <label>Account Holder Name :</label>
+                                <input type="text" placeholder="Enter Account Holder Name" name="BankHolderName"
+                                    class="form-control" formControlName="AccountHolderName">
+                                <div *ngIf="bankDetailForm.get('AccountHolderName')?.errors?.['required'] && (bankDetailForm.get('AccountHolderName')?.dirty || bankDetailForm.get('AccountHolderName')?.touched)"
+                                    class="text-danger">
+                                    Please enter account holder name.
+                                </div>
+                            </div>
+                            <div class="form-field mb-3">
+                                <label>Bank Name :</label>
+                                <input type="text" placeholder="Enter Name" name="BankName" class="form-control"
+                                    formControlName="BankName">
+                                <div *ngIf="bankDetailForm.get('BankName')?.errors?.['required'] && (bankDetailForm.get('BankName')?.dirty || bankDetailForm.get('BankName')?.touched)"
+                                    class="text-danger">
+                                    Please enter bank name.
+                                </div>
+                            </div>
+                            <div class="form-field mb-3" *ngIf="bankMethodName=='Bank'">
+                                <label>Branch Name :</label>
+                                <input type="text" placeholder="Enter Branch Name" name="BranchName"
+                                    class="form-control" formControlName="BranchName">
+
+                            </div>
+
+                            <div class="form-field mb-3" *ngIf="bankMethodName=='Bank'">
+                                <label>IFSC Code :</label>
+                                <input type="text" placeholder="Enter ifsc code" name="IfscCode" class="form-control"
+                                    formControlName="IfscCode">
+
+                            </div>
+                            <div class="form-field mb-3">
+                                <label>Account No/Mobile no/UPI ID :</label>
+                                <input type="text" placeholder="Enter acc code" name="AccountNumber"
+                                    class="form-control" formControlName="AccountNumber">
+                                <div *ngIf="bankDetailForm.get('AccountNumber')?.errors?.['required'] && (bankDetailForm.get('AccountNumber')?.dirty || bankDetailForm.get('AccountNumber')?.touched)"
+                                    class="text-danger">
+                                    Please enter account number/Mobile number or UPI id.
+                                </div>
+                            </div>
+                            <div class="form-field mb-3" *ngIf="bankMethodName!='Bank'">
+                                <label>Upload QR Code :</label>
+                                <input type="file" class="form-control" (change)="onFileSelected($event)">
+                                <div class="imgViewer mt-2" *ngIf="previewUrl">
+                                    <img src="" alt="QR img" class="img-fluid" [src]="previewUrl">
+                                </div>
+
+                            </div>
+                            <div class="modal-footer mt-4 pb-0">
+                                <button type="submit" class="btn btn-primary"
+                                    [disabled]="bankDetailForm.invalid">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- edit banking modal -->
+<div class="modal fade custoModal" id="editNewMethod" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="editNewMethodLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="editNewMethodLabel">Edit Banking Method</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="clsedtmdl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card-body">
+                    <div class="bankingForm">
+                        <form [formGroup]="bankDetailForm" (ngSubmit)="updateBankDetail()">
+                            <div class="form-field mb-3">
+                                <label>Edit Banking Details:</label>
+                                
+                                <img alt="icon" class="img-fluid paymtImg d-block" [src]="bankImage">
+
+
+                            </div>
+                            <div class="form-field mb-3">
+                                <label>Account Holder Name :</label>
+                                <input type="text" placeholder="Enter Account Holder Name" name="BankHolderName"
+                                    class="form-control" formControlName="AccountHolderName">
+                                <div *ngIf="bankDetailForm.get('AccountHolderName')?.errors?.['required'] && (bankDetailForm.get('AccountHolderName')?.dirty || bankDetailForm.get('AccountHolderName')?.touched)"
+                                    class="text-danger">
+                                    Please enter account holder name.
+                                </div>
+                            </div>
+                            <div class="form-field mb-3">
+                                <label>Bank Name :</label>
+                                <input type="text" placeholder="Enter Name" name="BankName"
+                                    class="form-control disabled" formControlName="BankName">
+
+                            </div>
+                            <div class="form-field mb-3" *ngIf="bankMethodName=='Bank'">
+                                <label>Branch Name :</label>
+                                <input type="text" placeholder="Enter Branch Name" name="BranchName"
+                                    class="form-control" formControlName="BranchName">
+
+                            </div>
+
+                            <div class="form-field mb-3" *ngIf="bankMethodName=='Bank'">
+                                <label>IFSC Code :</label>
+                                <input type="text" placeholder="Enter ifsc code" name="IfscCode" class="form-control"
+                                    formControlName="IfscCode">
+
+                            </div>
+                            <div class="form-field mb-3">
+                                <label>Account No/Mobile no/UPI ID :</label>
+                                <input type="text" placeholder="Enter acc code" name="AccountNumber"
+                                    class="form-control" formControlName="AccountNumber">
+                                <div *ngIf="bankDetailForm.get('AccountNumber')?.errors?.['required'] && (bankDetailForm.get('AccountNumber')?.dirty || bankDetailForm.get('AccountNumber')?.touched)"
+                                    class="text-danger">
+                                    Please enter account number/Mobile number or UPI id.
+                                </div>
+                            </div>
+                            <div class="form-field mb-3" *ngIf="bankMethodName!='Bank'">
+                                <label>Upload QR Code :</label>
+                                <input type="file" class="form-control" (change)="onFileSelected($event)">
+                                <div class="imgViewer mt-2" *ngIf="previewUrl">
+                                    <img src="" alt="QR img" class="img-fluid" [src]="previewUrl">
+                                </div>
+
+                            </div>
+                            <div class="modal-footer mt-4 pb-0">
+                                <button type="submit" class="btn btn-primary"
+                                    [disabled]="bankDetailForm.invalid">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--active deactive Modal -->
+<div class="modal fade custoModal actdeactiveModal" id="areyouSure" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="areyouSureLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content">
+            <div class="card-body p-4">
+                <div class="swalIcon">
+                    <span class="swa-icon-text">!</span>
+                </div>
+                <div class="text-center px-md-4">
+                    <h4>Are you sure?</h4>
+                    <p>Are you sure to {{modelText}} these bank details ?</p>
+                </div>
+                <div class="modal-footer border-0 justify-content-center order-0 p-0 mt-3">
+                    <button type="button" class="btn btn-success" (click)="updateBankDetail()">Yes, Update it.!</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="clsstsmdl">No,
+                        cancel.!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

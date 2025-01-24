@@ -1,0 +1,51 @@
+<div class="page-title-box mb-3 mb-ms-4">
+    <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center  add-event flex-wrap" style="gap: 10px;">
+        <h4 class="page-title mb-0">Add Event</h4>
+        <select class="form-control" (change)="OnValueChange($event)">
+            <option [value]=4>Cricket</option>
+            <option [value]=1>Football</option>
+            <option [value]=2>Tennis</option>
+        </select>
+        <div class="">
+            <button type="button" class="btn btn-primary" (click)="addEvent()">Add All Events</button>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table  mb-0">
+                    <thead>
+                        <tr>
+                            <th>S.No</th>
+                            <th>Id</th>
+                            <th>Competition</th>
+                            <th>Competition Region</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let series of seriesList; let i = index">
+                            <td>{{ i + 1 }}</td>
+                            <td>{{ series.competition.id }}</td>
+                            <td>{{ series.competition.name }}</td>
+                            <td>{{ series.competitionRegion }}</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                <!-- <button type="button" class="btn btn-success mx-1 py-1 px-2 text-white"
+                                routerLink="/match_list/{{sportsId}}/{{series.competition.id}}//{{series.competition.name}}">
+                                    <i class="fa-solid fa-eye"></i>
+                                </button> -->
+                                <button (click)="saveAllTournamentMatches(series.competition.id)" type="button" class="btn btn-info mx-1 py-1 px-2 text-white">
+                                    <i class="fa-solid fa-save"></i>
+                                </button>
+                            </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

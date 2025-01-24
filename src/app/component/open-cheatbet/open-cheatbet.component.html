@@ -1,0 +1,143 @@
+<div class="page-title-box mb-3 mb-ms-4">
+    <div class="row align-items-center">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <h4 class="page-title mb-0">Cheat Bet Report</h4>
+        </div>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="row">
+                <div class=" col-md-6 col-lg-6 col-xs-12 px-1"></div>
+                <div class="col-md-6 col-lg-6 col-xs-12 accordion custom-accordion text-sm-end">
+                    <a class="link m-1" data-bs-toggle="collapse" href="#advanceearch" role="button"
+                        aria-expanded="false" aria-controls="advanceearch">
+                        Advance Search <i class="ms-1 fa-solid fa-chevron-right"></i>
+                    </a>
+
+                </div>
+
+            </div>
+            <div class="collapse" id="advanceearch">
+                <div class="row">
+                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 mt-2 mt-md-0">
+                        <div class="form-group mb-0">
+                            <label class="checkbox checkbox-info d-flex align-items-center mb-2">Select Sports</label>
+                            <select class="form-control" (change)="onSportChange($event)">
+                                <option [value]="0">Select</option>
+                                <option [value]="4">Cricket</option>
+                                <option [value]="1">Football</option>
+                                <option [value]="2">Tennis</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 mt-2 mt-md-0">
+                        <div class="form-group mb-0">
+                            <label class="checkbox checkbox-info d-flex align-items-center mb-2">Select Match</label>
+                            <select class="form-control" (change)="onEventChange($event)">
+                                <option>Select</option>
+                                <option *ngFor="let data of eventList" [value]="data.eventId">{{data.eventName}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-8 col-sm-12 col-xs-12 mb-2">
+                    <div class="input-group marginb5 div-datepicker">
+                        <input type="datetime-local" class="form-control" name="startTime" [(ngModel)]="startTime">
+                        <span class="col-form-label">to</span>
+                        <input type="datetime-local" class="form-control" name="endTime" [(ngModel)]="endTime">
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 mb-2">
+                    <!-- <label class=" d-none d-md-block d-lg-block mb-1">&nbsp;</label> -->
+                    <button (click)="getBetHistory()" type="button" class="btn btn-success">
+                        <i class="fa fa-search"></i> Search
+                    </button>
+                    <button (click)="reset()" type="button" class="btn btn-danger ms-2" >
+                        <i class="fa fa-reset"></i> Reset
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="row mt-2 mb-2 d-flex align-items-center flex-row-reverse tableTopRow ">
+                <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12 ps-md-0">
+                    <input type="text" class="form-control" placeholder="Search Min. 2 characters"
+                        [(ngModel)]="username" name="username" (ngModelChange)="onUsernameChange($event)">
+                </div>
+                <div class="dt-buttons flex-wrap mt-2 mt-md-0 col-lg-7 col-md-6 col-sm-12 col-xs-12 text-end">
+                    <button class="btn downloadTableBtn me-2" type="button"><i class="fas fa-file-csv"></i></button>
+                    <button class="btn downloadTableBtn me-2" type="button"><i class="far fa-file-excel"></i></button>
+                    <button class="btn downloadTableBtn" type="button"><i class="far fa-file-pdf"></i></button>
+                </div>
+                <div *ngIf="betHis?.length>0" class="col-lg-3 col-md-3 col-sm-12 mt-2 mt-md-0">
+                    <p class="tableP mb-0">Showing {{betHis?.length}} of {{count}} entries
+                </div>
+            </div>
+            <div class="table-responsive border">
+                <table class="datatable table nowrapTable">
+                    <thead>
+                        <tr>
+                            <th>Client</th>
+                            <th>Market Details</th>
+                            <th>Rate</th>
+                            <th>Stake</th>
+                            <th>Bet Type</th>
+                            <th>PL</th>
+                            <th>Result</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody  *ngIf="betHis?.length>0">
+                        <tr *ngFor="let data of betHis | paginate: { itemsPerPage:takeRecords, currentPage:pageNum,totalItems: count };">
+                            <td>{{data.userName}}</td>
+                            <td>{{data.eventName}}/{{data.marketName}}</td>
+                            <td>{{data.odds}}</td>
+                            <td>{{data.stake}}</td>
+                            <td><span [ngClass]="{'back': data.selection === 'Back' || data.selection === 'Yes', 'lay': data.selection === 'Lay' || data.selection === 'No'}">{{data.selection}}</span></td>
+                            <td>{{data.profit}}</td>
+                            <td>{{data.result}}</td>
+                            <th>
+                                <span class='bg-danger py-2 px-2 text-white'>Deleted</span>
+                            </th>
+                            
+                            <td>{{data.betTime | date:'dd/MM/yyyy h:mm:ss a'}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div *ngIf="betHis?.length>0" class="pagination_filter justify-content-between pt-3 d-flex  row">
+                <div class="col-sm-6 mb- mb-sm-0">
+                    <select class="form-control w-auto mr-2 " id="" (change)="updateRecValue($event)">
+                        <option value="takeRecords" selected>{{takeRecords}}</option>
+                        <option value="10" *ngIf="takeRecords!=10">10</option>
+                        <option value="20" *ngIf="takeRecords!=20">20</option>
+                        <option value="30" *ngIf="takeRecords!=30">30</option>
+                        <option value="40" *ngIf="takeRecords!=40">40</option>
+                        <option value="50" *ngIf="takeRecords!=50">50</option>
+                    </select>
+                </div>
+                <div class="col-sm-6 d-flex justify-content-end">
+                    <pagination-controls class="pagination" [maxSize]="5" *ngIf="betHis?.length>0"
+                        (pageChange)="pageChanged($event)">
+                    </pagination-controls>
+                </div>
+            </div>
+            <div *ngIf="betHis?.length==0" class="load-more"><span>No Data Available.</span></div>
+        </div>
+    </div>
+</div>

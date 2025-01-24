@@ -1,0 +1,620 @@
+<div class="page-title-box mb-3 mb-ms-4">
+    <h4 *ngIf="userType=='client'" class="page-title">Add Client</h4>
+    <h4 *ngIf="userType=='agent'" class="page-title">Add Agent</h4>
+</div>
+<div class="card">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+        <div class="card-body">
+
+            <div class="text-lg-end form-group">
+                <button class="btn w-sm btn-danger waves-effect waves-light" (click)="backFunction()" type="button"><i
+                        class="fa-solid fa-arrow-left"></i> Back</button>
+                <button type="submit" class="btn w-sm btn-success waves-effect waves-light ms-2">
+                    <i class="fa-regular fa-floppy-disk"></i> Save
+                </button>
+            </div>
+
+        </div>
+        <div class="accordionQs mt-2 mt-md-3">
+            <div class="accordion" id="accordionExample">
+
+                <!--general new -->
+                <div class="accordion-item border-0 mb-0">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                            Personal Details
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                        data-bs-parent="#accordionExampleone">
+                        <div class="accordion-body px-0">
+                            <div class="Portletcard-body">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-xs-12 col-form-label">Parent Name</label>
+                                            <div class="col-sm-8 col-xs-12">
+                                                <div class="form-control ParentName disabled">{{parentDetails?.loginId}}
+                                                    [{{parentDetails?.fullName}}]</div>
+                                            </div>
+
+
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-xs-12 col-form-label">
+                                                {{ userType === 'client' ? 'Client Name' : 'Agent Name' }}
+                                            </label>
+                                            <div class="col-sm-8 col-xs-12">
+                                                <input type="text" class="form-control" formControlName="fullName"
+                                                    placeholder="fullName">
+                                                <div *ngIf="userForm.get('fullName')?.invalid && userForm.get('fullName')?.touched"
+                                                    class="text-danger">
+                                                    Please enter {{ userType === 'client' ? 'Client' : 'Agent' }} Full
+                                                    Name.
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-xs-12 col-form-label">Password</label>
+                                            <div class="col-sm-8 col-xs-12">
+                                                <input type="password" class="form-control" formControlName="password"
+                                                    placeholder="password">
+                                                <div *ngIf="userForm.get('password')?.invalid && userForm.get('password')?.touched"
+                                                    class="text-danger">
+                                                    Password Required Minimum 6 Digits,Minimum One Capital
+                                                    Latter,Minimum One Special Character and Minimum One Digit.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-xs-6 col-form-label">Username</label>
+                                            <div class="col-sm-8 col-xs-6">
+                                                <input type="text" class="form-control" formControlName="loginId"
+                                                    placeholder="loginId">
+                                                <div *ngIf="userForm.get('loginId')?.invalid && userForm.get('loginId')?.touched"
+                                                    class="text-danger">
+                                                    Please enter loginId.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" *ngIf="isDomainActive && showDomainInput">
+                                            <label class="col-sm-3 col-xs-12 col-form-label">Domain</label>
+                                            <div class="col-sm-8 col-xs-12">
+                                                <div class="d-flex align-items-center">
+                                                    <select class="form-control" formControlName="domainId"
+                                                        (change)="onDomainSelect($event)">
+                                                        <option value=""><--Select Domain--></option>
+                                                        <option *ngFor="let domain of domains" [value]="domain.id">
+                                                            {{domain.domainName}}</option>
+                                                    </select>
+                                                    <button class="addoption " type="button" data-bs-toggle="modal"
+                                                        data-bs-target="#AddDomain">
+                                                        <i class="fa-solid fa-plus"></i>
+                                                    </button>
+                                                </div>
+                                                <div *ngIf="domains?.length==0" class="text-danger">
+                                                    No domain is available.Please add new domain from add domain icon.
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group row" *ngIf="!isDomainActive && showDomainInput">
+                                            <label class="col-sm-3 col-xs-12 col-form-label">Domain</label>
+                                            <div class="col-sm-8 col-xs-12">
+                                                <div class="form-control ParentName disabled">{{
+                                                    userForm.get('domain')?.value }}</div>
+                                            </div>
+
+                                        </div>
+
+
+
+
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div *ngIf="userType=='agent' && parentId>1" class="form-group row">
+                                            <label class="col-sm-3 col-xs-12 col-form-label">Child Level</label>
+                                            <div class="col-sm-8 col-xs-12">
+                                                <div class="input-group">
+                                                    <select class="form-control" formControlName="childLevel"
+                                                        (change)="onChildLevelChange($event)">
+                                                        <option value=""><--Select Level--></option>
+                                                        <option *ngFor="let role of roles;let i=index"
+                                                            [value]="role.id">{{(roles?.length - i)}}-{{
+                                                            role.role}}</option>
+                                                    </select>
+                                                    <input type="hidden" value="6">
+                                                </div>
+                                                <div *ngIf="userForm.get('childLevel')?.invalid && userForm.get('childLevel')?.touched"
+                                                    class="text-danger">
+                                                    Please select a Child Level.
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div *ngIf="userType!='agent'" class="form-group row">
+                                            <label class="col-sm-3 col-xs-12 col-form-label">Mobile Number</label>
+                                            <div class="col-sm-8 col-xs-12">
+                                                <input type="text" class="form-control" formControlName="mobile"
+                                                    placeholder="mobile number">
+                                                <div *ngIf="userForm.get('mobile')?.invalid && userForm.get('mobile')?.touched"
+                                                    class="text-danger">
+                                                    Please enter mobile number.
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <!-- <div class="form-group row">
+                                            <label class="col-sm-3 col-xs-12 col-form-label">Referral Code</label>
+                                            <div class="col-sm-8 col-xs-12">
+                                                <input class="form-control ParentName disabled" type="text"
+                                                    formControlName="referralCode" placeholder="referralCode">
+                                            </div>
+
+                                        </div> -->
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-xs-12 col-form-label">Credit Reference</label>
+                                            <div class="col-sm-8 col-xs-12">
+                                                <input type="number" class="form-control" formControlName="creditRef"
+                                                    placeholder="Opening Balance">
+                                                <div *ngIf="userForm.get('creditRef')?.invalid && userForm.get('creditRef')?.touched"
+                                                    class="text-danger">
+                                                    Please enter credit reference.
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group row" *ngIf="userType=='client'">
+                                            <label class="col-sm-3 col-xs-12 col-form-label">Exposure Limit</label>
+                                            <div class="col-sm-8 col-xs-12">
+                                                <input type="number" class="form-control"
+                                                    formControlName="exposureLimit" placeholder="Exposure Limit"
+                                                    [ngClass]="{'disabled':userType == 'client'}" value="-1">
+                                                <div *ngIf="userForm.get('exposureLimit')?.invalid && userForm.get('exposureLimit')?.touched"
+                                                    class="text-danger">
+                                                    Please enter exposureLimit from -1 to any +ve number.
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group row" *ngIf="userType=='client'">
+                                            <label class="col-sm-3 col-xs-12 col-form-label">Losing Bonus</label>
+                                            <div class="col-sm-8 col-xs-12 d-flex align-items-center">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" role="switch"
+                                                        id="flexSwitchCheckDefault" [checked]="isBonusChecked"
+                                                        (change)="toggleSwitch('bonus')">
+                                                </div>
+                                                <input *ngIf="isBonusChecked" type="number" class="form-control ms-2"
+                                                    formControlName="losingBonus" placeholder="enter bonus percent">
+                                            </div>
+
+                                        </div>
+
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--general end -->
+
+                <!--sharing or commsion toggle new -->
+                <div class="accordion-item border-0 mb-0"
+                    *ngIf="userType=='agent' && parentDetails?.roleId==2 || parentDetails?.roleId==1 ">
+                    <h2 class="accordion-header" id="headingSix">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                            Create agent in Sharing or Commision
+                        </button>
+                    </h2>
+                    <div id="collapseSix" class="accordion-collapse collapse show" aria-labelledby="headingSix"
+                        data-bs-parent="#accordionExampleSix">
+                        <div class="accordion-body px-0">
+                            <div class="Portletcard-body">
+                                <div class="row">
+                                    <!-- Sharing Toggle -->
+                                    <div class="col-6">
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-xs-12 col-form-label">Sharing</label>
+                                            <div class="col-sm-8 col-xs-12">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" role="switch"
+                                                        id="shareToggle" [checked]="isShareChecked"
+                                                        (change)="toggleSwitch('share')">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Commission Toggle -->
+                                    <div class="col-6">
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-xs-12 col-form-label">Losing Commission</label>
+                                            <div class="col-sm-8 col-xs-12">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" role="switch"
+                                                        id="commissionToggle" [checked]="isCommissionChecked"
+                                                        (change)="toggleSwitch('commission')">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end -->
+
+                <!-- comision -->
+                <div class="accordion-item border-0 mb-0"
+                    *ngIf="userType=='agent' && parentDetails?.userRole!=='SubAgent' && isCommissionChecked">
+                    <h2 class="accordion-header" id="headingSeven">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                            Losing commision
+                        </button>
+                    </h2>
+                    <div id="collapseSeven" class="accordion-collapse collapse show" aria-labelledby="headingSeven"
+                        data-bs-parent="#accordionExampleSeven">
+                        <div class="accordion-body px-0">
+                            <div class="Portletcard-body">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-xs-12 col-form-label">Commision Value </label>
+                                            <div class="col-sm-8 col-xs-12">
+                                                <div class="">
+                                                    <input class="form-control" type="text"
+                                                        formControlName="losingCommision"
+                                                        placeholder="Please enter losing commision" placeholder="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end -->
+
+                <!--sharing-->
+                <div *ngIf="userType=='agent' && parentDetails?.userRole!=='SubAgent' && isShareChecked"
+                    class="accordion-item border-0 mb-0">
+                    <h2 class="accordion-header" id="headingFive">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                            Sharing
+                        </button>
+                    </h2>
+                    <div id="collapseFive" class="accordion-collapse collapse show" aria-labelledby="headingFive"
+                        data-bs-parent="#accordionExamplefive">
+                        <div class="accordion-body px-0 pb-1">
+                            <div class="Portletcard-body">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="row">
+                                            <div class="col-md-12 mb-2 col-lg-12">
+                                                <div class="form-group row">
+                                                    <label class="col-sm-3 col-xs-12 col-form-label">Sports
+                                                        Share</label>
+                                                    <div class="col-sm-8 col-xs-12">
+                                                        <input type="number" class="form-control"
+                                                            formControlName="sportsShare"
+                                                            placeholder="Please enter sports Share"
+                                                            (input)="updateSportsShare($event)">
+                                                        <div *ngIf="userForm.get('sportsShare')?.invalid && userForm.get('sportsShare')?.touched"
+                                                            class="text-danger">
+                                                            Please enter Sports Share.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12 mb-2 col-lg-12">
+                                                <div class="form-group row">
+                                                    <label class="col-sm-3 col-xs-12 col-form-label">Casino
+                                                        Share</label>
+                                                    <div class="col-sm-8 col-xs-12">
+                                                        <input type="number" class="form-control"
+                                                            formControlName="casinoShare"
+                                                            placeholder="Please enter casino Share."
+                                                            (input)="updateCasinoShare($event)">
+                                                        <div *ngIf="userForm.get('casinoShare')?.invalid && userForm.get('casinoShare')?.touched"
+                                                            class="text-danger">
+                                                            Please enter Casino Share.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-lg-6">
+                                        <div class="row">
+                                            <div class="col-md-6 mb-2 col-lg-10">
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-xs-12 col-form-label">Parent Sports
+                                                        Share</label>
+                                                    <div class="col-sm-7 col-xs-12">
+                                                        <div class="form-control ParentName disabled">{{
+                                                            parentDetails.sportsShare }}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-2 col-lg-10">
+                                                <div class="form-group row">
+                                                    <label class="col-sm-4 col-xs-12 col-form-label">Parent Casino
+                                                        Share</label>
+                                                    <div class="col-sm-7 col-xs-12">
+                                                        <div class="form-control ParentName disabled">{{
+                                                            parentDetails.casinoShare }}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <!--sharing end-->
+
+                <!-- losing bonus  -->
+                <div class="accordion-item border-0 mb-0"
+                    *ngIf="userType=='agent' && parentDetails?.roleId==2 || parentDetails?.roleId==1 ">
+                    <h2 class="accordion-header" id="headingEight">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+                            Losing Bonus
+                        </button>
+                    </h2>
+                    <div id="collapseEight" class="accordion-collapse collapse show" aria-labelledby="headingEight"
+                        data-bs-parent="#accordionExampleEight">
+                        <div class="accordion-body px-0">
+                            <div class="Portletcard-body">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-xs-12 col-form-label">Losing Bonus</label>
+                                            <div class="col-sm-8 col-xs-12">
+                                                <div class="form-check form-switch d-flex align-items-center">
+                                                    <input class="form-check-input" type="checkbox" role="switch"
+                                                        id="shareToggle" [checked]="isBonusChecked"
+                                                        (change)="toggleSwitch('bonus')">
+                                                    <input *ngIf="isBonusChecked" type="number"
+                                                        class="form-control ms-2" formControlName="losingBonus"
+                                                        placeholder="enter bonus percent">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--losing bonus end -->
+
+
+                <!--other Bonus start-->
+                <div *ngIf="userForm.get('b2C')?.value==true" class="accordion-item border-0 mb-0">
+                    <h2 class="accordion-header" id="headingThreeA1">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseThreeA1" aria-expanded="false" aria-controls="collapseThreeA1">
+                            Bonus
+                        </button>
+                    </h2>
+                    <div id="collapseThreeA1" class="accordion-collapse collapse show" aria-labelledby="headingThreeA1"
+                        data-bs-parent="#accordionExampleA1">
+                        <div class="accordion-body px-0">
+                            <div class="Portletcard-body">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-xs-12 col-form-label">Is First Refil Bonus
+                                            </label>
+                                            <div class="col-sm-8 col-xs-12">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        formControlName="isFirstRefilBonus">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-xs-12 col-form-label">Is Every Refil
+                                                Bonus</label>
+                                            <div class="col-sm-8 col-xs-12">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        formControlName="isEveryRefilBonus">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!--other Bonus end-->
+
+                <!--permission start-->
+                <div class="accordion-item border-0 mb-0">
+                    <h2 class="accordion-header" id="headingFour">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            Permissions
+                        </button>
+                    </h2>
+                    <div id="collapseFour" class="accordion-collapse collapse show" aria-labelledby="headingFour"
+                        data-bs-parent="#accordionExamplefour">
+                        <div class="accordion-body px-0">
+                            <div class="Portletcard-body">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-xs-12 col-form-label">Is Approved </label>
+                                            <div class="col-sm-8 col-xs-12">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" role="switch"
+                                                        id="flexSwitchCheckDefault" (click)="permission()">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--permission start-->
+
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+
+
+<!--Limit Setting Modal -->
+<!-- <div class="modal fade custoModal" id="confirmSave" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="confirmSaveLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title" id="confirmSaveLabel">Limit Settings: ak80 [ak80]</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="card-body p-4">
+                <div class="text-center px-md-4">
+                    <h4>Are you sure to Edit Client ?</h4>
+                    <input type="password" class="form-control" placeholder="password">
+                </div>
+                <div class="modal-footer border-0 p-0 mt-3">
+                    <button type="button" class="btn btn-primary">Ok</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<!--deposit Modal -->
+<div class="modal fade custoModal settlementMod" id="AddDomain" data-bs-backdrop="static" tabindex="-1"
+    aria-labelledby="AddDomainLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title">Add Domain</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="clsadddomain"><i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="settlementBody">
+                    <form [formGroup]="domainForm" (ngSubmit)="addDomain()">
+                        <div class="form-field d-flex flex-column mb-1">
+                            <label for="domain">Domain</label>
+                            <input type="text" id="domain" formControlName="domainName"
+                                placeholder="https://example.com" class="form-control">
+                            <div *ngIf="domainForm.get('domainName')?.errors?.['required'] && (domainForm.get('domainName')?.dirty || domainForm.get('domainName')?.touched)"
+                                class="text-danger">
+                                Please enter valid domain.example:https://yourdomain.com
+                            </div>
+                        </div>
+
+                        <div class="form-field d-flex flex-column mb-1">
+                            <label for="provider-id">Provider Id</label>
+                            <input type="number" id="provider-id" formControlName="providerId"
+                                placeholder="Enter Provider Id" class="form-control">
+                            <div *ngIf="domainForm.get('providerId')?.errors?.['required'] && (domainForm.get('providerId')?.dirty || domainForm.get('providerId')?.touched)"
+                                class="text-danger">
+                                Please enter provider Id.
+                            </div>
+                        </div>
+
+                        <div class="form-field d-flex flex-column mb-1">
+                            <label for="casino-type">Casino Type</label>
+                            <div class="d-flex align-items-center">
+                                <select class="form-control" formControlName="casinoType">
+                                    <option value=""><--Select--></option>
+                                    <option value="St8">ST8</option>
+                                    <option value="dream">Dream</option>
+                                </select>
+                                <div *ngIf="domainForm.get('casinoType')?.errors?.['required'] && (domainForm.get('casinoType')?.dirty || domainForm.get('casinoType')?.touched)"
+                                    class="text-danger">
+                                    Please select casino provider.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-field d-flex flex-column mb-1">
+                            <label for="first-refill-bonus">First Refill Bonus</label>
+                            <input type="text" id="first-refill-bonus" formControlName="firstRefilBonus"
+                                placeholder="Enter First Refill Bonus" class="form-control">
+                            <div *ngIf="domainForm.get('firstRefilBonus')?.errors?.['required'] && (domainForm.get('firstRefilBonus')?.dirty || domainForm.get('firstRefilBonus')?.touched)"
+                                class="text-danger">
+                                Please enter first refill bonus value.
+                            </div>
+                        </div>
+
+                        <div class="form-field d-flex flex-column mb-1">
+                            <label for="every-refill-bonus">Every Refill Bonus</label>
+                            <input type="text" id="every-refill-bonus" formControlName="everyRefilBonus"
+                                placeholder="Enter Every Refill Bonus" class="form-control">
+                            <div *ngIf="domainForm.get('everyRefilBonus')?.errors?.['required'] && (domainForm.get('everyRefilBonus')?.dirty || domainForm.get('everyRefilBonus')?.touched)"
+                                class="text-danger">
+                                Please enter every refill bonus value.
+                            </div>
+                        </div>
+                        <div class="form-field d-flex flex-column mb-1">
+                            <label for="casino-type">Select Domain Mode</label>
+                            <div class="d-flex align-items-center">
+                                <select class="form-control" formControlName="webSiteType">
+                                    <option value=""><--Select--></option>
+                                    <option value="B2B">Is B2B</option>
+                                    <option value="B2C">Is B2C</option>
+                                </select>
+                                <div *ngIf="domainForm.get('webSiteType')?.errors?.['required'] && (domainForm.get('webSiteType')?.dirty || domainForm.get('webSiteType')?.touched)"
+                                    class="text-danger">
+                                    Please select casino provider.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-primary mt-2" [disabled]="domainForm.invalid">Add
+                                Domain</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

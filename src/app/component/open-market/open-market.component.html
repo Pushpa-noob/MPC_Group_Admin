@@ -1,0 +1,299 @@
+<div class="page-title-box mb-3 mb-ms-4">
+  <h4 class="page-title">Open Markets</h4>
+</div>
+
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="row">
+        <div class="col-lg-2 col-md-3 col-sm-12 col-xs-12 mb-2 mb-md-0">
+          <select class="form-control filteroption" name="sports" data-style="btn-danger"
+            (change)="onSportChange($event)">
+            <option value="0">All</option>
+            <option *ngFor="let data of sportsList" [value]="data.betfairSportsId">{{data.sportsName}}</option>
+          </select>
+        </div>
+        <div class="col-md-4 col-lg-4 col-xs-12">
+          <button class="btn btn-success waves-effect waves-light m-1" type="button"
+            (click)="updateMultipleStatus('Unblock')">Unblock Market</button>
+          <button class="btn btn-danger waves-effect waves-light m-1" type="button"
+            (click)="updateMultipleStatus('Block')">Block Market</button>
+        </div>
+        <div class="col-md-2 col-lg-2 col-xs-12">
+          <div class="input-group input-group-merge mt-2 mt-md-0">
+            <input type="password" class="form-control" placeholder="Enter Password" name="password"
+              [(ngModel)]="password">
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row mt-4 mb-2 d-flex align-items-center flex-row-reverse tableTopRow">
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 ps-md-0 d-flex">
+          <input type="text" [(ngModel)]="searchKeyword" name="searchKeyword" class="form-control"
+            placeholder="Search Min. 2 characters">
+          <button (click)="search()" type="button" class="btn btn-success ms-1">
+            <i class="fa fa-search"></i>
+          </button>
+        </div>
+
+        <div class="dt-buttons flex-wrap mt-2 mt-md-0 col-md-7 col-sm-12 col-xs-12 text-end">
+          <button (click)="resetAll()" class="btn downloadTableBtn me-2" type="button"><i
+              class="fas fa-sync-alt"></i></button>
+          <button class="btn downloadTableBtn me-2" type="button" (click)="downloadCSV()"><i
+              class="fas fa-file-csv"></i> CSV</button>
+          <button class="btn downloadTableBtn me-2" type="button" (click)="downloadExcel()"><i
+              class="far fa-file-excel"></i> Excel</button>
+          <button class="btn downloadTableBtn" type="button" (click)="downloadPDF()"><i
+              class="far fa-file-pdf"></i> Pdf</button>
+        </div>
+        <div *ngIf="returnObj?.length > 0" class="col-md-3 col-sm-12 mt-2 mt-md-0">
+          <p class="tableP mb-0">Showing {{returnObj?.length}} of {{Count}} entries</p>
+        </div>
+      </div>
+      <div class="table-responsive border">
+        <table class="datatable table nowrapTable">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Date</th>
+              <th>Market Type</th>
+              <th>Market Name</th>
+              <th>Status</th>
+              <th>Allow Market</th>
+              <th>Before Inplay Settings</th>
+              <th>Inplay Settings</th>
+              <th>Bets</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="returnObj?.length > 0">
+            <tr
+              *ngFor="let data of returnObj | paginate: { itemsPerPage: takeRec, currentPage: pageNum, totalItems: Count };">
+              <td>
+                <input type="checkbox" name="chkAllUser" (click)="selectMarkets(data)">
+              </td>
+              <td>
+                <span class="frstLet">{{data.eventTime | date:'short'}}</span>
+              </td>
+              <td>
+                <span class="frstLet">{{data.marketName}}</span>
+              </td>
+              <td>{{data.sportsName}} / {{data.tournamentName}} / {{data.eventName}} / {{data.marketName}}</td>
+              <td>
+                <span *ngIf="!data.isLocked" class="frstLet">Open</span>
+                <span *ngIf="data.isLocked" class="frstLet btn btn-danger">Locked</span>
+              </td>
+              <td>
+                <span *ngIf="!data.isLocked" (click)="setType('Block'); selectMarkets(data)"
+                  class="frstLet btn btn-success" data-bs-toggle="modal" data-bs-target="#blockConfirm">Open</span>
+                <span *ngIf="data.isLocked" (click)="setType('Unblock'); selectMarkets(data)"
+                  class="frstLet btn btn-danger" data-bs-toggle="modal" data-bs-target="#blockConfirm">Locked</span>
+              </td>
+              <td (click)="getMarketSettings(data.marketId,data.eventId,data.marketName,false)">
+                <span data-bs-toggle="modal" data-bs-target="#inplaySettingModal"><i class="fas fa-cog"></i></span>
+              </td>
+              <td (click)="getMarketSettings(data.marketId,data.eventId,data.marketName,true)">
+                <span data-bs-toggle="modal" data-bs-target="#inplaySettingModal"><i class="fas fa-cog"></i></span>
+              </td>
+              <td (click)="getBets(data.eventId,data.marketName,data.sportsName,data.tournamentName,data.eventName)">
+                <span class="frstLet btn btn-success" data-bs-toggle="modal" data-bs-target="#historyModal">B</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div *ngIf="returnObj?.length > 0" class="pagination_filter justify-content-between pt-3 d-flex row">
+        <div class="col-sm-6 mb-2 mb-sm-0">
+          <select class="form-control w-auto mr-2" name="record" (change)="updateRecValue($event)">
+            <option value="takeRec" selected>{{takeRec}}</option>
+            <option value="10" *ngIf="takeRec != 10">10</option>
+            <option value="20" *ngIf="takeRec != 20">20</option>
+            <option value="30" *ngIf="takeRec != 30">30</option>
+            <option value="40" *ngIf="takeRec != 40">40</option>
+            <option value="50" *ngIf="takeRec != 50">50</option>
+          </select>
+        </div>
+        <div class="col-sm-6 d-flex justify-content-end">
+          <pagination-controls class="pagination" [maxSize]="5" *ngIf="returnObj?.length > 0"
+            (pageChange)="pageChanged($event)"></pagination-controls>
+        </div>
+      </div>
+      <div *ngIf="returnObj?.length == 0" class="load-more"><span>No Data Available.</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Block Market Modal -->
+<div class="modal fade custoModal" id="blockConfirm" data-bs-backdrop="static" tabindex="-1"
+  aria-labelledby="blockConfirmLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="blockConfirmLabel">Block Market</h4>
+        <button type="button" id="cldCnfPassMdl" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card-body">
+          <div class="text-center">
+            <h4>Are you sure to {{type}} Market?</h4>
+            <input type="password" class="form-control" name="password" [(ngModel)]="password" placeholder="password">
+          </div>
+          <div class="modal-footer border-0 p-2">
+            <button type="button" class="btn btn-primary" (click)="callApi()">Ok</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Client Bet Report Modal -->
+<div class="modal fade custoModal" id="historyModal" data-bs-backdrop="static" tabindex="-1"
+  aria-labelledby="historyLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="historyLabel">{{marketName}}</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body px-2">
+        <div class="card p-0 mt-0">
+          <div class="row mt-0 mb-2 d-flex align-items-center flex-row-reverse tableTopRow">
+            <div class="col-lg-2 col-md-2 col-sm-9 col-xs-10 ps-md-0">
+              <input type="text" class="form-control" placeholder="Search Min. 2 characters">
+            </div>
+            <div class="dt-buttons flex-wrap col-lg-3 col-md-3 col-sm-3 col-xs-2 text-end">
+              <button class="btn downloadTableBtn me-2" type="button"><i class="far fa-file-excel"
+                  (click)="downloadExcel()"></i></button>
+            </div>
+            <div class="col-md-7 col-sm-12">
+              <p class="tableP mb-0">Showing 1 of 1 entries</p>
+            </div>
+          </div>
+          <div class="table-responsive border">
+            <table class="table dataNowrap mb-0">
+              <thead>
+                <tr>
+                  <th>Name [UserName]</th>
+                  <th>Runner</th>
+                  <th>Type</th>
+                  <th>Rate</th>
+                  <th>Stake</th>
+                  <th>P|L</th>
+                  <th>Place Time</th>
+                  <th>Match Time</th>
+                  <th>Info</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let bet of bets">
+                  <td>{{bet.userName}}</td>
+                  <td>{{bet.runnerName}}</td>
+                  <td>{{bet.selection}}</td>
+                  <td>{{bet.odds}}</td>
+                  <td>{{bet.stake}}</td>
+                  <td [ngClass]="bet.selection === 'Back' || bet.selection === 'Yes' ? 'text-success' : 'text-danger'">
+                    {{ (bet.selection === 'Back' || bet.selection === 'Yes') ?
+                    (bet.profit | number:'1.2-2') : (bet.exposure | number:'1.2-2') }}</td>
+                  <td>{{ bet.betTime | date:'dd/MM/yyyy hh:mm:ss a' }}</td>
+                  <td>{{ bet.createdOn | date:'dd/MM/yyyy hh:mm:ss a' }}</td>
+                  <td>{{ bet.eventName}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Inplay setting Modal -->
+<div class="modal fade custoModal settlementMod" id="inplaySettingModal" data-bs-backdrop="static" tabindex="-1"
+  aria-labelledby="inplaySettingModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="inplaySettingModalLabel">Settings</h1>
+        <button type="button" id="clsdep" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+            class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="settlementBody">
+          <form>
+            <table class="datatable table dt-responsive nowrap">
+              <tbody>
+                <tr>
+                  <td>
+                    <label class="col-form-label">Max Stake :</label>
+                  </td>
+                  <td>
+                    <div class="input-group">
+                      <input type="number" autocomplete="off" class="form-control" placeholder="" name="maxStake"
+                        [(ngModel)]="marketSettings.maxStake">
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label class="col-form-label">Bet Delay :</label>
+                  </td>
+                  <td>
+                    <div class="input-group">
+                      <input type="number" autocomplete="off" class="form-control" placeholder="" name="betDelay"
+                        [(ngModel)]="marketSettings.betDelay">
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label class="col-form-label">Min Stake :</label>
+                  </td>
+                  <td>
+                    <div class="input-group">
+                      <input type="number" autocomplete="off" class="form-control" placeholder="" name="minStake"
+                        [(ngModel)]="marketSettings.minStake">
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label class="col-form-label">Max Profit :</label>
+                  </td>
+                  <td>
+                    <div class="input-group">
+                      <input type="number" autocomplete="off" class="form-control" placeholder="" name="maxProfit"
+                        [(ngModel)]="marketSettings.maxProfit">
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label class="col-form-label">Max Odds :</label>
+                  </td>
+                  <td>
+                    <div class="input-group">
+                      <input type="number" autocomplete="off" class="form-control" placeholder="" name="maxOdds"
+                        [(ngModel)]="marketSettings.maxOdds">
+                    </div>
+                  </td>
+                </tr>
+
+              </tbody>
+
+            </table>
+          </form>
+          <div class="text-end">
+            <button type="submit" class="btn btn-primary" (click)="updateMarketSettings()">Update</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
